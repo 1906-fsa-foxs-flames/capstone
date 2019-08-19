@@ -3,8 +3,8 @@ import { Text, View } from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
-import LogIn from '../auth/signInScreen';
-import CamTest from '../camera/camera'
+import LogIn from './LogIn';
+import CamTest from './CamTest'
 
 class SettingsScreen extends React.Component {
   render() { 
