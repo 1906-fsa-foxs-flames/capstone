@@ -8,7 +8,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.0.5",
     "expo": "^34.0.1",
+    "expo-camera": "^6.0.0",
     "firebase": "^6.4.0",
     "moment": "^2.24.0",
     "mta-gtfs": "^1.1.0",

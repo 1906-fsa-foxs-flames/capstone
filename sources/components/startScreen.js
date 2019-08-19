@@ -12,7 +12,7 @@ export default class StartScreen extends React.Component {
                 <View style={styles.logoView}>
                     <Text style={[{...styles.logiText, marginBottom: 10}]}>SubwAR</Text>
                     <Image
-                        source={ require('../images/logo.png') }
+                        source={ require('../../assets/icon.png') }
                         style={styles.logoImage}
                     />
                     <Text style={styles.logiText}>Powered By Fox's Flames</Text>
