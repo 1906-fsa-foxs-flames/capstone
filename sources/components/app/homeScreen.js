@@ -1,37 +1,51 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable eol-last */
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import styles from '../../variables/styles';
-import * as firebase from 'firebase';
+import { Text, View } from 'react-native';
+import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
 
-export default class HomeScreen extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            email: ''
-        }
-    }
+import LogIn from '../auth/signInScreen';
+import CamTest from '../camera/camera'
 
-    onSignOutPress = () => {
-        firebase.auth().signOut();
-    }
-
-    onGoBackPress = () => {
-        this.props.navigation.navigate('Start');
-    }
-
-    render() {
-        return (
-            <View style={styles.container} >
-                <Text>Home Screen</Text>
-                <TouchableOpacity onPress={this.onSignOutPress}>
-                    <Text style={styles.buttonText}>Sign Out</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.onGoBackPress}>
-                    <Text style={styles.buttonText}>Go Back</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+class SettingsScreen extends React.Component {
+  render() { 
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Settings!</Text>
+      </View>
+    );
+  }
 }
+
+const getTabBarIcon = (navigation, focused, tintColor) => {
+  const { routeName } = navigation.state;
+  let IconComponent = Ionicons;
+  let iconName;
+  if (routeName === 'Home') {
+    iconName = 'md-subway';
+  } else if (routeName === 'Camera') {
+    iconName = 'md-camera';
+  } else if (routeName === 'LogIn') {
+    iconName = 'md-person'
+  }
+  return <IconComponent name={iconName} size={25} color={tintColor} />;
+};
+
+const TabNavigator = createBottomTabNavigator({
+  Home: { screen: SettingsScreen},
+  Camera: { screen: CamTest },
+  LogIn: { screen: LogIn }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) =>
+        getTabBarIcon(navigation, focused, tintColor),
+    }),
+    tabBarOptions: {
+      activeTintColor: 'dodgerblue',
+      inactiveTintColor: 'gray',
+    },
+    initialRouteName: 'Camera'
+  }
+);
+
+export default TabNavigator;
