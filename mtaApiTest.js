@@ -17,13 +17,13 @@ var mta = new Mta({
 // });
 
 // TO GET MTA SCHEDULE
-// mta.schedule((train = 635)).then(function(result) {
-//   console.log(result.schedule[train]["N"]);
+// mta.schedule((stop = 635)).then(function(result) {
+//   console.log(result.schedule[stop]["N"]);
 // });
 
 // TO GET MTA SCHEDULE FORMATTED
-// mta.schedule((train = 635)).then(function(result) {
-//   let schedule = result.schedule[train]["N"].map(train =>
+// mta.schedule((stop = 635)).then(function(result) {
+//   let schedule = result.schedule[stop]["N"].map(train =>
 //     moment.unix(train.arrivalTime).format("MMMM Do YYYY, h:mm:ss a")
 //   );
 //   console.log(schedule);
