@@ -22,8 +22,8 @@ class SettingsScreen extends React.Component {
           userLocation: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            latitudeDelta: 0.000622,
-            longitudeDelta: 0.0421
+            latitudeDelta: 0.00622,
+            longitudeDelta: 0.00421
           }
         });
       },
