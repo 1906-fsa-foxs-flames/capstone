@@ -1,8 +1,8 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
-import apiKeys from "../../variables/apiKeys";
-import * as firebase from "firebase";
-import * as ImagePicker from "expo-image-picker";
+import React from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react-native';
+import apiKeys from '../../variables/apiKeys';
+import * as firebase from 'firebase';
+import * as ImagePicker from 'expo-image-picker';
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
@@ -12,16 +12,17 @@ firebase.initializeApp(apiKeys.firebaseConfig);
 export default class Cam extends React.Component {
   state = {
     hasCameraPermission: null,
-    type: Camera.Constants.Type.back
+    type: Camera.Constants.Type.back,
+    photoProcessed: false
   };
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    const { rollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     this.setState({
-      hasCameraPermission: status === "granted"
-    });
+      hasCameraPermission: status === 'granted',
+    })
   }
+
   snap = async () => {
     try {
       if (this.camera) {
@@ -51,7 +52,9 @@ export default class Cam extends React.Component {
           }
         );
         let responseJson = await response.json();
-        Alert.alert(responseJson.responses[0].fullTextAnnotation.text);
+        let OCRtext = responseJson.responses[0].fullTextAnnotation.text
+        let split = OCRtext.split('')
+        this.setState({ photoProcessed: true })
       }
     } catch (error) {
       console.log(error);
@@ -84,7 +87,7 @@ export default class Cam extends React.Component {
     let img = await ref.put(blob);
     blob.close();
     return img.ref.getDownloadURL();
-  };
+  }
 
   render() {
     const { hasCameraPermission } = this.state;
@@ -92,7 +95,7 @@ export default class Cam extends React.Component {
       return <View />;
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
-    } else {
+    } else if (!this.state.photoProcessed) {
       return (
         <View style={{ flex: 1 }}>
           <Camera
@@ -110,6 +113,10 @@ export default class Cam extends React.Component {
           </Camera>
         </View>
       );
+    } else {
+      return (
+        <Text>THIS BLOCK IS WHERE THE LIST OF STATIONS WILL GO</Text>
+      )
     }
   }
 }
