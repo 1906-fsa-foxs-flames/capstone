@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import * as ImagePicker from 'expo-image-picker';
-=======
-import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from "react-native";
-import apiKeys from "../../variables/apiKeys";
-import * as firebase from "firebase";
-import * as ImagePicker from "expo-image-picker";
->>>>>>> master
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
@@ -26,14 +18,10 @@ export default class Cam extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
-<<<<<<< HEAD
       hasCameraPermission: status === 'granted',
-   })
-=======
-      hasCameraPermission: status === "granted"
-    });
->>>>>>> master
+    })
   }
+
   snap = async () => {
     try {
       if (this.camera) {
