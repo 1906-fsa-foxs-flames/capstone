@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   cameraButton: {
     fontSize: 150, 
     color: 'white', 
-    // fontFamily: 'Courier New' 
+    fontFamily: 'Courier New' 
   }
 });
