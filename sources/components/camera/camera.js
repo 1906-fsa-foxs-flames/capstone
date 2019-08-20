@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-//import vision from '@google-cloud/vision';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import * as ImagePicker from 'expo-image-picker';
@@ -18,10 +17,8 @@ export default class Cam extends React.Component {
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    const { rollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     this.setState({
       hasCameraPermission: status === 'granted',
-      // hasCameraRollPermission: status === 'granted'
    })
   }
   snap = async () => {
@@ -55,7 +52,9 @@ export default class Cam extends React.Component {
           }
         );
         let responseJson = await response.json();
-        Alert.alert(responseJson.responses[0].fullTextAnnotation.text);
+        let OCRtext = responseJson.responses[0].fullTextAnnotation.text
+        let split = OCRtext.split('')
+        alert(split[0])
       }
     } catch(error) {
       console.log(error)
@@ -86,19 +85,6 @@ export default class Cam extends React.Component {
     blob.close();
     return img.ref.getDownloadURL();
   }
-
-  //     // Creates a client
-  //     const client = new vision.ImageAnnotatorClient({
-  //       keyFilename: './capstone.json'
-  //     });
-
-  //     // Performs label detection on the image file
-  //     const [result] = await client.textDetection(photo.uri);
-  //     const detections = result.textAnnotations;
-  //     console.log('Text:');
-  //     detections.forEach(text => console.log(text));
-  //   }
-  // }
 
   render() {
     const { hasCameraPermission } = this.state;
