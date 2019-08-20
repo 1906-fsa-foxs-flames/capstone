@@ -55,7 +55,7 @@ export default class Cam extends React.Component {
           }
         );
         let responseJson = await response.json();
-        console.log(responseJson.responses[0].fullTextAnnotation.text);
+        Alert.alert(responseJson.responses[0].fullTextAnnotation.text);
       }
     } catch(error) {
       console.log(error)
