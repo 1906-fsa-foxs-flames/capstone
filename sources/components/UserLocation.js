@@ -3,24 +3,19 @@ import { View, StyleSheet } from "react-native";
 import MapView from "react-native-maps";
 
 const usersMap = props => {
-  let userLocationMarker = null;
-  if (props.userLocation) {
-    userLocationMarker = <MapView.Marker coordinate={props.userLocation} />;
-  }
   return (
     <View style={styles.mapContainer}>
       <MapView
         initialRegion={{
           latitude: 40.78,
           longitude: -73.96,
-          latitudeDelta: 0.1,
+          latitudeDelta: 0.05,
           longitudeDelta: 0.0421
         }}
         region={props.userLocation}
+        showsUserLocation={true}
         style={styles.map}
-      >
-        {userLocationMarker}
-      </MapView>
+      />
     </View>
   );
 };
