@@ -21,7 +21,7 @@ export default class Cam extends React.Component {
     const { rollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     this.setState({ 
       hasCameraPermission: status === 'granted',
-      hasCameraRollPermission: status === 'granted'
+      // hasCameraRollPermission: status === 'granted'
    })
   }
   snap = async () => {
@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   cameraButton: {
     fontSize: 150, 
     color: 'white', 
-    fontFamily: 'Courier New' 
+    // fontFamily: 'Courier New' 
   }
 });
