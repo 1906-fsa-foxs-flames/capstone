@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-// import vision from '@google-cloud/vision';
+//import vision from '@google-cloud/vision';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,7 +19,7 @@ export default class Cam extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     const { rollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    this.setState({ 
+    this.setState({
       hasCameraPermission: status === 'granted',
       // hasCameraRollPermission: status === 'granted'
    })
@@ -28,10 +28,37 @@ export default class Cam extends React.Component {
     try {
       if (this.camera) {
         const photo = await this.camera.takePictureAsync();
-        Alert.alert('Success!')
-        this.uploadImage(photo.uri, 'test')
+        let uploadUrl = await this.uploadImage(photo.uri, 'test')
+        let body = JSON.stringify({
+          requests: [
+            {
+              features: [
+                { type: "TEXT_DETECTION", maxResults: 5 },
+              ],
+              image: {
+                source: {
+                  imageUri: uploadUrl
+                }
+              }
+            }
+          ]
+        });
+        let response = await fetch(
+          "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: body
+          }
+        );
+        let responseJson = await response.json();
+        Alert.alert(responseJson.responses[0].fullTextAnnotation.text);
       }
     } catch(error) {
+      console.log(error)
       alert(error);
     }
   }
@@ -55,14 +82,16 @@ export default class Cam extends React.Component {
     const blob = await response.blob();
 
     let ref = firebase.storage().ref().child('images/' + imageName);
-    return ref.put(blob);
+    let img = await ref.put(blob);
+    blob.close();
+    return img.ref.getDownloadURL();
   }
 
   //     // Creates a client
   //     const client = new vision.ImageAnnotatorClient({
   //       keyFilename: './capstone.json'
   //     });
-    
+
   //     // Performs label detection on the image file
   //     const [result] = await client.textDetection(photo.uri);
   //     const detections = result.textAnnotations;
@@ -70,7 +99,7 @@ export default class Cam extends React.Component {
   //     detections.forEach(text => console.log(text));
   //   }
   // }
-  
+
   render() {
     const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {
@@ -80,9 +109,9 @@ export default class Cam extends React.Component {
       return <Text>No access to camera</Text>
     }
     else {
-      return ( 
+      return (
         <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} type={this.state.type} 
+          <Camera style={{ flex: 1 }} type={this.state.type}
             ref={ref => {
               this.camera = ref;
             }}>
@@ -111,8 +140,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cameraButton: {
-    fontSize: 150, 
-    color: 'white', 
-    fontFamily: 'Courier New' 
+    fontSize: 150,
+    color: 'white',
+    fontFamily: 'Courier New'
   }
 });
