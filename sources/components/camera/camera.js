@@ -1,9 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 // import vision from '@google-cloud/vision';
+import apiKeys from '../../variables/apiKeys';
+import * as firebase from 'firebase';
+import * as ImagePicker from 'expo-image-picker';
 
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
+
+firebase.initializeApp(apiKeys.firebaseConfig);
 
 export default class Cam extends React.Component {
   state = {
@@ -13,13 +18,44 @@ export default class Cam extends React.Component {
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' })
+    const { rollStatus } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    this.setState({ 
+      hasCameraPermission: status === 'granted',
+      // hasCameraRollPermission: status === 'granted'
+   })
   }
   snap = async () => {
-    if (this.camera) {
-      let photo = await this.camera.takePictureAsync();
-      alert(photo.uri)
+    try {
+      if (this.camera) {
+        const photo = await this.camera.takePictureAsync();
+        Alert.alert('Success!')
+        this.uploadImage(photo.uri, 'test')
+      }
+    } catch(error) {
+      alert(error);
     }
+  }
+
+  onChooseImagePress = async() => {
+    let result = await ImagePicker.launchCameraAsync();
+
+    if (!result.cancelled) {
+      this.uploadImage(result.uri, "test")
+      .then(() => {
+        alert("Success");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    }
+  }
+
+  uploadImage = async (uri, imageName) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    let ref = firebase.storage().ref().child('images/' + imageName);
+    return ref.put(blob);
   }
 
   //     // Creates a client
@@ -52,7 +88,7 @@ export default class Cam extends React.Component {
             }}>
             <View style={styles.cameraStyle}>
               <TouchableOpacity style={styles.onPress}
-                onPress={(this.snap)}>
+                onPress={this.snap}>
                 <Text style={styles.cameraButton}> o </Text>
               </TouchableOpacity>
             </View>

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "capstone-249918",
+  "private_key_id": "14951bd1cdb3e122c5cabc4f4722e2930cba9a55",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzfT6itRn6VaO+\n1oTUimmBzxjQKPXyB5Kwz+t0V7yjLUn+D6sOtmZIENU2vW87wxkqagCgKSpl3B0D\nM8RqW/cX/eBHI/9Z+dNRScx+E5r7QRHBgpF3mnCuRtucxdJAc7muM6syHcrKjwl3\nQ7i0qCYc02LbEHE8TwVn+W8iKihZcSLSUPIKBaLbc0kdNmC9BMbck3iHjimXUa19\nV92Y2Ye8fmT6RlE5rjNNU2x1sH18qhg+NfhsiQK0TABLfDa1MJ3zoS7PSfPshIa2\nawql8CwJ4iRKIyD0O4QiUOu3p7lpjOuUwodVg+X7JYw4Fa6lf+hmq9oiYSws+yEs\n2VQMEt5hAgMBAAECggEACTFObm3hDTmqn8ED35DRM4VES5D1e7ZYlHapo/VEY4UT\nx4/M3n2IAoPeL6YHFuP4m3v/WTSSh9H8qGfT1PCt2Iw3mt0knFqXsI+big99/gVI\noAUMZzhBMiPN5psZGBT1Ow9JYtE0zCgEP5f300TTYuGOrBKNAh439CnJv9Gx7Fax\ncuPAH8Z3Sgc3mWlJadBDvOGoogMywHX9H733Ilss0mYUHWFznodoCurvuD6/Oxyx\nEoYfpaZJ6AmtpT/u7eNFLJbhGE09xS5aUc4n5Gn5vNMT4d1NzY6J/74jxPoSw2lX\nPrv8jhQMXPhajWNjtZ2WIkXujt8O/cCKw+nk/IaL0wKBgQDt2+MmK8EmbH0K7HHW\n6OPsumFw0L1+kwUV1M81pTmldQR6ljCBdrAlR3KlvWGWAKN8rB/Yvy9PiBilB82U\nfQA0/PURvovi+0dDTKKUk1cW8YLo8HfrKBpiMIId9EKQBLMqFEWeosmY5yWUpo10\nMoD6wmWqETDSjg8jZxZbsuSSPwKBgQDBLbWae0MlfHYPxTxfL6N/oM+3lFqew2nM\nHUvXGZ8bjWKdNXqttWoV7ijhBOyEkrjWISdixhrZZandsQJThcdOKldTUVFC+zim\nIfBMFKrXe/6excRnkvonh2aUecS/awVBg+cEOgXQEgAUaw7zoddTPnLlEhhfqRnx\nTkXH2McnXwKBgQCNy+DtF3Zszo34nh37TRjbPfzqwTXGKCUG77ebNmVYMps57SD7\nfOLjRmWdUnnDb5wGraHKl6a/ldWDRFSU6bPe4tHCA0LnTH8eKqhdRDzNy6oL7Za/\nlEeuM1bOPpgTvQmF01HxkP/3bAymQmffVmA3nP34VYkybEewBjt47PuABwKBgE16\ndMTRvTuSsJNgqvcOV0gACm95u+LDQ3KPKXTLHOpjCXM+GMcE5NiI3bJqVCZT5nhT\nccWG6QvaX4e/z8wJ8sbh6oZLLglsUusm34bUHzUv0Q6DCWP1Kgmin7zbHdMcLE57\nhbNHRj+OiKOn0KZcec00VcaUPFxZqUMD/q7Jvg6HAoGAYkDBj5eVtYhaNzqdoBcJ\nOV7N5/v+jkN4kJ7lBXogZ1WtjayTnss5W+uIwBJpAg8YvlUMlyh7rvD1SdSqeQ7y\ntKTKE18hr3q1AvuSkwUHxVP1eD5om8TeqNp+Azh54eLxwrm3rceOF3dfeV8iS5uq\ngv8dcWOKiZ2pVFuGgsMNDMg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "fox-flames@capstone-249918.iam.gserviceaccount.com",
+  "client_id": "116148863745986206489",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/fox-flames%40capstone-249918.iam.gserviceaccount.com"
+}
