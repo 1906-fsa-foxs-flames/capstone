@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import * as ImagePicker from 'expo-image-picker';
@@ -12,7 +12,8 @@ firebase.initializeApp(apiKeys.firebaseConfig);
 export default class Cam extends React.Component {
   state = {
     hasCameraPermission: null,
-    type: Camera.Constants.Type.back
+    type: Camera.Constants.Type.back,
+    photoProcessed: false
   };
 
   async componentDidMount() {
@@ -53,7 +54,7 @@ export default class Cam extends React.Component {
         let responseJson = await response.json();
         let OCRtext = responseJson.responses[0].fullTextAnnotation.text
         let split = OCRtext.split('')
-        alert(split[0])
+        this.setState({ photoProcessed: true })
       }
     } catch (error) {
       console.log(error);
@@ -94,7 +95,7 @@ export default class Cam extends React.Component {
       return <View />;
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
-    } else {
+    } else if (!this.state.photoProcessed) {
       return (
         <View style={{ flex: 1 }}>
           <Camera
@@ -112,6 +113,10 @@ export default class Cam extends React.Component {
           </Camera>
         </View>
       );
+    } else {
+      return (
+        <Text>THIS BLOCK IS WHERE THE LIST OF STATIONS WILL GO</Text>
+      )
     }
   }
 }
