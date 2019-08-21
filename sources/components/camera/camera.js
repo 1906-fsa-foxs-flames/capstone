@@ -6,6 +6,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
+import * as FileSystem from 'expo-file-system';
+
 
 firebase.initializeApp(apiKeys.firebaseConfig);
 
@@ -27,15 +29,13 @@ export default class Cam extends React.Component {
     try {
       if (this.camera) {
         const photo = await this.camera.takePictureAsync();
-        let uploadUrl = await this.uploadImage(photo.uri, "test");
+        let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, { encoding: FileSystem.EncodingType.Base64})
         let body = JSON.stringify({
           requests: [
             {
               features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
               image: {
-                source: {
-                  imageUri: uploadUrl
-                }
+                content: BASE_64_IMAGE
               }
             }
           ]
@@ -53,6 +53,7 @@ export default class Cam extends React.Component {
         );
         let responseJson = await response.json();
         let OCRtext = responseJson.responses[0].fullTextAnnotation.text
+        Alert.alert(OCRtext)
         let split = OCRtext.split('')
         this.setState({ photoProcessed: true })
       }
