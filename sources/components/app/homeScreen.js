@@ -5,37 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 
 import LogIn from "../auth/signInScreen";
 import CamTest from "../camera/camera";
-// import CamTest from '../../../test';
 
-import FetchLocation from "../FetchLocation";
 import UsersMap from "../UserLocation";
 
 class SettingsScreen extends React.Component {
-  state = {
-    userLocation: null
-  };
-
-  getUserLocationHandler = () => {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          userLocation: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.00622,
-            longitudeDelta: 0.00421
-          }
-        });
-      },
-      err => console.log(err)
-    );
-  };
-
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <FetchLocation onGetLocation={this.getUserLocationHandler} />
-        <UsersMap userLocation={this.state.userLocation} />
+        <UsersMap />
       </View>
     );
   }
