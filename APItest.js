@@ -27,6 +27,7 @@ rp({
   url: MTA_URL,
   encoding: null,
 }).then((buf) => {
+  console.log(buf)
   const feed = MtaGtfsRealtimeBindings.transit_realtime.FeedMessage.decode(buf);
 
   //This will hold the trains of the type we care about

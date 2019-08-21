@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import * as ImagePicker from 'expo-image-picker';
+import ScheduleList from '../ScheduleList'
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
@@ -27,33 +28,33 @@ export default class Cam extends React.Component {
     try {
       if (this.camera) {
         const photo = await this.camera.takePictureAsync();
-        let uploadUrl = await this.uploadImage(photo.uri, "test");
-        let body = JSON.stringify({
-          requests: [
-            {
-              features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
-              image: {
-                source: {
-                  imageUri: uploadUrl
-                }
-              }
-            }
-          ]
-        });
-        let response = await fetch(
-          "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: body
-          }
-        );
-        let responseJson = await response.json();
-        let OCRtext = responseJson.responses[0].fullTextAnnotation.text
-        let split = OCRtext.split('')
+        // let uploadUrl = await this.uploadImage(photo.uri, "test");
+        // let body = JSON.stringify({
+        //   requests: [
+        //     {
+        //       features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
+        //       image: {
+        //         source: {
+        //           imageUri: uploadUrl
+        //         }
+        //       }
+        //     }
+        //   ]
+        // });
+        // let response = await fetch(
+        //   "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
+        //   {
+        //     headers: {
+        //       Accept: "application/json",
+        //       "Content-Type": "application/json"
+        //     },
+        //     method: "POST",
+        //     body: body
+        //   }
+        // );
+        // let responseJson = await response.json();
+        // let OCRtext = responseJson.responses[0].fullTextAnnotation.text
+        // let split = OCRtext.split('')
         this.setState({ photoProcessed: true })
       }
     } catch (error) {
@@ -115,7 +116,7 @@ export default class Cam extends React.Component {
       );
     } else {
       return (
-        <Text>THIS BLOCK IS WHERE THE LIST OF STATIONS WILL GO</Text>
+        <ScheduleList />
       )
     }
   }
