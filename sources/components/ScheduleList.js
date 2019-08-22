@@ -50,13 +50,15 @@ export default class ScheduleList extends Component {
         </View>
         <View>
           <Button onPress={() => this.props.closeNextTrains()} title='Close' />
-          <Card title='Next Trains'>{this.state.trains.map(function(trainTime) {
+          <Card title='Next Trains'>
+          {this.state.trains.map(function(trainTime) {
             if (Math.ceil((trainTime - now) / 60) >= 0) {
               return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {
               return null
             }
-          })}</Card>
+          })}
+          </Card>
         </View>
       </ScrollView>
     )
