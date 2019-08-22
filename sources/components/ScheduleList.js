@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Alert, ScrollView } from 'react-native'
+import { View, Text, Alert, ScrollView, Button } from 'react-native'
 import { Card } from 'react-native-elements'
 import axios from 'axios'
 
@@ -49,7 +49,16 @@ export default class ScheduleList extends Component {
           <UserLocation />
         </View>
         <View>
-          <Card title='Next Trains'>{this.state.trains.map(x => <Text key={x}>{Math.ceil((x - now) / 60)} Min. away</Text>)}</Card>
+          <Button onPress={() => this.props.closeNextTrains()} title='Close' />
+          <Card title='Next Trains'>
+          {this.state.trains.map(function(trainTime) {
+            if (Math.ceil((trainTime - now) / 60) >= 0) {
+              return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+            } else {
+              return null
+            }
+          })}
+          </Card>
         </View>
       </ScrollView>
     )

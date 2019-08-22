@@ -3,6 +3,8 @@ import { Text, View } from 'react-native';
 import styles from '../../variables/styles';
 import TopToolBar from './topToolBar'
 
+import Camera from './camera'
+
 export default class ReportScreen extends React.Component {
 
     render() {
@@ -10,7 +12,7 @@ export default class ReportScreen extends React.Component {
             <View style={styles.container}>
                 <TopToolBar navigation={this.props.navigation} />
                 <View style={styles.mainSpace}>
-                    <Text>Report</Text>
+                    <Camera />
                 </View>
             </View>
         )

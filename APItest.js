@@ -11,7 +11,7 @@ const rp = require('request-promise')
 async function queryMTA() {
   const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=1'
   const CURRENT_STATION = { id: '230N', name: 'Bergen St.' }  //The 'N' refers to the train's direction
-  const CURRENT_LINE = '2'
+  const CURRENT_LINE = '3'
 
   const arrivalTimes = []
 
