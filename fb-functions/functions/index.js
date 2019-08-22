@@ -12,6 +12,7 @@ const rp = require('request-promise')
 // });
 
 exports.queryMTA = functions.https.onRequest(async (req, res) => {
+  console.log(req.body)
   //For testing purposes, these values are hardcoded.  Eventually they will be dynamic
   const MTA_URL = `http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=${req.body.feedId}`
   const CURRENT_STATION = { id: 'F20N', name: 'Bergen St.' }  //The 'N' refers to the train's direction
@@ -49,7 +50,7 @@ exports.queryMTA = functions.https.onRequest(async (req, res) => {
     let filtered = scheduleArray.filter(stop => stop.stop_id === stopId)
 
     //Currently this logs in UTC time.  Will eventually want to convert it to EST time
-    filtered.length > 0 ? arrivalTimes.push(new Date(filtered[0].arrival.time.low * 1000)) : null
+    filtered.length > 0 ? arrivalTimes.push(filtered[0].arrival.time.low) : null
   }
 
   //Filtering for trains scheduled to stop at the current stop and then logging the arrival times

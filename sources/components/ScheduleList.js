@@ -30,13 +30,14 @@ export default class ScheduleList extends Component {
   }
 
   render() {
+    const now = new Date().getTime() / 1000
     return (
       <ScrollView style={{flex:1}}>
         <View style={{height:300}}>
           <UserLocation />
         </View>
         <View>
-          <Card title='Next Trains'>{this.state.trains.map(x => <Text key={x}>{x}</Text>)}</Card>
+          <Card title='Next Trains'>{this.state.trains.map(x => <Text key={x}>{Math.ceil((x - now) / 60)} Min. away</Text>)}</Card>
         </View>
       </ScrollView>
     )
