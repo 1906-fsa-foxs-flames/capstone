@@ -3,7 +3,8 @@ import React from 'react';
 import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import StartScreen from './sources/components/startScreen';
 import HomeScreen from './sources/components/app/homeScreen';
-import ReportScreen from './sources/components/app/reportScreen';
+//import ReportScreen from './sources/components/app/reportScreen';
+import Camera from './sources/components/app/camera'
 import InfoScreen from './sources/components/app/infoScreen';
 import forgotPasswordScreen from './sources/components/auth/forgotPasswordScreen';
 import signInScreen from './sources/components/auth/signInScreen';
@@ -43,25 +44,25 @@ export default class App extends React.Component {
         headerMode: 'none',
       }
     );
-    
+
     const getTabBarIcon = (navigation, focused, tintColor) => {
       const { routeName } = navigation.state;
       let IconComponent = Ionicons;
       let iconName;
       if (routeName === 'Home') {
+        iconName = 'md-home';
+      } else if (routeName === 'Camera') {
         iconName = 'md-camera';
-      } else if (routeName === 'Report') {
-        iconName = 'md-person';
       } else if (routeName === 'Info') {
         iconName = 'md-subway';
       }
       return <IconComponent name={iconName} size={25} color={tintColor} />;
     };
-    
+
     const AppNav = createBottomTabNavigator(
       {
         Home: { screen: HomeScreen },
-        Report: { screen: ReportScreen},
+        Camera: { screen: Camera},
         Info: { screen: InfoScreen},
       },
       {
@@ -82,16 +83,16 @@ export default class App extends React.Component {
         }
       }
     );
-    
+
     const SwitchNav = createSwitchNavigator({
       AuthNav: { screen: AuthNav},
       AppNav: { screen: AppNav},
     }, {
       initialRouteName: this.state.isAuth ? 'AppNav' : 'AuthNav',
     });
-    
+
     const AppContainer = createAppContainer(SwitchNav);
-    
+
     return (
       <AppContainer />
     )

@@ -13,18 +13,26 @@ import * as ImageManipulator from 'expo-image-manipulator'
 firebase.initializeApp(apiKeys.firebaseConfig);
 
 export default class Cam extends React.Component {
-  state = {
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-    photoProcessed: false,
-    currentLine: ''
-  };
+  constructor() {
+    super()
+    this.state = {
+      hasCameraPermission: null,
+      type: Camera.Constants.Type.back,
+      photoProcessed: false,
+      currentLine: ''
+    }
+    this.closeNextTrains = this.closeNextTrains.bind(this)
+  }
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
       hasCameraPermission: status === 'granted',
     })
+  }
+
+  closeNextTrains() {
+    this.setState({ photoProcessed: false })
   }
 
   snap = async () => {
@@ -116,7 +124,7 @@ export default class Cam extends React.Component {
       );
     } else {
       return (
-        <ScheduleList currentLine={this.state.currentLine}/>
+        <ScheduleList currentLine={this.state.currentLine} closeNextTrains={this.closeNextTrains}/>
       )
     }
   }
