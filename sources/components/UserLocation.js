@@ -72,7 +72,7 @@ class UsersMap extends React.Component {
 const styles = StyleSheet.create({
   mapContainer: {
     width: "100%",
-    height: "70%"
+    height: "89%"
   },
   map: {
     width: "100%",

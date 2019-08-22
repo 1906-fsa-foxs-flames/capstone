@@ -1,43 +1,21 @@
 /* eslint-disable no-use-before-define */
 import React from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import StartScreen from './sources/components/startScreen';
 import HomeScreen from './sources/components/app/homeScreen';
+import ReportScreen from './sources/components/app/reportScreen';
+import InfoScreen from './sources/components/app/infoScreen';
 import forgotPasswordScreen from './sources/components/auth/forgotPasswordScreen';
 import signInScreen from './sources/components/auth/signInScreen';
 import signUpScreen from './sources/components/auth/signUpScreen';
 import * as firebase from 'firebase';
 import ApiKeys from './sources/variables/apiKeys';
-
-const AuthStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-    SignIn: signInScreen,
-    SignUp: signUpScreen,
-    ForgotPassword: forgotPasswordScreen,
-    Start: StartScreen,
-  },
-  {
-    initialRouteName: 'Start',
-    headerMode: 'none',
-  }
-);
-
-const AppStack = createStackNavigator(
-  {
-    Home: HomeScreen
-  }
-);
-
-const AppContainer = createAppContainer(AppStack);
-
-const AuthContainer = createAppContainer(AuthStack);
+import { Ionicons } from '@expo/vector-icons';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuthReady: false,
       isAuth: false,
     }
 
@@ -48,15 +26,74 @@ export default class App extends React.Component {
   }
 
   onAuthStateChanged = (user) => {
-    this.setState({isAuthReady: true});
     this.setState({isAuth: !!user});
   }
 
   render() {
+
+    const AuthNav = createStackNavigator(
+      {
+        Start: StartScreen,
+        SignIn: signInScreen,
+        SignUp: signUpScreen,
+        ForgotPassword: forgotPasswordScreen,
+      },
+      {
+        initialRouteName: 'Start',
+        headerMode: 'none',
+      }
+    );
+    
+    const getTabBarIcon = (navigation, focused, tintColor) => {
+      const { routeName } = navigation.state;
+      let IconComponent = Ionicons;
+      let iconName;
+      if (routeName === 'Home') {
+        iconName = 'md-camera';
+      } else if (routeName === 'Report') {
+        iconName = 'md-person';
+      } else if (routeName === 'Info') {
+        iconName = 'md-subway';
+      }
+      return <IconComponent name={iconName} size={25} color={tintColor} />;
+    };
+    
+    const AppNav = createBottomTabNavigator(
+      {
+        Home: { screen: HomeScreen },
+        Report: { screen: ReportScreen},
+        Info: { screen: InfoScreen},
+      },
+      {
+        initialRouteName: 'Home',
+        defaultNavigationOptions: ({navigation}) => ({
+          tabBarIcon: ({focused, tintColor}) => getTabBarIcon(navigation, focused, tintColor)
+        }),
+        tabBarOptions: {
+          activeTintColor: 'dodgerblue',
+          inactiveTintColor: 'gray',
+          labelStyle: {
+            fontSize: 16,
+            fontWeight: 'bold'
+          },
+          style: {
+            backgroundColor: 'lightblue',
+          }
+        }
+      }
+    );
+    
+    const SwitchNav = createSwitchNavigator({
+      AuthNav: { screen: AuthNav},
+      AppNav: { screen: AppNav},
+    }, {
+      initialRouteName: this.state.isAuth ? 'AppNav' : 'AuthNav',
+    });
+    
+    const AppContainer = createAppContainer(SwitchNav);
+    
     return (
-      this.state.isAuth
-      ? <AppContainer />
-      : <AuthContainer />
+      <AppContainer />
     )
   }
 }
