@@ -11,11 +11,8 @@ export default class ScheduleList extends Component {
   }
 
   async componentDidMount() {
-    console.log('a')
-    //let a = await fetch('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA')
-    let a = await axios.get('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA')
-    console.log('b')
-    console.log(a)
+    let arrivals = await axios.get('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA')
+    this.setState({ trains: arrivals.data })
   }
 
   render() {
