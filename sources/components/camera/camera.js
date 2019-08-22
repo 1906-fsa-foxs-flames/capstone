@@ -6,6 +6,9 @@ import ScheduleList from '../ScheduleList'
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
+import * as FileSystem from 'expo-file-system';
+import * as ImageManipulator from 'expo-image-manipulator'
+
 
 firebase.initializeApp(apiKeys.firebaseConfig);
 
@@ -27,20 +30,29 @@ export default class Cam extends React.Component {
   snap = async () => {
     try {
       if (this.camera) {
-        const photo = await this.camera.takePictureAsync();
-        let uploadUrl = await this.uploadImage(photo.uri, "test");
+
+        //Taking the photo
+        let photo = await this.camera.takePictureAsync();
+
+        //Compressing the photo
+        photo = await ImageManipulator.manipulateAsync(photo.uri, {}, {compress: 0.5})
+
+        //Encoding the photo as base64 so that it can be fed into Google Vision API directly
+        let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, { encoding: FileSystem.EncodingType.Base64})
+
+        //Setting the body for the Vision API request
         let body = JSON.stringify({
           requests: [
             {
               features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
               image: {
-                source: {
-                  imageUri: uploadUrl
-                }
+                content: BASE_64_IMAGE
               }
             }
           ]
         });
+
+        //Hitting the vision API
         let response = await fetch(
           "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
           {
@@ -52,10 +64,11 @@ export default class Cam extends React.Component {
             body: body
           }
         );
+
+        //Getting the text data back, splitting it up so that we only grab the first letter (should be the train line if the user has composed the photo correctly), and passing that letter on to the MTA API call
         let responseJson = await response.json();
         let OCRtext = responseJson.responses[0].fullTextAnnotation.text
         let split = OCRtext.split('')
-        Alert.alert(split[0])
         this.setState({ photoProcessed: true, currentLine: split[0] })
       }
     } catch (error) {
