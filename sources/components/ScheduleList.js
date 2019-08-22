@@ -19,10 +19,12 @@ export default class ScheduleList extends Component {
   }
 
   async componentDidMount() {
+    console.log(this.props.currentLine, 'CURRENT LINE')
     let feedKeys = Object.keys(this.feedIds)
     feedKeys = feedKeys.filter(key => key.includes(this.props.currentLine))
-    let feedId = feedKeys[0]
-    let arrivals = await axios.get('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine })
+    let feedId = this.feedIds[feedKeys[0]]
+    console.log(feedId)
+    let arrivals = await axios.post('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine })
     this.setState({ trains: arrivals.data })
   }
 
