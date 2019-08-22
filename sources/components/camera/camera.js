@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
-import * as ImagePicker from 'expo-image-picker';
+import ScheduleList from '../ScheduleList'
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
@@ -15,7 +15,8 @@ export default class Cam extends React.Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
-    photoProcessed: false
+    photoProcessed: false,
+    currentLine: ''
   };
 
   async componentDidMount() {
@@ -55,25 +56,12 @@ export default class Cam extends React.Component {
         let OCRtext = responseJson.responses[0].fullTextAnnotation.text
         Alert.alert(OCRtext)
         let split = OCRtext.split('')
-        this.setState({ photoProcessed: true })
+        Alert.alert(split[0])
+        this.setState({ photoProcessed: true, currentLine: split[0] })
       }
     } catch (error) {
       console.log(error);
       alert(error);
-    }
-  };
-
-  onChooseImagePress = async () => {
-    let result = await ImagePicker.launchCameraAsync();
-
-    if (!result.cancelled) {
-      this.uploadImage(result.uri, "test")
-        .then(() => {
-          alert("Success");
-        })
-        .catch(error => {
-          alert(error);
-        });
     }
   };
 
@@ -116,7 +104,7 @@ export default class Cam extends React.Component {
       );
     } else {
       return (
-        <Text>THIS BLOCK IS WHERE THE LIST OF STATIONS WILL GO</Text>
+        <ScheduleList currentLine={this.state.currentLine}/>
       )
     }
   }
