@@ -4,7 +4,12 @@ import UsersMap from '../UserLocation';
 import styles from '../../variables/styles';
 import TopToolBar from './topToolBar';
 
-export default class HomeScreen extends React.Component {
+import LogIn from "../auth/signInScreen";
+import CamTest from "../camera/camera";
+
+import UsersMap from "../UsersMap";
+
+class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
