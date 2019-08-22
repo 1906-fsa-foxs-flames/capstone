@@ -3,7 +3,8 @@ import { View, Text, Alert, ScrollView } from 'react-native'
 import { Card } from 'react-native-elements'
 import axios from 'axios'
 
-import UserLocation from './UserLocation'
+import UserLocation from './UsersMap'
+import NearestCity from "../../trainStopInfo";
 
 export default class ScheduleList extends Component {
   constructor(props) {
@@ -21,12 +22,23 @@ export default class ScheduleList extends Component {
     }
   }
 
-  async componentDidMount() {
+  async sendToAPI(position) {
+    //Getting the station you're at
+    const station = NearestCity(position.coords.latitude, position.coords.longitude)
+
+    //Finding which MTA feed to query in the firebase function
     let feedKeys = Object.keys(this.feedIds)
     feedKeys = feedKeys.filter(key => key.includes(this.props.currentLine))
     let feedId = this.feedIds[feedKeys[0]]
-    let arrivals = await axios.post('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine })
-    this.setState({ trains: arrivals.data, displayMap: true })
+
+    //Querying the firebase function and setting the trains on state
+    let arrivals = await axios.post('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine, station })
+    this.setState({ trains: arrivals.data })
+  }
+
+  componentDidMount() {
+    //Gets the user's location in the background for use in calculating what station a user is at
+    navigator.geolocation.getCurrentPosition(position => this.sendToAPI(position))
   }
 
   render() {

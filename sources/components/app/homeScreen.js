@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import LogIn from "../auth/signInScreen";
 import CamTest from "../camera/camera";
 
-import UsersMap from "../UserLocation";
+import UsersMap from "../UsersMap";
 
 class SettingsScreen extends React.Component {
   render() {
