@@ -50,7 +50,26 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 6,
         margin: 8,
-    }
+    },
+    mainSpace: {
+        flex: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      toolsBar: {
+        flex: 1,
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        backgroundColor: 'lightblue',
+        marginTop: 24,
+        width: '100%',
+      },
+      toolBarButton: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'gray',
+      }
 });
 
 export default styles;
