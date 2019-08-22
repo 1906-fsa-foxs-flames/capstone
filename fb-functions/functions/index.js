@@ -14,9 +14,9 @@ const rp = require('request-promise')
 exports.queryMTA = functions.https.onRequest(async (req, res) => {
 
   //For testing purposes, these values are hardcoded.  Eventually they will be dynamic
-  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=21'
+  const MTA_URL = `http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=${req.body.feedId}`
   const CURRENT_STATION = { id: 'F20N', name: 'Bergen St.' }  //The 'N' refers to the train's direction
-  const CURRENT_LINE = 'F'
+  const CURRENT_LINE = req.body.currentLine
 
   //Hitting the MTA API
   let arrivals = await rp({

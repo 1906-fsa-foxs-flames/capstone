@@ -3,13 +3,26 @@ import { View, Text, Alert } from 'react-native'
 import axios from 'axios'
 
 export default class ScheduleList extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = { trains: [] }
+    this.feedIds = {
+      '123456S': 1,
+      'ACEHS': 26,
+      'NQRW': 16,
+      'BDFM': 21,
+      'L': 2,
+      'G': 31,
+      'JZ': 36,
+      '7': 51
+    }
   }
 
   async componentDidMount() {
-    let arrivals = await axios.get('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA')
+    let feedKeys = Object.keys(this.feedIds)
+    feedKeys = feedKeys.filter(key => key.includes(this.props.currentLine))
+    let feedId = feedKeys[0]
+    let arrivals = await axios.get('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine })
     this.setState({ trains: arrivals.data })
   }
 
