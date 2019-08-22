@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { View, Text, Alert } from 'react-native'
 import axios from 'axios'
 
-//This library handles the protocol buffers required to get the MTA data in a useful format
-
 export default class ScheduleList extends Component {
   constructor() {
     super()
