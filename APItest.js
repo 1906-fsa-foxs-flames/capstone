@@ -9,9 +9,9 @@ const rp = require('request-promise')
 
 //For the purposes of developing the API query code, the data feed URL, current station, and current line will be hardcoded
 async function queryMTA() {
-  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=21'
-  const CURRENT_STATION = { id: 'F20N', name: 'Bergen St.' }  //The 'N' refers to the train's direction
-  const CURRENT_LINE = 'F'
+  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=1'
+  const CURRENT_STATION = { id: '230N', name: 'Bergen St.' }  //The 'N' refers to the train's direction
+  const CURRENT_LINE = '2'
 
   const arrivalTimes = []
 
@@ -37,12 +37,21 @@ async function queryMTA() {
     //entity = a single train
     feed.entity.forEach((entity) => {
       //Each train's ID will include the number/letter of it's line
-      if (entity.id.includes(CURRENT_LINE)) {
-        if (entity.trip_update) {
+      if (entity.trip_update) {
+        if (entity.trip_update.trip.route_id.includes(CURRENT_LINE)) {
           //Pushing all the relevant trains to an array for filtering
           relevantTrains.push(entity)
         }
       }
+
+
+/*       //Each train's ID will include the number/letter of it's line
+      if (entity.trip_update.trip.route_id.includes(CURRENT_LINE)) {
+        if (entity.trip_update) {
+          //Pushing all the relevant trains to an array for filtering
+          relevantTrains.push(entity)
+        }
+      } */
     });
 
     //Filtering for trains scheduled to stop at the current stop and then logging the arrival times
