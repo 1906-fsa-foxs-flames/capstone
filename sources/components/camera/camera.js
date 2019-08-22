@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
-import * as ImagePicker from 'expo-image-picker';
 import ScheduleList from '../ScheduleList'
 
 import { Camera } from "expo-camera";
@@ -14,7 +13,8 @@ export default class Cam extends React.Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
-    photoProcessed: false
+    photoProcessed: false,
+    currentLine: ''
   };
 
   async componentDidMount() {
@@ -28,52 +28,39 @@ export default class Cam extends React.Component {
     try {
       if (this.camera) {
         const photo = await this.camera.takePictureAsync();
-        // let uploadUrl = await this.uploadImage(photo.uri, "test");
-        // let body = JSON.stringify({
-        //   requests: [
-        //     {
-        //       features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
-        //       image: {
-        //         source: {
-        //           imageUri: uploadUrl
-        //         }
-        //       }
-        //     }
-        //   ]
-        // });
-        // let response = await fetch(
-        //   "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
-        //   {
-        //     headers: {
-        //       Accept: "application/json",
-        //       "Content-Type": "application/json"
-        //     },
-        //     method: "POST",
-        //     body: body
-        //   }
-        // );
-        // let responseJson = await response.json();
-        // let OCRtext = responseJson.responses[0].fullTextAnnotation.text
-        // let split = OCRtext.split('')
-        this.setState({ photoProcessed: true })
+        let uploadUrl = await this.uploadImage(photo.uri, "test");
+        let body = JSON.stringify({
+          requests: [
+            {
+              features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
+              image: {
+                source: {
+                  imageUri: uploadUrl
+                }
+              }
+            }
+          ]
+        });
+        let response = await fetch(
+          "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: body
+          }
+        );
+        let responseJson = await response.json();
+        let OCRtext = responseJson.responses[0].fullTextAnnotation.text
+        let split = OCRtext.split('')
+        Alert.alert(split[0])
+        this.setState({ photoProcessed: true, currentLine: split[0] })
       }
     } catch (error) {
       console.log(error);
       alert(error);
-    }
-  };
-
-  onChooseImagePress = async () => {
-    let result = await ImagePicker.launchCameraAsync();
-
-    if (!result.cancelled) {
-      this.uploadImage(result.uri, "test")
-        .then(() => {
-          alert("Success");
-        })
-        .catch(error => {
-          alert(error);
-        });
     }
   };
 
@@ -116,7 +103,7 @@ export default class Cam extends React.Component {
       );
     } else {
       return (
-        <ScheduleList />
+        <ScheduleList currentLine={this.state.currentLine}/>
       )
     }
   }
