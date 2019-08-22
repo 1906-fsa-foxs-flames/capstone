@@ -20,7 +20,7 @@ export default class SignInScreen extends React.Component {
     onSignInPress = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then( () => {
-
+            this.props.navigation.navigate('Home');
         }, (error) => {
             Alert.alert(error.message);
         });
