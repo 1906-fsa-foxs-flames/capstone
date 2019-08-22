@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
-import * as ImagePicker from 'expo-image-picker';
 import ScheduleList from '../ScheduleList'
 
 import { Camera } from "expo-camera";
@@ -56,25 +55,12 @@ export default class Cam extends React.Component {
         let responseJson = await response.json();
         let OCRtext = responseJson.responses[0].fullTextAnnotation.text
         let split = OCRtext.split('')
+        Alert.alert(split[0])
         this.setState({ photoProcessed: true, currentLine: split[0] })
       }
     } catch (error) {
       console.log(error);
       alert(error);
-    }
-  };
-
-  onChooseImagePress = async () => {
-    let result = await ImagePicker.launchCameraAsync();
-
-    if (!result.cancelled) {
-      this.uploadImage(result.uri, "test")
-        .then(() => {
-          alert("Success");
-        })
-        .catch(error => {
-          alert(error);
-        });
     }
   };
 
