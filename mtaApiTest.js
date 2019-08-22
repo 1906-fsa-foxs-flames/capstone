@@ -7,7 +7,7 @@ var mta = new Mta({
 });
 
 // TO GET MTA STOP INFO
-// mta.stop(635).then(function(result) {
+// mta.stop("635").then(function(result) {
 //   console.log(result);
 // });
 
@@ -17,12 +17,12 @@ var mta = new Mta({
 // });
 
 // TO GET MTA SCHEDULE
-// mta.schedule((stop = 635)).then(function(result) {
+// mta.schedule((stop = "635")).then(function(result) {
 //   console.log(result.schedule[stop]["N"]);
 // });
 
 // TO GET MTA SCHEDULE FORMATTED
-// mta.schedule((stop = 635)).then(function(result) {
+// mta.schedule((stop = "635")).then(function(result) {
 //   let schedule = result.schedule[stop]["N"].map(train =>
 //     moment.unix(train.arrivalTime).format("MMMM Do YYYY, h:mm:ss a")
 //   );
