@@ -1,13 +1,15 @@
 import React from "react";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, Button, Text } from "react-native";
 import MapView from "react-native-maps";
 import FetchLocation from "./FetchLocation";
+import NearestCity from "../../trainStopInfo";
 
 class UsersMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userLocation: null
+      userLocation: null,
+      station: null
     };
   }
 
@@ -51,6 +53,17 @@ class UsersMap extends React.Component {
         >
           <FetchLocation onGetLocation={this.getUserLocationHandler} />
         </View>
+        {this.state.userLocation && (
+          <Text style={{ fontSize: 20 }}>
+            Closest station:{" "}
+            {
+              NearestCity(
+                this.state.userLocation.latitude,
+                this.state.userLocation.longitude
+              )[1]
+            }
+          </Text>
+        )}
       </View>
     );
   }
@@ -59,8 +72,7 @@ class UsersMap extends React.Component {
 const styles = StyleSheet.create({
   mapContainer: {
     width: "100%",
-    height: "90%",
-    marginTop: 10
+    height: "70%"
   },
   map: {
     width: "100%",
