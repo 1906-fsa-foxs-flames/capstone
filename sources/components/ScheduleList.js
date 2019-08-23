@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Alert, ScrollView } from 'react-native'
+import { View, Text, Alert, ScrollView, Dimensions } from 'react-native'
 import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
@@ -48,6 +48,7 @@ export default class ScheduleList extends Component {
     //For rendering a maximum number of trains (who cares if there's a train coming in an hour and a half?)
     let uptownCounter = 0
     let downtownCounter = 0
+    let phoneWidth = Dimensions.get('window').width
     return (
       <ScrollView style={{flex:1}}>
         <View style={{height:300}}>
@@ -55,26 +56,33 @@ export default class ScheduleList extends Component {
         </View>
         <View>
           <Text style={{ textAlign: 'center' }}>Next {this.props.currentLine} Trains</Text>
-          <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
-          {this.state.uptownTrains.map(function(trainTime) {
-            if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
-              uptownCounter++
-              return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
-            } else {
-              return null
-            }
-          })}
-          </Card>
-          <Card title='Downtown' containerStyle={{ flex: 1, alignItems: 'center' }}>
-          {this.state.downtownTrains.map(function(trainTime) {
-            if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
-              downtownCounter++
-              return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
-            } else {
-              return null
-            }
-          })}
-          </Card>
+          <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
+            <View style={{width: phoneWidth}}>
+              <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+                {this.state.uptownTrains.map(function(trainTime) {
+                  if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
+                    uptownCounter++
+                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+                  } else {
+                    return null
+                  }
+                })}
+                </Card>
+            </View>
+            <View style={{width: phoneWidth}}>
+              <Card title='Downtown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+                {this.state.downtownTrains.map(function(trainTime) {
+                  if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
+                    downtownCounter++
+                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+                  } else {
+                    return null
+                  }
+                })}
+                </Card>
+            </View>
+          </ScrollView>
+            
           <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }}/>
         </View>
       </ScrollView>
