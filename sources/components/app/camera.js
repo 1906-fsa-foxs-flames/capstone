@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import ScheduleList from '../ScheduleList'
@@ -19,7 +19,8 @@ export default class Cam extends React.Component {
       hasCameraPermission: null,
       type: Camera.Constants.Type.back,
       photoProcessed: false,
-      currentLine: ''
+      currentLine: '',
+      isLoading: false
     }
     this.closeNextTrains = this.closeNextTrains.bind(this)
   }
@@ -28,17 +29,18 @@ export default class Cam extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
       hasCameraPermission: status === 'granted',
+      isLoading: false
     })
   }
 
   closeNextTrains() {
-    this.setState({ photoProcessed: false })
+    this.setState({ photoProcessed: false, isLoading: false })
   }
 
   snap = async () => {
     try {
       if (this.camera) {
-
+        this.setState({isLoading: true})
         //Taking the photo
         let photo = await this.camera.takePictureAsync();
 
@@ -80,6 +82,7 @@ export default class Cam extends React.Component {
         this.setState({ photoProcessed: true, currentLine: split[0] })
       }
     } catch (error) {
+      this.setState({isLoading: false})
       Alert.alert('Image processing failed - please try again or yell your train line into the microphone');
     }
   };
@@ -105,9 +108,11 @@ export default class Cam extends React.Component {
       return <Text>No access to camera</Text>;
     } else if (!this.state.photoProcessed) {
       return (
-        <View style={{ flex: 1 }}>
-          <Camera
-            style={{ flex: 1 }}
+        
+        <View style={{ flex: 1 , justifyContent: 'center'}}>
+          {!this.state.isLoading
+          ? (<Camera
+            style={{ flex: 5 }}
             type={this.state.type}
             ref={ref => {
               this.camera = ref;
@@ -118,7 +123,16 @@ export default class Cam extends React.Component {
                 <Ionicons name="ios-radio-button-off" color='white' size={100} />
               </TouchableOpacity>
             </View>
-          </Camera>
+          </Camera>)
+          :
+          (
+            <View>
+          <ActivityIndicator size='large'/>
+            <View style={{flexDirection: "row", justifyContent: "center", alignContent:"center"}}>
+              <Text textAlign='center'>Your data is being held by a train dispatcher</Text>
+            </View>
+          </View>)
+          }
         </View>
       );
     } else {
@@ -139,10 +153,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     alignItems: "center"
-  },
-  cameraButton: {
-    fontSize: 150,
-    color: "white",
-    fontFamily: "Courier New"
   }
 });
