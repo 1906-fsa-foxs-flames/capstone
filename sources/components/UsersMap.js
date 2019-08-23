@@ -1,8 +1,10 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
+import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
+import { lines } from "../../SubwayLines";
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -10,16 +12,16 @@ class UsersMap extends React.Component {
     this.state = {
       userLocation: null
     };
-    this.getUserLocationHandler = this.getUserLocationHandler.bind(this)
+    this.getUserLocationHandler = this.getUserLocationHandler.bind(this);
   }
 
   getUserLocationHandler = (zoom = false) => {
     //This makes it so the automatic zoom to the users location is a wide view, but if the botton is pressed it zooms in much closer
-    let latDelta = 0.05
-    let lonDelta = 0.05
+    let latDelta = 0.05;
+    let lonDelta = 0.05;
     if (zoom) {
-      latDelta /= 4
-      lonDelta /= 4
+      latDelta /= 4;
+      lonDelta /= 4;
     }
 
     navigator.geolocation.getCurrentPosition(
@@ -38,23 +40,27 @@ class UsersMap extends React.Component {
   };
 
   componentDidMount() {
-    this.getUserLocationHandler()
+    this.getUserLocationHandler();
   }
 
   render() {
     return (
       <View style={styles.mapContainer}>
-        <MapView
-          initialRegion={{
-            latitude: 40.78,
-            longitude: -73.965,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05
-          }}
-          region={this.state.userLocation}
-          showsUserLocation
-          style={styles.map}
-        />
+        {this.state.userLocation && (
+          <MapView
+            initialRegion={{
+              latitude: 40.78,
+              longitude: -73.965,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05
+            }}
+            region={this.state.userLocation}
+            showsUserLocation
+            style={styles.map}
+          >
+            <Geojson geojson={lines} strokeColor={"green"} />
+          </MapView>
+        )}
         <View
           style={{
             position: "absolute",
@@ -63,8 +69,8 @@ class UsersMap extends React.Component {
             right: "5%"
           }}
         >
-        <FetchLocation onGetLocation={this.getUserLocationHandler} />
-        </View >
+          <FetchLocation onGetLocation={this.getUserLocationHandler} />
+        </View>
         {this.state.userLocation && (
           <Text style={{ fontSize: 20 }}>
             Closest station:{" "}
