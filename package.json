@@ -36,7 +36,8 @@
     "rn-fetch-blob": "^0.10.16"
   },
   "devDependencies": {
-    "babel-preset-expo": "^6.0.0"
+    "babel-preset-expo": "^6.0.0",
+    "eslint-plugin-promise": "^4.2.1"
   },
   "private": true
 }
