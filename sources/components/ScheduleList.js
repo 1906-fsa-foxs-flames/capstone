@@ -51,7 +51,7 @@ export default class ScheduleList extends Component {
     return (
       <ScrollView style={{flex:1}}>
         <View style={{height:300}}>
-          <UserLocation />
+          <UserLocation smaller={true} />
         </View>
         <View>
           <Text style={{ textAlign: 'center' }}>Next {this.props.currentLine} Trains</Text>
