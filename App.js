@@ -71,14 +71,14 @@ export default class App extends React.Component {
           tabBarIcon: ({focused, tintColor}) => getTabBarIcon(navigation, focused, tintColor)
         }),
         tabBarOptions: {
-          activeTintColor: 'dodgerblue',
-          inactiveTintColor: 'gray',
+          activeTintColor: '#f2a900',
+          inactiveTintColor: 'white',
           labelStyle: {
             fontSize: 12,
             fontWeight: 'bold'
           },
           style: {
-            backgroundColor: 'lightblue',
+            backgroundColor: '#0f61a9',
           }
         }
       }
