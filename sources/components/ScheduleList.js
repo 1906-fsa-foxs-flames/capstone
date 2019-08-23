@@ -42,19 +42,24 @@ export default class ScheduleList extends Component {
   }
 
   render() {
+    //For rendering the times as relative instead of absolute
     const now = new Date().getTime() / 1000
+
+    //For rendering a maximum number of trains (who cares if there's a train coming in an hour and a half?)
+    let uptownCounter = 0
+    let downtownCounter = 0
     return (
       <ScrollView style={{flex:1}}>
         <View style={{height:300}}>
-          <UserLocation />
+          <UserLocation smaller={true} />
         </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Button onPress={() => this.props.closeNextTrains()} title='Close' />
-          <Text>Next {this.props.currentLine} Trains</Text>
+        <View>
+          <Text style={{ textAlign: 'center' }}>Next {this.props.currentLine} Trains</Text>
           <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
           {this.state.uptownTrains.map(function(trainTime) {
-            if (Math.ceil((trainTime - now) / 60) >= 0) {
-              return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+            if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
+              uptownCounter++
+              return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {
               return null
             }
@@ -62,13 +67,15 @@ export default class ScheduleList extends Component {
           </Card>
           <Card title='Downtown' containerStyle={{ flex: 1, alignItems: 'center' }}>
           {this.state.downtownTrains.map(function(trainTime) {
-            if (Math.ceil((trainTime - now) / 60) >= 0) {
-              return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+            if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
+              downtownCounter++
+              return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {
               return null
             }
           })}
           </Card>
+          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }}/>
         </View>
       </ScrollView>
     )

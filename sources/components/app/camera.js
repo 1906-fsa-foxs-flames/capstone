@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, IconComponent } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import ScheduleList from '../ScheduleList'
@@ -80,8 +80,7 @@ export default class Cam extends React.Component {
         this.setState({ photoProcessed: true, currentLine: split[0] })
       }
     } catch (error) {
-      console.log(error);
-      alert(error);
+      Alert.alert('Image processing failed - please try again or yell your train line into the microphone');
     }
   };
 
