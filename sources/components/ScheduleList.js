@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Alert, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Image } from 'react-native'
 import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
@@ -19,6 +19,10 @@ export default class ScheduleList extends Component {
       'G': 31,
       'JZ': 36,
       '7': 51
+    }
+    this.lineImgs = {
+      2: require('../../assets/2TRAIN.png'),
+      3: require('../../assets/3TRAIN.png')
     }
   }
 
@@ -48,18 +52,28 @@ export default class ScheduleList extends Component {
     //For rendering a maximum number of trains (who cares if there's a train coming in an hour and a half?)
     let uptownCounter = 0
     let downtownCounter = 0
+
+    //For grabbing the train line image
+    var icon = this.props.currentLine
+    ? this.lineImgs[this.props.currentLine]
+    : require('../../assets/Empty.png');
+
     return (
       <ScrollView style={{flex:1}}>
-        <View style={{height:300}}>
+        <View style={{ height:300 }}>
           <UserLocation smaller={true} />
+          <View style={{ paddingTop: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{ textAlign: 'center', fontSize: 24 }}>Next</Text>
+            <Image source={icon} style={{width: 40, height: 40}} />
+            <Text style={{ textAlign: 'center', fontSize: 24 }}>Trains</Text>
+          </View>
         </View>
         <View>
-          <Text style={{ textAlign: 'center' }}>Next {this.props.currentLine} Trains</Text>
           <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
           {this.state.uptownTrains.map(function(trainTime) {
             if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
               uptownCounter++
-              return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+              return <Text key={trainTime} style={{ textAlign: 'center', fontSize: 16 }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {
               return null
             }
@@ -69,13 +83,13 @@ export default class ScheduleList extends Component {
           {this.state.downtownTrains.map(function(trainTime) {
             if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
               downtownCounter++
-              return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+              return <Text key={trainTime} style={{ textAlign: 'center', fontSize: 16 }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {
               return null
             }
           })}
           </Card>
-          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }}/>
+          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }} buttonStyle={{ backgroundColor: '#0f61a9' }}/>
         </View>
       </ScrollView>
     )
