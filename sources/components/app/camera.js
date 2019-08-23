@@ -45,7 +45,7 @@ export default class Cam extends React.Component {
         let photo = await this.camera.takePictureAsync();
 
         //Compressing the photo
-        photo = await ImageManipulator.manipulateAsync(photo.uri, {}, {compress: 0.4})
+        photo = await ImageManipulator.manipulateAsync(photo.uri, {}, {compress: 0.5})
 
         //Encoding the photo as base64 so that it can be fed into Google Vision API directly
         let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, { encoding: FileSystem.EncodingType.Base64})
