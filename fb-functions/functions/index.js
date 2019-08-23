@@ -5,17 +5,9 @@ const MtaGtfsRealtimeBindings = require('mta-gtfs-realtime-bindings');
 //Request-promise is used instead of something like axios because it's simpler to decode binary responses using a protocol buffer in r-p
 const rp = require('request-promise')
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
 exports.queryMTA = functions.https.onRequest(async (req, res) => {
-  console.log(req.body)
-  //For testing purposes, these values are hardcoded.  Eventually they will be dynamic
   const MTA_URL = `http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=${req.body.feedId}`
-  const CURRENT_STATION = { id: req.body.station[0] + 'N', name: req.body.station[1] }  //The 'N' refers to the train's direction --- CURRENTLY HARDCODED FOR TESTING
+  const CURRENT_STATION = { id: req.body.station[0], name: req.body.station[1] }
   const CURRENT_LINE = req.body.currentLine
 
   //Hitting the MTA API
@@ -42,19 +34,31 @@ exports.queryMTA = functions.https.onRequest(async (req, res) => {
       }
     });
 
-  //This will hold the arrival times of the trains for this station
-  let arrivalTimes = []
+  //These hold the arrival times of the trains for this station
+  let uptownArrivals = []
+  let downtownArrivals = []
 
   //A helper funciton that filters the trains for schedules containing the current stop and then logs the arrival time at this stop
   const filterAndLog = (scheduleArray, stopId) => {
-    let filtered = scheduleArray.filter(stop => stop.stop_id === stopId)
+    let uptownArrival = false
+    let downtownArrival = false
 
-    //Currently this logs in UTC time.  Will eventually want to convert it to EST time
-    filtered.length > 0 ? arrivalTimes.push(filtered[0].arrival.time.low) : null
+    //Checking each stop of the train for whether it matches our current stop
+    scheduleArray.forEach(stop => {
+      if (stop.stop_id === stopId + 'N') {
+        uptownArrival = stop
+      } else if (stop.stop_id === stopId + 'S') {
+        downtownArrival = stop
+      }
+    })
+
+    //Pushing any relevant stops to the arrays
+    uptownArrival ? uptownArrivals.push(uptownArrival.arrival.time.low) : null
+    downtownArrival ? downtownArrivals.push(downtownArrival.arrival.time.low) : null
   }
 
   //Filtering for trains scheduled to stop at the current stop and then logging the arrival times
   relevantTrains.forEach(train => filterAndLog(train.trip_update.stop_time_update, CURRENT_STATION.id))
 
-  res.send(arrivalTimes)
+  res.send([uptownArrivals, downtownArrivals])
 })

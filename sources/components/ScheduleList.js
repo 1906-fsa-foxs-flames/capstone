@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Alert, ScrollView, Button } from 'react-native'
-import { Card } from 'react-native-elements'
+import { View, Text, Alert, ScrollView } from 'react-native'
+import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
 import UserLocation from './UsersMap'
@@ -9,7 +9,7 @@ import NearestCity from "../../trainStopInfo";
 export default class ScheduleList extends Component {
   constructor(props) {
     super(props)
-    this.state = { trains: [] }
+    this.state = { uptownTrains: [], downtownTrains: [] }
     this.feedIds = {
       '123456S': 1,
       'ACEHS': 26,
@@ -33,7 +33,7 @@ export default class ScheduleList extends Component {
 
     //Querying the firebase function and setting the trains on state
     let arrivals = await axios.post('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine, station })
-    this.setState({ trains: arrivals.data })
+    this.setState({ uptownTrains: arrivals.data[0].sort((a, b) => a - b), downtownTrains: arrivals.data[1].sort((a, b) => a - b)})
   }
 
   componentDidMount() {
@@ -48,10 +48,20 @@ export default class ScheduleList extends Component {
         <View style={{height:300}}>
           <UserLocation />
         </View>
-        <View>
+        <View style={{ flex: 1, alignItems: 'center' }}>
           <Button onPress={() => this.props.closeNextTrains()} title='Close' />
-          <Card title='Next Trains'>
-          {this.state.trains.map(function(trainTime) {
+          <Text>Next {this.props.currentLine} Trains</Text>
+          <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+          {this.state.uptownTrains.map(function(trainTime) {
+            if (Math.ceil((trainTime - now) / 60) >= 0) {
+              return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+            } else {
+              return null
+            }
+          })}
+          </Card>
+          <Card title='Downtown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+          {this.state.downtownTrains.map(function(trainTime) {
             if (Math.ceil((trainTime - now) / 60) >= 0) {
               return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {

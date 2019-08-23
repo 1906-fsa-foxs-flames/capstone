@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#575fcf',
+        backgroundColor: '#0f61a9',
     },
     logoView: {
         flexGrow: 1,
@@ -61,14 +61,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row-reverse',
         alignItems: 'center',
         justifyContent: 'space-around',
-        backgroundColor: 'lightblue',
+        backgroundColor: '#0f61a9',
         marginTop: 24,
         width: '100%',
       },
       toolBarButton: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'gray',
+        color: 'white',
       }
 });
 

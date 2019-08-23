@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, IconComponent } from 'react-native';
 import apiKeys from '../../variables/apiKeys';
 import * as firebase from 'firebase';
 import ScheduleList from '../ScheduleList'
@@ -8,7 +8,7 @@ import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator'
-
+import { Ionicons } from '@expo/vector-icons';
 
 firebase.initializeApp(apiKeys.firebaseConfig);
 
@@ -43,7 +43,7 @@ export default class Cam extends React.Component {
         let photo = await this.camera.takePictureAsync();
 
         //Compressing the photo
-        photo = await ImageManipulator.manipulateAsync(photo.uri, {}, {compress: 0.5})
+        photo = await ImageManipulator.manipulateAsync(photo.uri, {}, {compress: 0.375})
 
         //Encoding the photo as base64 so that it can be fed into Google Vision API directly
         let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, { encoding: FileSystem.EncodingType.Base64})
@@ -116,7 +116,7 @@ export default class Cam extends React.Component {
           >
             <View style={styles.cameraStyle}>
               <TouchableOpacity style={styles.onPress} onPress={this.snap}>
-                <Text style={styles.cameraButton}> o </Text>
+                <Ionicons name="ios-radio-button-off" color='white' size={100} />
               </TouchableOpacity>
             </View>
           </Camera>
