@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Alert, ScrollView, Button } from 'react-native'
-import { Card } from 'react-native-elements'
+import { View, Text, Alert, ScrollView } from 'react-native'
+import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
 import UserLocation from './UsersMap'
@@ -43,6 +43,7 @@ export default class ScheduleList extends Component {
 
   render() {
     const now = new Date().getTime() / 1000
+    const sortedTrains = this.state.trains.sort((a, b) => a - b)
     return (
       <ScrollView style={{flex:1}}>
         <View style={{height:300}}>
@@ -50,8 +51,8 @@ export default class ScheduleList extends Component {
         </View>
         <View>
           <Button onPress={() => this.props.closeNextTrains()} title='Close' />
-          <Card title='Next Trains'>
-          {this.state.trains.map(function(trainTime) {
+          <Card title='Next Trains' containerStyle={{ flex: 1, alignItems: 'center' }}>
+          {sortedTrains.map(function(trainTime) {
             if (Math.ceil((trainTime - now) / 60) >= 0) {
               return <Text key={trainTime}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
             } else {

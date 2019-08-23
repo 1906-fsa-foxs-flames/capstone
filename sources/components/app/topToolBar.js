@@ -4,12 +4,16 @@ import styles from '../../variables/styles';
 import * as firebase from 'firebase';
 
 export default class TopToolBar extends React.Component {
+    constructor() {
+        super()
+        this.onLogoutPress = this.onLogoutPress.bind(this)
+    }
 
     onLogoutPress = () => {
         firebase.auth().signOut();
         this.props.navigation.navigate('Start');
     }
-  
+
     render() {
         const user = firebase.auth().currentUser;
         return (

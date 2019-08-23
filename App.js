@@ -74,7 +74,7 @@ export default class App extends React.Component {
           activeTintColor: 'dodgerblue',
           inactiveTintColor: 'gray',
           labelStyle: {
-            fontSize: 16,
+            fontSize: 12,
             fontWeight: 'bold'
           },
           style: {

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Button, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
@@ -8,26 +8,38 @@ class UsersMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userLocation: null,
-      station: null
+      userLocation: null
     };
+    this.getUserLocationHandler = this.getUserLocationHandler.bind(this)
   }
 
-  getUserLocationHandler = () => {
+  getUserLocationHandler = (zoom = false) => {
+    //This makes it so the automatic zoom to the users location is a wide view, but if the botton is pressed it zooms in much closer
+    let latDelta = 0.05
+    let lonDelta = 0.05
+    if (zoom) {
+      latDelta /= 4
+      lonDelta /= 4
+    }
+
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
           userLocation: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            latitudeDelta: 0.00622,
-            longitudeDelta: 0.00421
+            latitudeDelta: latDelta,
+            longitudeDelta: lonDelta
           }
-        });
+        }, () => console.log(this.state));
       },
       err => console.log(err)
     );
   };
+
+  componentDidMount() {
+    this.getUserLocationHandler()
+  }
 
   render() {
     return (
@@ -37,7 +49,7 @@ class UsersMap extends React.Component {
             latitude: 40.78,
             longitude: -73.965,
             latitudeDelta: 0.05,
-            longitudeDelta: 0.0421
+            longitudeDelta: 0.05
           }}
           region={this.state.userLocation}
           showsUserLocation
@@ -51,8 +63,8 @@ class UsersMap extends React.Component {
             right: "5%"
           }}
         >
-          <FetchLocation onGetLocation={this.getUserLocationHandler} />
-        </View>
+        <FetchLocation onGetLocation={this.getUserLocationHandler} />
+        </View >
         {this.state.userLocation && (
           <Text style={{ fontSize: 20 }}>
             Closest station:{" "}
