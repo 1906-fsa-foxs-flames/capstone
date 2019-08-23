@@ -20,6 +20,8 @@ export default class ScheduleList extends Component {
       'JZ': 36,
       '7': 51
     }
+
+    //The locations of the images for each train line
     this.lineImgs = {
       2: require('../../assets/2TRAIN.png'),
       3: require('../../assets/3TRAIN.png')
@@ -73,7 +75,7 @@ export default class ScheduleList extends Component {
         <View>
           <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
             <View style={{width: phoneWidth}}>
-              <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+              <Card title='Uptown' titleStyle={{ fontSize: 24 }} containerStyle={{ flex: 1, alignItems: 'center' }}>
                 {this.state.uptownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
                     uptownCounter++
@@ -85,7 +87,7 @@ export default class ScheduleList extends Component {
                 </Card>
             </View>
             <View style={{width: phoneWidth}}>
-              <Card title='Downtown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+              <Card title='Downtown' titleStyle={{ fontSize: 24 }} containerStyle={{ flex: 1, alignItems: 'center' }}>
                 {this.state.downtownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
                     downtownCounter++
@@ -97,8 +99,8 @@ export default class ScheduleList extends Component {
                 </Card>
             </View>
           </ScrollView>
-
-          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }}/>
+          <Text style={{ textAlign: 'center' }}>Swipe for uptown/downtown</Text>
+          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }} buttonStyle={{ backgroundColor: '#0f61a9' }}/>
         </View>
       </ScrollView>
     )
