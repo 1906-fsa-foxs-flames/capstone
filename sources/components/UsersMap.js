@@ -31,7 +31,7 @@ class UsersMap extends React.Component {
             latitudeDelta: latDelta,
             longitudeDelta: lonDelta
           }
-        }, () => console.log(this.state));
+        });
       },
       err => console.log(err)
     );

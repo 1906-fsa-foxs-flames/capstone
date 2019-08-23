@@ -9,18 +9,32 @@ const rp = require('request-promise')
 
 //For the purposes of developing the API query code, the data feed URL, current station, and current line will be hardcoded
 async function queryMTA() {
-  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=1'
-  const CURRENT_STATION = { id: '230N', name: 'Bergen St.' }  //The 'N' refers to the train's direction
-  const CURRENT_LINE = '3'
+  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=21'
+  const CURRENT_STATION = { id: 'F20', name: 'Bergen St.' }  //The 'N' refers to the train's direction
+  const CURRENT_LINE = 'F'
 
-  const arrivalTimes = []
+  let uptownArrivalTimes = []
+  let downtownArrivalTimes = []
 
   //A helper funciton that filters the trains for schedules containing the current stop and then logs the arrival time at this stop
   const filterAndLog = (scheduleArray, stopId) => {
-    let filtered = scheduleArray.filter(stop => stop.stop_id === stopId)
+    //let filtered = scheduleArray.filter(stop => stop.stop_id === stopId)
+    let uptownTrains = []
+    let downtownTrains = []
+
+    scheduleArray.forEach(function(stop) {
+      if (stop.stop_id === stopId + 'N') {
+        uptownTrains.push(stop)
+      } else if (stop.stop_id === stopId + 'S') {
+        downtownTrains.push(stop)
+      }
+    })
+
+    uptownTrains.length > 0 ? uptownArrivalTimes.push(new Date(uptownTrains[0].arrival.time.low * 1000)) : null
+    downtownTrains.length > 0 ? downtownArrivalTimes.push(new Date(downtownTrains[0].arrival.time.low * 1000)) : null
 
     //Currently this logs in UTC time.  Will eventually want to convert it to EST time
-    filtered.length > 0 ? arrivalTimes.push(new Date(filtered[0].arrival.time.low * 1000)) : null
+    //filtered.length > 0 ? arrivalTimes.push(new Date(filtered[0].arrival.time.low * 1000)) : null
   }
 
   //Need to send the r-p with null encoding because of the specifics of GTFS spec
@@ -57,7 +71,8 @@ async function queryMTA() {
     //Filtering for trains scheduled to stop at the current stop and then logging the arrival times
     relevantTrains.forEach(train => filterAndLog(train.trip_update.stop_time_update, CURRENT_STATION.id))
 
-    return arrivalTimes
+    downtownArrivalTimes = downtownArrivalTimes.sort((a, b) => a - b)
+    return [uptownArrivalTimes, downtownArrivalTimes]
 
   }).catch(e => console.log(e));
 
