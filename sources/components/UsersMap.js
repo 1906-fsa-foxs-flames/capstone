@@ -58,7 +58,7 @@ class UsersMap extends React.Component {
         <View
           style={{
             position: "absolute",
-            top: "90%",
+            top: "80%",
             alignSelf: "flex-end",
             right: "5%"
           }}
@@ -66,7 +66,7 @@ class UsersMap extends React.Component {
         <FetchLocation onGetLocation={this.getUserLocationHandler} />
         </View >
         {this.state.userLocation && (
-          <Text style={{ fontSize: 20 }}>
+          <Text style={{ fontSize: 20, textAlign: 'center' }}>
             Closest station:{" "}
             {
               NearestCity(
