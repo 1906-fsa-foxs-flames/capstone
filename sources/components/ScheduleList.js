@@ -116,7 +116,7 @@ export default class ScheduleList extends Component {
                 </Card>
             </View>
           </ScrollView>
-          <Text style={{ textAlign: 'center' }}>Swipe for uptown/downtown</Text>
+          <Text style={{ textAlign: 'center' }}>Swipe left/right for uptown/downtown</Text>
           <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }} buttonStyle={{ backgroundColor: '#0f61a9' }}/>
         </View>
       </ScrollView>
