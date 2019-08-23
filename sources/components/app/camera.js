@@ -109,7 +109,7 @@ export default class Cam extends React.Component {
     } else if (!this.state.photoProcessed) {
       return (
         
-        <View style={{ flex: 1 , justifyContent: 'center'}}>
+        <View style={{ flex: 1 , justifyContent: 'center', backgroundColor:"#0f61a9"}}>
           {!this.state.isLoading
           ? (<Camera
             style={{ flex: 5 }}
@@ -127,9 +127,9 @@ export default class Cam extends React.Component {
           :
           (
             <View>
-          <ActivityIndicator size='large'/>
+          <ActivityIndicator size='large' color='white'/>
             <View style={{flexDirection: "row", justifyContent: "center", alignContent:"center"}}>
-              <Text textAlign='center'>Your data is being held by a train dispatcher</Text>
+              <Text style={{textAlign:'center', fontSize:24, color:'white'}}>Your data is being held by a train dispatcher</Text>
             </View>
           </View>)
           }

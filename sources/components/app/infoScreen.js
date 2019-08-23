@@ -10,7 +10,7 @@ export default class InfoScreen extends React.Component {
             <View style={styles.container}>
                 <TopToolBar navigation={this.props.navigation} />
                 <View style={styles.mainSpace}>
-                    <Text>Info</Text>
+                Linking.openURL('http://google.com')
                 </View>
             </View>
         )
