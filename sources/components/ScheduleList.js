@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Alert, ScrollView, Dimensions } from 'react-native'
+import { View, Text, ScrollView, Image, Dimensions } from 'react-native'
 import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
@@ -19,6 +19,12 @@ export default class ScheduleList extends Component {
       'G': 31,
       'JZ': 36,
       '7': 51
+    }
+
+    //The locations of the images for each train line
+    this.lineImgs = {
+      2: require('../../assets/2TRAIN.png'),
+      3: require('../../assets/3TRAIN.png')
     }
   }
 
@@ -48,17 +54,28 @@ export default class ScheduleList extends Component {
     //For rendering a maximum number of trains (who cares if there's a train coming in an hour and a half?)
     let uptownCounter = 0
     let downtownCounter = 0
+
+    //For grabbing the train line image
+    var icon = this.props.currentLine
+    ? this.lineImgs[this.props.currentLine]
+    : require('../../assets/Empty.png');
+
     let phoneWidth = Dimensions.get('window').width
+
     return (
       <ScrollView style={{flex:1}}>
-        <View style={{height:300}}>
+        <View style={{ height:300 }}>
           <UserLocation smaller={true} />
+          <View style={{ paddingTop: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{ textAlign: 'center', fontSize: 24 }}>Next</Text>
+            <Image source={icon} style={{width: 40, height: 40}} />
+            <Text style={{ textAlign: 'center', fontSize: 24 }}>Trains</Text>
+          </View>
         </View>
         <View>
-          <Text style={{ textAlign: 'center' }}>Next {this.props.currentLine} Trains</Text>
           <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
             <View style={{width: phoneWidth}}>
-              <Card title='Uptown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+              <Card title='Uptown' titleStyle={{ fontSize: 24 }} containerStyle={{ flex: 1, alignItems: 'center' }}>
                 {this.state.uptownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
                     uptownCounter++
@@ -70,7 +87,7 @@ export default class ScheduleList extends Component {
                 </Card>
             </View>
             <View style={{width: phoneWidth}}>
-              <Card title='Downtown' containerStyle={{ flex: 1, alignItems: 'center' }}>
+              <Card title='Downtown' titleStyle={{ fontSize: 24 }} containerStyle={{ flex: 1, alignItems: 'center' }}>
                 {this.state.downtownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
                     downtownCounter++
@@ -82,8 +99,8 @@ export default class ScheduleList extends Component {
                 </Card>
             </View>
           </ScrollView>
-            
-          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }}/>
+          <Text style={{ textAlign: 'center' }}>Swipe for uptown/downtown</Text>
+          <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }} buttonStyle={{ backgroundColor: '#0f61a9' }}/>
         </View>
       </ScrollView>
     )
