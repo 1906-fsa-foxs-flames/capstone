@@ -23,8 +23,25 @@ export default class ScheduleList extends Component {
 
     //The locations of the images for each train line
     this.lineImgs = {
+      1: require('../../assets/1TRAIN.png'),
       2: require('../../assets/2TRAIN.png'),
-      3: require('../../assets/3TRAIN.png')
+      3: require('../../assets/3TRAIN.png'),
+      4: require('../../assets/4TRAIN.png'),
+      5: require('../../assets/5TRAIN.png'),
+      6: require('../../assets/6TRAIN.png'),
+      'S': require('../../assets/STRAIN.png'),
+      'A': require('../../assets/ATRAIN.png'),
+      'C': require('../../assets/CTRAIN.png'),
+      'E': require('../../assets/ETRAIN.png'),
+      'B': require('../../assets/BTRAIN.png'),
+      'D': require('../../assets/DTRAIN.png'),
+      'F': require('../../assets/FTRAIN.png'),
+      'M': require('../../assets/MTRAIN.png'),
+      'L': require('../../assets/LTRAIN.png'),
+      'G': require('../../assets/GTRAIN.png'),
+      'J': require('../../assets/JTRAIN.png'),
+      'Z': require('../../assets/ZTRAIN.png'),
+      7: require('../../assets/7TRAIN.png')
     }
   }
 
