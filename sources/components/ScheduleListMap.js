@@ -4,8 +4,11 @@ import MapView from "react-native-maps";
 import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
-import { lines } from "../../twoLine";
-import { points } from "../../twoLinePoints";
+import { twoLines } from "../../twoLine";
+import { jLines } from "../../jLine";
+import { twoPoints } from "../../twoLinePoints";
+import { jPoints } from "../../jLinePoints";
+
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -47,6 +50,16 @@ class UsersMap extends React.Component {
   }
 
   render() {
+    let points, color, lines;
+   if (this.props.currentLine === '2') {
+    points = twoPoints;
+    lines = twoLines;
+    color = 'red';
+   } else {
+     points = jPoints;
+     lines = jLines;
+     color = '#8B4513';
+   }
     return (
       <View style={styles.mapContainer}>
         {this.state.userLocation && (
@@ -62,7 +75,7 @@ class UsersMap extends React.Component {
             style={styles.map}
             mapType={"mutedStandard"}
           >
-            <Geojson geojson={lines} strokeColor={"red"} />
+            <Geojson geojson={lines} strokeColor={color} />
             {points.map((point, i) => (
               <MapView.Marker
                 coordinate={{
@@ -73,8 +86,17 @@ class UsersMap extends React.Component {
                 description={point.description}
                 key={i}
               >
-                <View style={styles.marker}></View>
-              </MapView.Marker>
+              <View style={{
+                height: 15,
+                width: 15,
+                borderWidth: 3,
+                backgroundColor: 'white',
+                borderRadius: 10,
+                borderColor: color,
+                overflow: 'hidden'
+                }}>
+              </View>
+            </MapView.Marker>
             ))}
           </MapView>
         )}
@@ -124,15 +146,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%"
   },
-  marker: {
-    height: 15,
-    width: 15,
-    borderColor: "red",
-    borderWidth: 3,
-    backgroundColor: "white",
-    borderRadius: 10,
-    overflow: "hidden"
-  }
 });
 
 export default UsersMap;

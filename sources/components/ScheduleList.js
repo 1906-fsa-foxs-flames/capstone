@@ -54,6 +54,7 @@ export default class ScheduleList extends Component {
 
   async sendToAPI(position) {
     //Getting the station you're at
+
     const station = NearestCity(
       position.coords.latitude,
       position.coords.longitude
@@ -100,13 +101,12 @@ export default class ScheduleList extends Component {
     let phoneWidth = Dimensions.get("window").width;
 
     return (
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ height: 300 }}>
-          {this.props.currentLine === "2" ? (
-            <UserLocation smaller={true} currentLine={this.props.currentLine} />
-          ) : (
-            <DefaultLocation smaller={true} />
-          )}
+      <ScrollView style={{flex:1}}>
+        <View style={{ height:300 }}>
+          {this.props.currentLine === '2' || this.props.currentLine === 'J'
+          ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
+          :  <DefaultLocation smaller={true} />
+          }
 
           <View
             style={{
