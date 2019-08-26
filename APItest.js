@@ -9,15 +9,15 @@ const rp = require('request-promise')
 
 //For the purposes of developing the API query code, the data feed URL, current station, and current line will be hardcoded
 async function queryMTA() {
-  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=21'
-  const CURRENT_STATION = { id: 'F20', name: 'Bergen St.' }  //The 'N' refers to the train's direction
-  const CURRENT_LINE = 'F'
+  const MTA_URL = 'http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=1'
+  const CURRENT_STATION = { id: '230', name: 'Wall St.' }  //The 'N' refers to the train's direction
+  const CURRENT_LINE = '2'
 
   let uptownArrivalTimes = []
   let downtownArrivalTimes = []
 
   //A helper funciton that filters the trains for schedules containing the current stop and then logs the arrival time at this stop
-  const filterAndLog = (scheduleArray, stopId) => {
+  const filterAndLog = (scheduleArray, stopId, tripId) => {
     //let filtered = scheduleArray.filter(stop => stop.stop_id === stopId)
     let uptownTrains = []
     let downtownTrains = []
@@ -29,8 +29,8 @@ async function queryMTA() {
         downtownTrains.push(stop)
       }
     })
-    uptownTrains.length > 0 ? uptownArrivalTimes.push(new Date(uptownTrains[0].arrival.time.low * 1000)) : null
-    downtownTrains.length > 0 ? downtownArrivalTimes.push(new Date(downtownTrains[0].arrival.time.low * 1000)) : null
+    uptownTrains.length > 0 ? uptownArrivalTimes.push([new Date(uptownTrains[0].arrival.time.low * 1000), tripId]) : null
+    downtownTrains.length > 0 ? downtownArrivalTimes.push([new Date(downtownTrains[0].arrival.time.low * 1000), tripId]) : null
 
     //Currently this logs in UTC time.  Will eventually want to convert it to EST time
     //filtered.length > 0 ? arrivalTimes.push(new Date(filtered[0].arrival.time.low * 1000)) : null
@@ -56,19 +56,10 @@ async function queryMTA() {
           relevantTrains.push(entity)
         }
       }
-
-
-/*       //Each train's ID will include the number/letter of it's line
-      if (entity.trip_update.trip.route_id.includes(CURRENT_LINE)) {
-        if (entity.trip_update) {
-          //Pushing all the relevant trains to an array for filtering
-          relevantTrains.push(entity)
-        }
-      } */
     });
 
     //Filtering for trains scheduled to stop at the current stop and then logging the arrival times
-    relevantTrains.forEach(train => filterAndLog(train.trip_update.stop_time_update, CURRENT_STATION.id))
+    relevantTrains.forEach(train => filterAndLog(train.trip_update.stop_time_update, CURRENT_STATION.id, train.trip_update.trip.trip_id))
 
     downtownArrivalTimes = downtownArrivalTimes.sort((a, b) => a - b)
     return [uptownArrivalTimes, downtownArrivalTimes]

@@ -7,12 +7,12 @@ const MtaInfo = require('mta-gtfs');
 const rp = require('request-promise');
 const mtaState = new MtaInfo({
   key: "3f1463633a6a8c127fcd6560f9d6299a",
-  feed_id: 1 
+  feed_id: 1
 });
 
 
 exports.getMTAState = functions.https.onRequest(async (req, res) => {
-  
+
   // Getting the state of subway traffic
   try {
     const result = await mtaState.status('subway')
@@ -20,7 +20,7 @@ exports.getMTAState = functions.https.onRequest(async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-  
+
 })
 
 exports.queryMTA = functions.https.onRequest(async (req, res) => {
@@ -57,7 +57,7 @@ exports.queryMTA = functions.https.onRequest(async (req, res) => {
   let downtownArrivals = []
 
   //A helper funciton that filters the trains for schedules containing the current stop and then logs the arrival time at this stop
-  const filterAndLog = (scheduleArray, stopId) => {
+  const filterAndLog = (scheduleArray, stopId, tripId) => {
     let uptownArrival = false
     let downtownArrival = false
 
@@ -71,12 +71,12 @@ exports.queryMTA = functions.https.onRequest(async (req, res) => {
     })
 
     //Pushing any relevant stops to the arrays
-    uptownArrival ? uptownArrivals.push(uptownArrival.arrival.time.low) : null
-    downtownArrival ? downtownArrivals.push(downtownArrival.arrival.time.low) : null
+    uptownArrival ? uptownArrivals.push([uptownArrival.arrival.time.low, tripId]) : null
+    downtownArrival ? downtownArrivals.push([downtownArrival.arrival.time.low, tripId]) : null
   }
 
   //Filtering for trains scheduled to stop at the current stop and then logging the arrival times
-  relevantTrains.forEach(train => filterAndLog(train.trip_update.stop_time_update, CURRENT_STATION.id))
+  relevantTrains.forEach(train => filterAndLog(train.trip_update.stop_time_update, CURRENT_STATION.id, train.trip_update.trip.trip_id))
 
   res.send([uptownArrivals, downtownArrivals])
 })
