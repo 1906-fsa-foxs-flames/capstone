@@ -56,7 +56,7 @@ class UsersMap extends React.Component {
             showsUserLocation
             style={styles.map}
             mapType={"mutedStandard"}
-           
+
           >
             {/* <Geojson geojson={lines} strokeColor={"red"} /> */}
           </MapView>

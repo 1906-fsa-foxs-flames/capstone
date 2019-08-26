@@ -87,19 +87,6 @@ export default class Cam extends React.Component {
     }
   };
 
-  uploadImage = async (uri, imageName) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-
-    let ref = firebase
-      .storage()
-      .ref()
-      .child("images/" + imageName);
-    let img = await ref.put(blob);
-    blob.close();
-    return img.ref.getDownloadURL();
-  }
-
   render() {
     const { hasCameraPermission } = this.state;
     if (hasCameraPermission === null) {
@@ -108,7 +95,7 @@ export default class Cam extends React.Component {
       return <Text>No access to camera</Text>;
     } else if (!this.state.photoProcessed) {
       return (
-        
+
         <View style={{ flex: 1 , justifyContent: 'center', backgroundColor:"#0f61a9"}}>
           {!this.state.isLoading
           ? (<Camera
