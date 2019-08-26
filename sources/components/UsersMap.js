@@ -56,7 +56,6 @@ class UsersMap extends React.Component {
             showsUserLocation
             style={styles.map}
             mapType={"mutedStandard"}
-
           >
             {/* <Geojson geojson={lines} strokeColor={"red"} /> */}
           </MapView>
@@ -64,26 +63,35 @@ class UsersMap extends React.Component {
         <View
           style={{
             position: "absolute",
-            top: (this.props.smaller ? '70%' : '85%'),
+            top: this.props.smaller ? "70%" : "85%",
             alignSelf: "flex-end",
             right: "5%"
           }}
         >
-        <View style={{ backgroundColor: '#f2a900', padding: 6, marginBottom: 5, borderRadius: 3}}>
-          {this.state.userLocation && (
-            <Text style={{ fontSize: 12, textAlign: 'center', color: 'white' }}>
-              Closest station:{" "}
-              {
-                NearestCity(
-                  this.state.userLocation.latitude,
-                  this.state.userLocation.longitude
-                )[1]
-              }
-            </Text>
-          )}
+          <View
+            style={{
+              backgroundColor: "#f2a900",
+              padding: 6,
+              marginBottom: 5,
+              borderRadius: 3
+            }}
+          >
+            {this.state.userLocation && (
+              <Text
+                style={{ fontSize: 12, textAlign: "center", color: "white" }}
+              >
+                Closest station:{" "}
+                {
+                  NearestCity(
+                    this.state.userLocation.latitude,
+                    this.state.userLocation.longitude
+                  )[1]
+                }
+              </Text>
+            )}
+          </View>
+          <FetchLocation onGetLocation={this.getUserLocationHandler} />
         </View>
-        <FetchLocation onGetLocation={this.getUserLocationHandler} />
-        </View >
       </View>
     );
   }

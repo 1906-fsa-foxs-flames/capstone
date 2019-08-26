@@ -1,54 +1,67 @@
-import React from 'react';
-import { ActivityIndicator, StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
-import apiKeys from '../../variables/apiKeys';
-import * as firebase from 'firebase';
-import ScheduleList from '../ScheduleList'
+import React from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert
+} from "react-native";
+import apiKeys from "../../variables/apiKeys";
+import * as firebase from "firebase";
+import ScheduleList from "../ScheduleList";
 
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
-import * as FileSystem from 'expo-file-system';
-import * as ImageManipulator from 'expo-image-manipulator'
-import { Ionicons } from '@expo/vector-icons';
+import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator";
+import { Ionicons } from "@expo/vector-icons";
 
 firebase.initializeApp(apiKeys.firebaseConfig);
 
 export default class Cam extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       hasCameraPermission: null,
       type: Camera.Constants.Type.back,
       photoProcessed: false,
-      currentLine: '',
+      currentLine: "",
       isLoading: false
-    }
-    this.closeNextTrains = this.closeNextTrains.bind(this)
+    };
+    this.closeNextTrains = this.closeNextTrains.bind(this);
   }
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
-      hasCameraPermission: status === 'granted',
+      hasCameraPermission: status === "granted",
       isLoading: false
-    })
+    });
   }
 
   closeNextTrains() {
-    this.setState({ photoProcessed: false, isLoading: false })
+    this.setState({ photoProcessed: false, isLoading: false });
   }
 
   snap = async () => {
     try {
       if (this.camera) {
-        this.setState({isLoading: true})
+        this.setState({ isLoading: true });
         //Taking the photo
         let photo = await this.camera.takePictureAsync();
 
         //Compressing the photo
-        photo = await ImageManipulator.manipulateAsync(photo.uri, {}, {compress: 0.5})
+        photo = await ImageManipulator.manipulateAsync(
+          photo.uri,
+          {},
+          { compress: 0.5 }
+        );
 
         //Encoding the photo as base64 so that it can be fed into Google Vision API directly
-        let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, { encoding: FileSystem.EncodingType.Base64})
+        let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, {
+          encoding: FileSystem.EncodingType.Base64
+        });
 
         //Setting the body for the Vision API request
         let body = JSON.stringify({
@@ -77,13 +90,15 @@ export default class Cam extends React.Component {
 
         //Getting the text data back, splitting it up so that we only grab the first letter (should be the train line if the user has composed the photo correctly), and passing that letter on to the MTA API call
         let responseJson = await response.json();
-        let OCRtext = responseJson.responses[0].fullTextAnnotation.text
-        let split = OCRtext.split('')
-        this.setState({ photoProcessed: true, currentLine: split[0] })
+        let OCRtext = responseJson.responses[0].fullTextAnnotation.text;
+        let split = OCRtext.split("");
+        this.setState({ photoProcessed: true, currentLine: split[0] });
       }
     } catch (error) {
-      this.setState({isLoading: false})
-      Alert.alert('Image processing failed - please try again or yell your train line into the microphone');
+      this.setState({ isLoading: false });
+      Alert.alert(
+        "Image processing failed - please try again or yell your train line into the microphone"
+      );
     }
   };
 
@@ -95,37 +110,58 @@ export default class Cam extends React.Component {
       return <Text>No access to camera</Text>;
     } else if (!this.state.photoProcessed) {
       return (
-
-        <View style={{ flex: 1 , justifyContent: 'center', backgroundColor:"#0f61a9"}}>
-          {!this.state.isLoading
-          ? (<Camera
-            style={{ flex: 5 }}
-            type={this.state.type}
-            ref={ref => {
-              this.camera = ref;
-            }}
-          >
-            <View style={styles.cameraStyle}>
-              <TouchableOpacity style={styles.onPress} onPress={this.snap}>
-                <Ionicons name="ios-radio-button-off" color='white' size={100} />
-              </TouchableOpacity>
-            </View>
-          </Camera>)
-          :
-          (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            backgroundColor: "#0f61a9"
+          }}
+        >
+          {!this.state.isLoading ? (
+            <Camera
+              style={{ flex: 5 }}
+              type={this.state.type}
+              ref={ref => {
+                this.camera = ref;
+              }}
+            >
+              <View style={styles.cameraStyle}>
+                <TouchableOpacity style={styles.onPress} onPress={this.snap}>
+                  <Ionicons
+                    name="ios-radio-button-off"
+                    color="white"
+                    size={100}
+                  />
+                </TouchableOpacity>
+              </View>
+            </Camera>
+          ) : (
             <View>
-          <ActivityIndicator size='large' color='white'/>
-            <View style={{flexDirection: "row", justifyContent: "center", alignContent:"center"}}>
-              <Text style={{textAlign:'center', fontSize:24, color:'white'}}>Your data is being held by a train dispatcher</Text>
+              <ActivityIndicator size="large" color="white" />
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center"
+                }}
+              >
+                <Text
+                  style={{ textAlign: "center", fontSize: 24, color: "white" }}
+                >
+                  Your data is being held by a train dispatcher
+                </Text>
+              </View>
             </View>
-          </View>)
-          }
+          )}
         </View>
       );
     } else {
       return (
-        <ScheduleList currentLine={this.state.currentLine} closeNextTrains={this.closeNextTrains}/>
-      )
+        <ScheduleList
+          currentLine={this.state.currentLine}
+          closeNextTrains={this.closeNextTrains}
+        />
+      );
     }
   }
 }
