@@ -3,7 +3,8 @@ import { View, Text, ScrollView, Image, Dimensions } from 'react-native'
 import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
-import UserLocation from './ScheduleListMap'
+import UserLocation from './ScheduleListMap';
+import DefaultLocation from './UsersMap';
 import NearestCity from "../../trainStopInfo";
 
 export default class ScheduleList extends Component {
@@ -47,8 +48,7 @@ export default class ScheduleList extends Component {
 
   async sendToAPI(position) {
     //Getting the station you're at
-    // const station = NearestCity(position.coords.latitude, position.coords.longitude)
-    const station = ["230", "Wall St", "40.706821", "-74.0091",]
+    const station = NearestCity(position.coords.latitude, position.coords.longitude)
 
     //Finding which MTA feed to query in the firebase function
     let feedKeys = Object.keys(this.feedIds)
@@ -83,7 +83,11 @@ export default class ScheduleList extends Component {
     return (
       <ScrollView style={{flex:1}}>
         <View style={{ height:300 }}>
-          <UserLocation smaller={true} />
+          {this.props.currentLine === '2' 
+          ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
+          :  <DefaultLocation smaller={true} />
+          }
+         
           <View style={{ paddingTop: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{ textAlign: 'center', fontSize: 24 }}>Next</Text>
             <Image source={icon} style={{width: 40, height: 40}} />
