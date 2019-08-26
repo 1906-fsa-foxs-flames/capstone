@@ -10,7 +10,7 @@ export default class StartScreen extends React.Component {
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.container} >
                 <View style={styles.logoView}>
-                    <Text style={[{...styles.logiText, marginBottom: 10}]}>SubwAR</Text>
+                    <Text style={[{...styles.logiText, marginBottom: 10}]}>MTALens</Text>
                     <Image
                         source={ require('../../assets/icon.png') }
                         style={styles.logoImage}

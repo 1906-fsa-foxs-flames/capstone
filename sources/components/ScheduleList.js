@@ -91,7 +91,7 @@ export default class ScheduleList extends Component {
     return (
       <ScrollView style={{flex:1}}>
         <View style={{ height:300 }}>
-          {this.props.currentLine === '2'
+          {this.props.currentLine === '2' || this.props.currentLine === 'J'
           ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
           :  <DefaultLocation smaller={true} />
           }

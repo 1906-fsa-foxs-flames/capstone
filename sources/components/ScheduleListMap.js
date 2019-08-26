@@ -4,7 +4,8 @@ import MapView from "react-native-maps";
 import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
-import { lines } from "../../twoLine";
+import { twoLines } from "../../twoLine";
+import { jLines } from "../../jLine";
 import { points } from "../../twoLinePoints";
 
 class UsersMap extends React.Component {
@@ -61,8 +62,10 @@ class UsersMap extends React.Component {
             showsUserLocation
             style={styles.map}
             mapType={"mutedStandard"}
-          >
-            <Geojson geojson={lines} strokeColor={"red"} />
+          >{this.props.currentLine === '2' ?
+            <Geojson geojson={jLines} strokeColor={"brown"} />
+            : <Geojson geojson={jLines} strokeColor={"brown"} />
+          }
             {points.map((point, i) => (
               <MapView.Marker 
               coordinate={{
