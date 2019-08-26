@@ -122,7 +122,16 @@ export default class InfoScreen extends React.Component {
                     states.map(state => {
                         return (
                             <View key={state} style={styles.infoContainer}>
+                                <View
+                                    style={{
+                                        borderBottomColor: 'white',
+                                        borderBottomWidth: 1,
+                                        width: "90%",
+                                        alignSelf: "center"
+                                    }}
+                                    />
                                 <View style={styles.infoHeaderContainer}>
+                                
                                     <Text style={styles.infoHeaderText}>{state + ' (' + (this.state.finalObject[state].timeStamp === '' 
                                                                         ? this.state.effectiveDate
                                                                         : this.state.finalObject[state].timeStamp) + ')'}
