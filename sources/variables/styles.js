@@ -85,11 +85,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 5,
         margin: 5,
+        alignSelf: 'center'
     },
     infoTrainContainer: {
         flex: 1,
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     infoTrainText: {
         fontSize: 16,
