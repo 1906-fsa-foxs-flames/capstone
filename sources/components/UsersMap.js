@@ -1,10 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
-import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
-import { lines } from "../../twoLine";
 
 class UsersMap extends React.Component {
   constructor(props) {
