@@ -74,7 +74,7 @@ export default class ScheduleList extends Component {
     let downtownCounter = 0
 
     //For grabbing the train line image
-    var icon = this.props.currentLine
+    let icon = this.props.currentLine
     ? this.lineImgs[this.props.currentLine]
     : require('../../assets/Empty.png');
 
@@ -83,11 +83,11 @@ export default class ScheduleList extends Component {
     return (
       <ScrollView style={{flex:1}}>
         <View style={{ height:300 }}>
-          {this.props.currentLine === '2' 
+          {this.props.currentLine === '2'
           ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
           :  <DefaultLocation smaller={true} />
           }
-         
+
           <View style={{ paddingTop: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{ textAlign: 'center', fontSize: 24 }}>Next</Text>
             <Image source={icon} style={{width: 40, height: 40}} />
