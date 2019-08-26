@@ -54,7 +54,7 @@ export default class ScheduleList extends Component {
 
   async sendToAPI(position) {
     //Getting the station you're at
-    const station = NearestCity(position.coords.latitude, position.coords.longitude)
+    const station = NearestCity(position.coords.latitude, position.coords.longitude);
 
     //Finding which MTA feed to query in the firebase function
     let feedKeys = Object.keys(this.feedIds)

@@ -6,7 +6,9 @@ import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
 import { twoLines } from "../../twoLine";
 import { jLines } from "../../jLine";
-import { points } from "../../twoLinePoints";
+import { twoPoints } from "../../twoLinePoints";
+import { jPoints } from "../../jLinePoints";
+
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -48,6 +50,16 @@ class UsersMap extends React.Component {
   }
 
   render() {
+    let points, color, lines;
+   if (this.props.currentLine === '2') {
+    points = twoPoints;
+    lines = twoLines;
+    color = 'red';
+   } else {
+     points = jPoints;
+     lines = jLines;
+     color = '#8B4513';
+   }
     return (
       <View style={styles.mapContainer}>
         {this.state.userLocation && (
@@ -62,10 +74,8 @@ class UsersMap extends React.Component {
             showsUserLocation
             style={styles.map}
             mapType={"mutedStandard"}
-          >{this.props.currentLine === '2' ?
-            <Geojson geojson={jLines} strokeColor={"brown"} />
-            : <Geojson geojson={jLines} strokeColor={"brown"} />
-          }
+          >
+            <Geojson geojson={lines} strokeColor={color} />
             {points.map((point, i) => (
               <MapView.Marker 
               coordinate={{
@@ -76,7 +86,15 @@ class UsersMap extends React.Component {
               description={point.description}
               key={i}
               >
-              <View style={styles.marker}></View>
+              <View style={{
+                height: 15,
+                width: 15,
+                borderWidth: 3,
+                backgroundColor: 'white',
+                borderRadius: 10,
+                borderColor: color,
+                overflow: 'hidden'
+            }}></View>
             </MapView.Marker>
             ))}
             
@@ -93,7 +111,7 @@ class UsersMap extends React.Component {
         <View style={{ backgroundColor: '#f2a900', padding: 6, marginBottom: 5, borderRadius: 3}}>
           {this.state.userLocation && (
             <Text style={{ fontSize: 12, textAlign: 'center', color: 'white' }}>
-              Closest station:{" "}
+              Nearby:{" "}
               {
                 NearestCity(
                   this.state.userLocation.latitude,
@@ -119,15 +137,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%"
   },
-  marker: {
-    height: 15,
-    width: 15,
-    borderColor: 'red',
-    borderWidth: 3,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    overflow: 'hidden'
-  }
 });
 
 export default UsersMap;

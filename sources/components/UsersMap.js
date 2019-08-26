@@ -72,7 +72,7 @@ class UsersMap extends React.Component {
         <View style={{ backgroundColor: '#f2a900', padding: 6, marginBottom: 5, borderRadius: 3}}>
           {this.state.userLocation && (
             <Text style={{ fontSize: 12, textAlign: 'center', color: 'white' }}>
-              Closest station:{" "}
+              Nearby:{" "}
               {
                 NearestCity(
                   this.state.userLocation.latitude,
