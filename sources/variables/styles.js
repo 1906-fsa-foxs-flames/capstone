@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
       },
-      toolsBar: {
+    toolsBar: {
         flex: 1,
         flexDirection: 'row-reverse',
         alignItems: 'center',
@@ -64,12 +64,41 @@ const styles = StyleSheet.create({
         backgroundColor: '#0f61a9',
         marginTop: 24,
         width: '100%',
-      },
-      toolBarButton: {
+    },
+    toolBarButton: {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'white',
-      }
+    },
+    infoContainer: {
+        flex: 1,
+        backgroundColor: 'darkblue',
+    },
+    infoHeaderContainer: {
+        flex: 1,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+    },
+    infoHeaderText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 5,
+        margin: 5,
+    },
+    infoTrainContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    infoTrainText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        paddingVertical: 4,
+        paddingHorizontal: 10,
+        margin: 15,
+        borderRadius: 15,
+    },
 });
 
 export default styles;

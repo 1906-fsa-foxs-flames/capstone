@@ -2,8 +2,26 @@ const functions = require('firebase-functions');
 
 //This library handles the protocol buffers required to get the MTA data in a useful format
 const MtaGtfsRealtimeBindings = require('mta-gtfs-realtime-bindings');
+const MtaInfo = require('mta-gtfs');
 //Request-promise is used instead of something like axios because it's simpler to decode binary responses using a protocol buffer in r-p
-const rp = require('request-promise')
+const rp = require('request-promise');
+const mtaState = new MtaInfo({
+  key: "3f1463633a6a8c127fcd6560f9d6299a",
+  feed_id: 1 
+});
+
+
+exports.getMTAState = functions.https.onRequest(async (req, res) => {
+  
+  // Getting the state of subway traffic
+  try {
+    const result = await mtaState.status('subway')
+    res.send(result);
+  } catch (err) {
+    console.error(err);
+  }
+  
+})
 
 exports.queryMTA = functions.https.onRequest(async (req, res) => {
   const MTA_URL = `http://datamine.mta.info/mta_esi.php?key=3f1463633a6a8c127fcd6560f9d6299a&feed_id=${req.body.feedId}`
