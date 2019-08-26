@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     infoTrainContainer: {
         flex: 1,
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     infoTrainText: {
         fontSize: 16,
