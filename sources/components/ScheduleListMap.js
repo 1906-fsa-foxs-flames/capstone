@@ -64,44 +64,52 @@ class UsersMap extends React.Component {
           >
             <Geojson geojson={lines} strokeColor={"red"} />
             {points.map((point, i) => (
-              <MapView.Marker 
-              coordinate={{
-                latitude: point.latitude,
-                longitude: point.longitude
-              }}
-              title={point.title}
-              description={point.description}
-              key={i}
+              <MapView.Marker
+                coordinate={{
+                  latitude: point.latitude,
+                  longitude: point.longitude
+                }}
+                title={point.title}
+                description={point.description}
+                key={i}
               >
-              <View style={styles.marker}></View>
-            </MapView.Marker>
+                <View style={styles.marker}></View>
+              </MapView.Marker>
             ))}
-            
           </MapView>
         )}
         <View
           style={{
             position: "absolute",
-            top: (this.props.smaller ? '70%' : '85%'),
+            top: this.props.smaller ? "70%" : "85%",
             alignSelf: "flex-end",
             right: "5%"
           }}
         >
-        <View style={{ backgroundColor: '#f2a900', padding: 6, marginBottom: 5, borderRadius: 3}}>
-          {this.state.userLocation && (
-            <Text style={{ fontSize: 12, textAlign: 'center', color: 'white' }}>
-              Closest station:{" "}
-              {
-                NearestCity(
-                  this.state.userLocation.latitude,
-                  this.state.userLocation.longitude
-                )[1]
-              }
-            </Text>
-          )}
+          <View
+            style={{
+              backgroundColor: "#f2a900",
+              padding: 6,
+              marginBottom: 5,
+              borderRadius: 3
+            }}
+          >
+            {this.state.userLocation && (
+              <Text
+                style={{ fontSize: 12, textAlign: "center", color: "white" }}
+              >
+                Closest station:{" "}
+                {
+                  NearestCity(
+                    this.state.userLocation.latitude,
+                    this.state.userLocation.longitude
+                  )[1]
+                }
+              </Text>
+            )}
+          </View>
+          <FetchLocation onGetLocation={this.getUserLocationHandler} />
         </View>
-        <FetchLocation onGetLocation={this.getUserLocationHandler} />
-        </View >
       </View>
     );
   }
@@ -119,11 +127,11 @@ const styles = StyleSheet.create({
   marker: {
     height: 15,
     width: 15,
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: 3,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
-    overflow: 'hidden'
+    overflow: "hidden"
   }
 });
 

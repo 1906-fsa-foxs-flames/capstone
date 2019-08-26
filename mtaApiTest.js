@@ -1,6 +1,6 @@
 var Mta = require("mta-gtfs");
 var moment = require("moment");
-const axios = require('axios');
+const axios = require("axios");
 
 var mta = new Mta({
   key: "3f1463633a6a8c127fcd6560f9d6299a", // only needed for mta.schedule() method
@@ -31,12 +31,12 @@ var mta = new Mta({
 // });
 
 const myPromise = new Promise((resolve, reject) => {
-  const subwayState = axios.get('https://us-central1-subwar-a2611.cloudfunctions.net/getMTAState');
+  const subwayState = axios.get(
+    "https://us-central1-subwar-a2611.cloudfunctions.net/getMTAState"
+  );
   resolve(subwayState);
-}) 
+});
 
-myPromise.then(
-  result => {
-    console.log(result.data);
-  }
-);
+myPromise.then(result => {
+  console.log(result.data);
+});
