@@ -21,8 +21,8 @@ export default class TopToolBar extends React.Component {
                 <TouchableOpacity onPress={this.onLogoutPress}>
                     <Text style={styles.toolBarButton} >{user ? 'Sign Out' : 'Sign In'}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.toolBarButton} >Refresh</Text>
+                <TouchableOpacity onPress={this.props.refreshPage}>
+                    <Text style={styles.toolBarButton}>Refresh</Text>
                 </TouchableOpacity>
             </View>
         )

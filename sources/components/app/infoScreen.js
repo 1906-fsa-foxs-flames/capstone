@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import React from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import styles from '../../variables/styles';
 import TopToolBar from './topToolBar'
 import axios from 'axios';
@@ -18,9 +18,14 @@ export default class InfoScreen extends React.Component {
         this.getInstantDate = this.getInstantDate.bind(this);
         this.getBgColor = this.getBgColor.bind(this);
         this.getTextColor = this.getTextColor.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
     componentDidMount() {
+        this.getSubwayState();
+    }
+
+    onRefresh() {
         this.getSubwayState();
     }
 
@@ -107,7 +112,7 @@ export default class InfoScreen extends React.Component {
     getInstantDate() {
         const date = new Date(Date.now());
         const day = ((1 + date.getMonth()) >= 10 ? 1 + date.getMonth() : '0' + (1 + date.getMonth())) + '/' + date.getDate() + '/' + date.getFullYear();
-        const time = date.getHours() - 12 + ':' + date.getMinutes() + (date.getHours() >= 12 ? 'PM' : 'AM');
+        const time = (date.getHours() > 12 ? date.getHours() - 12 : date.getHours()) + ':' + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) + (date.getHours() >= 12 ? 'PM' : 'AM');
         return day + ' ' + time;
     }
 
@@ -115,7 +120,7 @@ export default class InfoScreen extends React.Component {
         const states = Object.keys(this.state.finalObject);
         return (
             <View style={styles.container}>
-                <TopToolBar navigation={this.props.navigation} />
+                <TopToolBar navigation={this.props.navigation} refreshPage={this.onRefresh} />
                 <View style={styles.mainSpace}>
                 <ScrollView>
                     {
