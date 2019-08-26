@@ -11,6 +11,8 @@ export default class ScheduleList extends Component {
   constructor(props) {
     super(props)
     this.state = { uptownTrains: [], downtownTrains: [] }
+
+    //Object that maps the train lines to the feed IDs
     this.feedIds = {
       '123456S': 1,
       'ACEHS': 26,
@@ -59,9 +61,11 @@ export default class ScheduleList extends Component {
     feedKeys = feedKeys.filter(key => key.includes(this.props.currentLine))
     let feedId = this.feedIds[feedKeys[0]]
 
-    //Querying the firebase function and setting the trains on state
+    //Querying the firebase function
     let arrivals = await axios.post('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine, station })
-    this.setState({ uptownTrains: arrivals.data[0].sort((a, b) => a[0] - b[0]), downtownTrains: arrivals.data[1].sort((a, b) => a[0] - b[0])}, () => console.log(this.state))
+
+    //Setting the trains on state.  Each train will be of the form [ARRIVAL_TIME, TRAIN_ID]
+    this.setState({ uptownTrains: arrivals.data[0].sort((a, b) => a[0] - b[0]), downtownTrains: arrivals.data[1].sort((a, b) => a[0] - b[0])})
   }
 
   componentDidMount() {
