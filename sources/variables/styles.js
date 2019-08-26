@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         backgroundColor: '#0f61a9',
         marginTop: 24,
-        width: '100%',
+        width: '100%'
     },
     toolBarButton: {
         fontSize: 16,
@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
         paddingHorizontal: 10,
         margin: 15,
-        borderRadius: 3,
+        borderRadius: 15,
+        overflow: 'hidden'
     },
 });
 
