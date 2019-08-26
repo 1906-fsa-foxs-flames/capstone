@@ -8,7 +8,7 @@ export default class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TopToolBar navigation={this.props.navigation} />
+        <TopToolBar navigation={this.props.navigation} tab="Home" />
         <UsersMap />
       </View>
     );
