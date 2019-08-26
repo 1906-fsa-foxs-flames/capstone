@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, Image, Dimensions } from "react-native";
+import { View, Text, ScrollView, Image, Dimensions, StyleSheet } from "react-native";
 import { Card, Button } from "react-native-elements";
 import axios from "axios";
 
@@ -86,9 +86,9 @@ export default class ScheduleList extends Component {
 
   render() {
     //For rendering the times as relative instead of absolute
-    const now = Date.now()
+    const now = Date.now() / 1000
 
-    //For rendering a maximum number of trains (who cares if there's a train coming in an hour and a half?)
+    //For rendering a maximum number of trains
     let uptownCounter = 0;
     let downtownCounter = 0;
 
@@ -99,29 +99,40 @@ export default class ScheduleList extends Component {
 
     let phoneWidth = Dimensions.get("window").width;
 
+    //helper function that converts absolute arrival times into relative times
+    //arrivalTime: epoch seconds
+    //currentTime: epoch seconds
+    //returns minutes
+    function getTimeUntil(arrivalTime, currentTime) {
+      return Math.ceil((arrivalTime - currentTime) / 60)
+    }
+
     return (
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ height: 300 }}>
+      //PARENT VIEW FOR THE WHOLE PAGE
+      <ScrollView style={styles.overallParentScroll}>
+
+        {/* PARENT VIEW FOR THE UPPER SECTION OF THE PAGE */}
+        <View style={styles.upperParentView}>
+
+          {/* FOR RENDERING THE MAP WITH THE SELECTED SUBWAY LINE OVERLAID*/}
           {this.props.currentLine === "2" ? (
             <UserLocation smaller={true} currentLine={this.props.currentLine} />
           ) : (
             <DefaultLocation smaller={true} />
           )}
 
-          <View
-            style={{
-              paddingTop: 4,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Text style={{ textAlign: "center", fontSize: 24 }}>Next</Text>
-            <Image source={icon} style={{ width: 40, height: 40 }} />
-            <Text style={{ textAlign: "center", fontSize: 24 }}>Trains</Text>
+          {/* FOR RENDERING THE 'NEXT A/B/C/1/2/3/ETC. TRAINS HEADER */}
+          <View style={styles.nextTrainHeaderView}>
+            <Text style={styles.nextTrainHeaderText}>Next</Text>
+            <Image source={icon} style={styles.nextTrainHeaderImg} />
+            <Text style={styles.nextTrainHeaderText}>Trains</Text>
           </View>
         </View>
+
+        {/* PARENT VIEW FOR THE LOWER SECTION OF THE PAGE*/}
         <View>
+
+          {/* PARENT VIEW FOR THE LEFT/RIGHT SWIPING CARDS*/}
           <ScrollView
             horizontal
             pagingEnabled
@@ -130,18 +141,18 @@ export default class ScheduleList extends Component {
             <View style={{ width: phoneWidth }}>
               <Card
                 title="Uptown"
-                titleStyle={{ fontSize: 24 }}
-                containerStyle={{ flex: 1, alignItems: "center" }}
+                titleStyle={styles.cardTitleStyle}
+                containerStyle={styles.cardContainerStyle}
               >
                 {this.state.uptownTrains.map(function(trainTime) {
                   if (
-                    Math.ceil((trainTime[0] - now) / 60) >= 0 &&
+                    getTimeUntil(trainTime[0], now) >= 0 &&
                     uptownCounter < 4
                   ) {
                     uptownCounter++;
                     return (
-                      <Text key={trainTime[0]} style={{ textAlign: "center" }}>
-                        {Math.ceil((trainTime[0] - now) / 60)} minutes
+                      <Text key={trainTime[0]} style={styles.cardTextStyle}>
+                        {getTimeUntil(trainTime[0], now)} minutes
                       </Text>
                     );
                   } else {
@@ -153,18 +164,18 @@ export default class ScheduleList extends Component {
             <View style={{ width: phoneWidth }}>
               <Card
                 title="Downtown"
-                titleStyle={{ fontSize: 24 }}
-                containerStyle={{ flex: 1, alignItems: "center" }}
+                titleStyle={styles.cardTitleStyle}
+                containerStyle={styles.cardContainerStyle}
               >
                 {this.state.downtownTrains.map(function(trainTime) {
                   if (
-                    Math.ceil((trainTime[0] - now) / 60) >= 0 &&
+                    getTimeUntil(trainTime[0], now) >= 0 &&
                     downtownCounter < 4
                   ) {
                     downtownCounter++;
                     return (
-                      <Text key={trainTime[0]} style={{ textAlign: "center" }}>
-                        {Math.ceil((trainTime[0] - now) / 60)} minutes
+                      <Text key={trainTime[0]} style={styles.cardTextStyle}>
+                        {getTimeUntil(trainTime[0], now)} minutes
                       </Text>
                     );
                   } else {
@@ -174,17 +185,63 @@ export default class ScheduleList extends Component {
               </Card>
             </View>
           </ScrollView>
-          <Text style={{ textAlign: "center" }}>
+
+          {/* SWIPING INSTRUCTIONS*/}
+          <Text style={styles.swipingInstructionsTextStyle}>
             Swipe left/right for uptown/downtown
           </Text>
+
+          {/* 'CLOSE CAMERA' BUTTON */}
           <Button
             onPress={() => this.props.closeNextTrains()}
             title="Back to Camera"
-            style={{ padding: 15 }}
-            buttonStyle={{ backgroundColor: "#0f61a9" }}
+            style={styles.closeCameraStyle}
+            buttonStyle={styles.closeCameraButtonStyle}
           />
         </View>
       </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  overallParentScroll: {
+    flex: 1
+  },
+  upperParentView: {
+    height: 300
+  },
+  nextTrainHeaderView: {
+    paddingTop: 4,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  nextTrainHeaderText: {
+    textAlign: "center",
+    fontSize: 24
+  },
+  nextTrainHeaderImg: {
+    width: 40,
+    height: 40
+  },
+  cardTitleStyle: {
+    fontSize: 24
+  },
+  cardContainerStyle: {
+    flex: 1,
+    alignItems: "center"
+  },
+  cardTextStyle: {
+    textAlign: "center"
+  },
+  swipingInstructionsTextStyle: {
+    textAlign: "center"
+  },
+  closeCameraStyle: {
+    padding: 15
+  },
+  closeCameraButtonStyle: {
+    backgroundColor: "#0f61a9"
+  }
+})
