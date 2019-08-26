@@ -1,9 +1,9 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable eol-last */
-import React from 'react';
-import { View, Text, Image, KeyboardAvoidingView } from 'react-native';
-import styles from '../variables/styles';
-import SignInScreen from './auth/signInScreen';
+import React from "react";
+import { View, Text, Image, KeyboardAvoidingView } from "react-native";
+import styles from "../variables/styles";
+import SignInScreen from "./auth/signInScreen";
 
 export default class StartScreen extends React.Component {
     render() {

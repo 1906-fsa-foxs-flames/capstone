@@ -77,14 +77,14 @@ class UsersMap extends React.Component {
           >
             <Geojson geojson={lines} strokeColor={color} />
             {points.map((point, i) => (
-              <MapView.Marker 
-              coordinate={{
-                latitude: point.latitude,
-                longitude: point.longitude
-              }}
-              title={point.title}
-              description={point.description}
-              key={i}
+              <MapView.Marker
+                coordinate={{
+                  latitude: point.latitude,
+                  longitude: point.longitude
+                }}
+                title={point.title}
+                description={point.description}
+                key={i}
               >
               <View style={{
                 height: 15,
@@ -94,35 +94,44 @@ class UsersMap extends React.Component {
                 borderRadius: 10,
                 borderColor: color,
                 overflow: 'hidden'
-            }}></View>
+                }}>
+              </View>
             </MapView.Marker>
             ))}
-            
           </MapView>
         )}
         <View
           style={{
             position: "absolute",
-            top: (this.props.smaller ? '70%' : '85%'),
+            top: this.props.smaller ? "70%" : "85%",
             alignSelf: "flex-end",
             right: "5%"
           }}
         >
-        <View style={{ backgroundColor: '#f2a900', padding: 6, marginBottom: 5, borderRadius: 3}}>
-          {this.state.userLocation && (
-            <Text style={{ fontSize: 12, textAlign: 'center', color: 'white' }}>
-              Nearby:{" "}
-              {
-                NearestCity(
-                  this.state.userLocation.latitude,
-                  this.state.userLocation.longitude
-                )[1]
-              }
-            </Text>
-          )}
+          <View
+            style={{
+              backgroundColor: "#f2a900",
+              padding: 6,
+              marginBottom: 5,
+              borderRadius: 3
+            }}
+          >
+            {this.state.userLocation && (
+              <Text
+                style={{ fontSize: 12, textAlign: "center", color: "white" }}
+              >
+                Closest station:{" "}
+                {
+                  NearestCity(
+                    this.state.userLocation.latitude,
+                    this.state.userLocation.longitude
+                  )[1]
+                }
+              </Text>
+            )}
+          </View>
+          <FetchLocation onGetLocation={this.getUserLocationHandler} />
         </View>
-        <FetchLocation onGetLocation={this.getUserLocationHandler} />
-        </View >
       </View>
     );
   }
