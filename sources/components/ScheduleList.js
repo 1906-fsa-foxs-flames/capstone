@@ -61,7 +61,7 @@ export default class ScheduleList extends Component {
 
     //Querying the firebase function and setting the trains on state
     let arrivals = await axios.post('https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA', { feedId, currentLine: this.props.currentLine, station })
-    this.setState({ uptownTrains: arrivals.data[0].sort((a, b) => a - b), downtownTrains: arrivals.data[1].sort((a, b) => a - b)})
+    this.setState({ uptownTrains: arrivals.data[0].sort((a, b) => a[0] - b[0]), downtownTrains: arrivals.data[1].sort((a, b) => a[0] - b[0])}, () => console.log(this.state))
   }
 
   componentDidMount() {
@@ -103,9 +103,9 @@ export default class ScheduleList extends Component {
             <View style={{width: phoneWidth}}>
               <Card title='Uptown' titleStyle={{ fontSize: 24 }} containerStyle={{ flex: 1, alignItems: 'center' }}>
                 {this.state.uptownTrains.map(function(trainTime) {
-                  if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
+                  if (Math.ceil((trainTime[0] - now) / 60) >= 0 && uptownCounter < 4) {
                     uptownCounter++
-                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} minutes</Text>
+                    return <Text key={trainTime[0]} style={{ textAlign: 'center' }}>{Math.ceil((trainTime[0] - now) / 60)} minutes</Text>
                   } else {
                     return null
                   }
@@ -115,9 +115,9 @@ export default class ScheduleList extends Component {
             <View style={{width: phoneWidth}}>
               <Card title='Downtown' titleStyle={{ fontSize: 24 }} containerStyle={{ flex: 1, alignItems: 'center' }}>
                 {this.state.downtownTrains.map(function(trainTime) {
-                  if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
+                  if (Math.ceil((trainTime[0] - now) / 60) >= 0 && downtownCounter < 4) {
                     downtownCounter++
-                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} minutes</Text>
+                    return <Text key={trainTime[0]} style={{ textAlign: 'center' }}>{Math.ceil((trainTime[0] - now) / 60)} minutes</Text>
                   } else {
                     return null
                   }
