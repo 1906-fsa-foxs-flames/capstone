@@ -86,7 +86,7 @@ export default class ScheduleList extends Component {
 
   render() {
     //For rendering the times as relative instead of absolute
-    const now = new Date().getTime() / 1000;
+    const now = Date.now()
 
     //For rendering a maximum number of trains (who cares if there's a train coming in an hour and a half?)
     let uptownCounter = 0;
