@@ -17,29 +17,37 @@ import * as FileSystem from "expo-file-system";
 import * as ImageManipulator from "expo-image-manipulator";
 import { Ionicons } from "@expo/vector-icons";
 
-firebase.initializeApp(apiKeys.firebaseConfig);
+const CAMERA_TYPE = Camera.Constants.Type.back
 
 export default class Cam extends React.Component {
   constructor() {
     super();
+
+    //State components:
+    //hasCameraPermission: bool that states whether the user has allowed use of the camera or not
+    //photoProcessed: bool that triggers rendering of relevant components once the photo has been processed
+    //currentLine: string that represents the result of the google vision OCR
+    //isLoading: bool that triggers rendering of the loading screen while the OCR is processing
     this.state = {
       hasCameraPermission: null,
-      type: Camera.Constants.Type.back,
       photoProcessed: false,
       currentLine: "",
       isLoading: false
     };
+
+    //closeNextTrains resets the bools that display different components.  For use when the "back to camera" button is pressed in ScheduleList
     this.closeNextTrains = this.closeNextTrains.bind(this);
   }
 
+  //componentDidMount asks for camera permissions
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
-      hasCameraPermission: status === "granted",
-      isLoading: false
+      hasCameraPermission: status === "granted"
     });
   }
 
+  //closeNextTrains is fired when the user presses "back to camera" in the scheduleList component
   closeNextTrains() {
     this.setState({ photoProcessed: false, isLoading: false });
   }
@@ -47,7 +55,9 @@ export default class Cam extends React.Component {
   snap = async () => {
     try {
       if (this.camera) {
+        //Triggering the display of the loading screen
         this.setState({ isLoading: true });
+
         //Taking the photo
         let photo = await this.camera.takePictureAsync();
 
@@ -92,9 +102,12 @@ export default class Cam extends React.Component {
         let responseJson = await response.json();
         let OCRtext = responseJson.responses[0].fullTextAnnotation.text;
         let split = OCRtext.split("");
+
+        //Triggering the display of the ScheduleList component and setting the OCR result on state for use by ScheduleList
         this.setState({ photoProcessed: true, currentLine: split[0] });
       }
     } catch (error) {
+      //changing the state so if the OCR fails the loading screen goes away so you can try again
       this.setState({ isLoading: false });
       Alert.alert(
         "Image processing failed - please try again or yell your train line into the microphone"
@@ -104,11 +117,16 @@ export default class Cam extends React.Component {
 
   render() {
     const { hasCameraPermission } = this.state;
-    if (hasCameraPermission === null) {
-      return <View />;
-    } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+
+    //If the user has not given camera permission, display a warning
+    if (!hasCameraPermission) {
+      return (
+        <View style={styles.permissionTextContainer}>
+          <Text style={styles.permissionText}>Please allow camera access to use this feature</Text>
+        </View>
+      )
     } else if (!this.state.photoProcessed) {
+      //If the photo has not been successfully processed, display either the camera or the loading screen
       return (
         <View
           style={{
@@ -117,10 +135,11 @@ export default class Cam extends React.Component {
             backgroundColor: "#0f61a9"
           }}
         >
-          {!this.state.isLoading ? (
+          {/*CAMERA DISPLAY*/}
+          {!this.state.isLoading && (
             <Camera
               style={{ flex: 5 }}
-              type={this.state.type}
+              type={CAMERA_TYPE}
               ref={ref => {
                 this.camera = ref;
               }}
@@ -135,7 +154,10 @@ export default class Cam extends React.Component {
                 </TouchableOpacity>
               </View>
             </Camera>
-          ) : (
+          )}
+
+          {/*LOADING SCREEN DISPLAY*/}
+          {this.state.isLoading && (
             <View>
               <ActivityIndicator size="large" color="white" />
               <View
@@ -156,6 +178,7 @@ export default class Cam extends React.Component {
         </View>
       );
     } else {
+      //If the photo has been processed, display the ScheduleList component
       return (
         <ScheduleList
           currentLine={this.state.currentLine}
@@ -176,5 +199,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     alignItems: "center"
+  },
+  permissionText: {
+    textAlign: 'center'
+  },
+  permissionTextContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 1
   }
 });
