@@ -1,12 +1,11 @@
 /* eslint-disable complexity */
 import React from 'react';
-import { Text, View, ScrollView, Alert } from 'react-native';
+import { Text, View, ScrollView, Image } from 'react-native';
 import styles from '../../variables/styles';
 import TopToolBar from './topToolBar'
 import axios from 'axios';
 
 export default class InfoScreen extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -16,9 +15,35 @@ export default class InfoScreen extends React.Component {
         }
         this.getSubwayState = this.getSubwayState.bind(this);
         this.getInstantDate = this.getInstantDate.bind(this);
-        this.getBgColor = this.getBgColor.bind(this);
-        this.getTextColor = this.getTextColor.bind(this);
         this.onRefresh = this.onRefresh.bind(this);
+
+            //The locations of the images for each train line
+        this.lineImgs = {
+            1: require('../../../assets/1TRAIN.png'),
+            2: require('../../../assets/2TRAIN.png'),
+            3: require('../../../assets/3TRAIN.png'),
+            4: require('../../../assets/4TRAIN.png'),
+            5: require('../../../assets/5TRAIN.png'),
+            6: require('../../../assets/6TRAIN.png'),
+            'S': require('../../../assets/STRAIN.png'),
+            'A': require('../../../assets/ATRAIN.png'),
+            'C': require('../../../assets/CTRAIN.png'),
+            'E': require('../../../assets/ETRAIN.png'),
+            'B': require('../../../assets/BTRAIN.png'),
+            'D': require('../../../assets/DTRAIN.png'),
+            'F': require('../../../assets/FTRAIN.png'),
+            'M': require('../../../assets/MTRAIN.png'),
+            'N': require('../../../assets/NTRAIN.png'),
+            'Q': require('../../../assets/QTRAIN.png'),
+            'R': require('../../../assets/RTRAIN.png'),
+            'W': require('../../../assets/WTRAIN.png'),
+            'L': require('../../../assets/LTRAIN.png'),
+            'G': require('../../../assets/GTRAIN.png'),
+            'J': require('../../../assets/JTRAIN.png'),
+            'Z': require('../../../assets/ZTRAIN.png'),
+            7: require('../../../assets/7TRAIN.png'),
+            'SIR': require('../../../assets/SIRTRAIN.png')
+        }
     }
 
     componentDidMount() {
@@ -35,7 +60,7 @@ export default class InfoScreen extends React.Component {
             resolve(result)
         });
         promise.then(
-            result => { 
+            result => {
                 this.setState({subwayState: result.data})
                 let obj = {};
                 this.state.subwayState.forEach(element => {
@@ -59,56 +84,6 @@ export default class InfoScreen extends React.Component {
         this.setState({effectiveDate: this.getInstantDate()});
     }
 
-    getBgColor(train) {
-        switch (train) {
-            case '1':
-            case '2':
-            case '3':
-                return 'red';
-            case '4':
-            case '5':
-            case '6':
-                return 'green';
-            case '7':
-                return 'violet';
-            case 'A':
-            case 'C':
-            case 'E':
-            case 'SIR':
-                return 'blue';
-            case 'B':
-            case 'D':
-            case 'F':
-            case 'M':
-                return 'orange';
-            case 'G':
-                return 'lightgreen';
-            case 'J':
-            case 'Z':
-                return 'brown';
-            case 'L':
-            case 'S':
-                return 'gray';
-            case 'Q':
-            case 'N':
-            case 'R':
-                return 'yellow'
-            default:
-                return 'black'
-        }
-    }
-
-    getTextColor(train) {
-        switch (train) {
-            case 'Q':
-            case 'N':
-            case 'R':
-                return 'black';
-            default:
-                return 'white';
-        }
-    }
-
     getInstantDate() {
         const date = new Date(Date.now());
         const day = ((1 + date.getMonth()) >= 10 ? 1 + date.getMonth() : '0' + (1 + date.getMonth())) + '/' + date.getDate() + '/' + date.getFullYear();
@@ -127,8 +102,17 @@ export default class InfoScreen extends React.Component {
                     states.map(state => {
                         return (
                             <View key={state} style={styles.infoContainer}>
+                                <View
+                                    style={{
+                                        borderBottomColor: 'white',
+                                        borderBottomWidth: 1,
+                                        width: "90%",
+                                        alignSelf: "center"
+                                    }}
+                                    />
                                 <View style={styles.infoHeaderContainer}>
-                                    <Text style={styles.infoHeaderText}>{state + ' (' + (this.state.finalObject[state].timeStamp === '' 
+
+                                    <Text style={styles.infoHeaderText}>{state + ' (' + (this.state.finalObject[state].timeStamp === ''
                                                                         ? this.state.effectiveDate
                                                                         : this.state.finalObject[state].timeStamp) + ')'}
                                     </Text>
@@ -136,13 +120,12 @@ export default class InfoScreen extends React.Component {
                                 <View style={styles.infoTrainContainer}>
                                     {
                                         this.state.finalObject[state].trains.map(train => {
+                                            //For grabbing the train line image
+                                            let icon = train
+                                            ? this.lineImgs[train]
+                                            : require('../../../assets/Empty.png');
                                             return (
-                                                <Text
-                                                    key={train}
-                                                    style={[styles.infoTrainText, {
-                                                            backgroundColor: this.getBgColor(train), 
-                                                            color: this.getTextColor(train)}]}>{train}
-                                                </Text>
+                                                <Image key={train} source={icon} style={{width: 50, height: 50}} />
                                             )
                                         })
                                     }

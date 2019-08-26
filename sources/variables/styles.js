@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         backgroundColor: '#0f61a9',
         marginTop: 24,
-        width: '100%',
+        width: '100%'
     },
     toolBarButton: {
         fontSize: 16,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flex: 1,
-        backgroundColor: 'darkblue',
+        backgroundColor: '#0f61a9',
     },
     infoHeaderContainer: {
         flex: 1,
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         padding: 5,
         margin: 5,
+        alignSelf: 'center'
     },
     infoTrainContainer: {
         flex: 1,
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         margin: 15,
         borderRadius: 15,
+        overflow: 'hidden'
     },
 });
 

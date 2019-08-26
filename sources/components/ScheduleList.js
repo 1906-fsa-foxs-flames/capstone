@@ -3,7 +3,8 @@ import { View, Text, ScrollView, Image, Dimensions } from 'react-native'
 import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
-import UserLocation from './UsersMap'
+import UserLocation from './ScheduleListMap';
+import DefaultLocation from './UsersMap';
 import NearestCity from "../../trainStopInfo";
 
 export default class ScheduleList extends Component {
@@ -23,8 +24,25 @@ export default class ScheduleList extends Component {
 
     //The locations of the images for each train line
     this.lineImgs = {
+      1: require('../../assets/1TRAIN.png'),
       2: require('../../assets/2TRAIN.png'),
-      3: require('../../assets/3TRAIN.png')
+      3: require('../../assets/3TRAIN.png'),
+      4: require('../../assets/4TRAIN.png'),
+      5: require('../../assets/5TRAIN.png'),
+      6: require('../../assets/6TRAIN.png'),
+      'S': require('../../assets/STRAIN.png'),
+      'A': require('../../assets/ATRAIN.png'),
+      'C': require('../../assets/CTRAIN.png'),
+      'E': require('../../assets/ETRAIN.png'),
+      'B': require('../../assets/BTRAIN.png'),
+      'D': require('../../assets/DTRAIN.png'),
+      'F': require('../../assets/FTRAIN.png'),
+      'M': require('../../assets/MTRAIN.png'),
+      'L': require('../../assets/LTRAIN.png'),
+      'G': require('../../assets/GTRAIN.png'),
+      'J': require('../../assets/JTRAIN.png'),
+      'Z': require('../../assets/ZTRAIN.png'),
+      7: require('../../assets/7TRAIN.png')
     }
   }
 
@@ -56,7 +74,7 @@ export default class ScheduleList extends Component {
     let downtownCounter = 0
 
     //For grabbing the train line image
-    var icon = this.props.currentLine
+    let icon = this.props.currentLine
     ? this.lineImgs[this.props.currentLine]
     : require('../../assets/Empty.png');
 
@@ -65,7 +83,11 @@ export default class ScheduleList extends Component {
     return (
       <ScrollView style={{flex:1}}>
         <View style={{ height:300 }}>
-          <UserLocation smaller={true} />
+          {this.props.currentLine === '2'
+          ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
+          :  <DefaultLocation smaller={true} />
+          }
+
           <View style={{ paddingTop: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{ textAlign: 'center', fontSize: 24 }}>Next</Text>
             <Image source={icon} style={{width: 40, height: 40}} />
@@ -79,7 +101,7 @@ export default class ScheduleList extends Component {
                 {this.state.uptownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
                     uptownCounter++
-                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} minutes</Text>
                   } else {
                     return null
                   }
@@ -91,7 +113,7 @@ export default class ScheduleList extends Component {
                 {this.state.downtownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
                     downtownCounter++
-                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} minutes</Text>
                   } else {
                     return null
                   }
@@ -99,7 +121,7 @@ export default class ScheduleList extends Component {
                 </Card>
             </View>
           </ScrollView>
-          <Text style={{ textAlign: 'center' }}>Swipe for uptown/downtown</Text>
+          <Text style={{ textAlign: 'center' }}>Swipe left/right for uptown/downtown</Text>
           <Button onPress={() => this.props.closeNextTrains()} title='Back to Camera' style={{ padding: 15 }} buttonStyle={{ backgroundColor: '#0f61a9' }}/>
         </View>
       </ScrollView>
