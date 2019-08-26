@@ -15,6 +15,7 @@ export default class InfoScreen extends React.Component {
         }
         this.getSubwayState = this.getSubwayState.bind(this);
         this.getInstantDate = this.getInstantDate.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
 
             //The locations of the images for each train line
         this.lineImgs = {
@@ -46,6 +47,10 @@ export default class InfoScreen extends React.Component {
     }
 
     componentDidMount() {
+        this.getSubwayState();
+    }
+
+    onRefresh() {
         this.getSubwayState();
     }
 
@@ -82,7 +87,7 @@ export default class InfoScreen extends React.Component {
     getInstantDate() {
         const date = new Date(Date.now());
         const day = ((1 + date.getMonth()) >= 10 ? 1 + date.getMonth() : '0' + (1 + date.getMonth())) + '/' + date.getDate() + '/' + date.getFullYear();
-        const time = date.getHours() - 12 + ':' + date.getMinutes() + (date.getHours() >= 12 ? 'PM' : 'AM');
+        const time = (date.getHours() > 12 ? date.getHours() - 12 : date.getHours()) + ':' + (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) + (date.getHours() >= 12 ? 'PM' : 'AM');
         return day + ' ' + time;
     }
 
@@ -90,7 +95,7 @@ export default class InfoScreen extends React.Component {
         const states = Object.keys(this.state.finalObject);
         return (
             <View style={styles.container}>
-                <TopToolBar navigation={this.props.navigation} />
+                <TopToolBar navigation={this.props.navigation} refreshPage={this.onRefresh} />
                 <View style={styles.mainSpace}>
                 <ScrollView>
                     {
