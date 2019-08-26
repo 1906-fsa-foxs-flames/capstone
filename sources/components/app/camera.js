@@ -137,7 +137,7 @@ export default class Cam extends React.Component {
       );
     } else {
       return (
-        <ScheduleList currentLine={this.state.currentLine} closeNextTrains={this.closeNextTrains}/>
+        <ScheduleList currentLine={'2'} closeNextTrains={this.closeNextTrains}/>
       )
     }
   }

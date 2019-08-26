@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Image, Dimensions } from 'react-native'
 import { Card, Button } from 'react-native-elements'
 import axios from 'axios'
 
-import UserLocation from './UsersMap'
+import UserLocation from './ScheduleListMap'
 import NearestCity from "../../trainStopInfo";
 
 export default class ScheduleList extends Component {
@@ -47,7 +47,8 @@ export default class ScheduleList extends Component {
 
   async sendToAPI(position) {
     //Getting the station you're at
-    const station = NearestCity(position.coords.latitude, position.coords.longitude)
+    // const station = NearestCity(position.coords.latitude, position.coords.longitude)
+    const station = ["230", "Wall St", "40.706821", "-74.0091",]
 
     //Finding which MTA feed to query in the firebase function
     let feedKeys = Object.keys(this.feedIds)
@@ -96,7 +97,7 @@ export default class ScheduleList extends Component {
                 {this.state.uptownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && uptownCounter < 4) {
                     uptownCounter++
-                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} minutes</Text>
                   } else {
                     return null
                   }
@@ -108,7 +109,7 @@ export default class ScheduleList extends Component {
                 {this.state.downtownTrains.map(function(trainTime) {
                   if (Math.ceil((trainTime - now) / 60) >= 0 && downtownCounter < 4) {
                     downtownCounter++
-                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} Min. away</Text>
+                    return <Text key={trainTime} style={{ textAlign: 'center' }}>{Math.ceil((trainTime - now) / 60)} minutes</Text>
                   } else {
                     return null
                   }

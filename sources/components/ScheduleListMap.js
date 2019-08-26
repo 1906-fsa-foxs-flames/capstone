@@ -5,6 +5,7 @@ import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
 import { lines } from "../../twoLine";
+import { points } from "../../twoLinePoints";
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -15,21 +16,23 @@ class UsersMap extends React.Component {
     this.getUserLocationHandler = this.getUserLocationHandler.bind(this);
   }
 
-  getUserLocationHandler = (zoom = false) => {
+  getUserLocationHandler = (zoom = true) => {
     //This makes it so the automatic zoom to the users location is a wide view, but if the botton is pressed it zooms in much closer
     let latDelta = 0.05;
     let lonDelta = 0.05;
     if (zoom) {
-      latDelta /= 4;
-      lonDelta /= 4;
+      latDelta /= 30;
+      lonDelta /= 30;
     }
 
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
           userLocation: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            // latitude: position.coords.latitude,
+            latitude: 40.706821,
+            // longitude: position.coords.longitude,
+            longitude: -74.0091,
             latitudeDelta: latDelta,
             longitudeDelta: lonDelta
           }
@@ -58,9 +61,22 @@ class UsersMap extends React.Component {
             showsUserLocation
             style={styles.map}
             mapType={"mutedStandard"}
-           
           >
-            {/* <Geojson geojson={lines} strokeColor={"red"} /> */}
+            <Geojson geojson={lines} strokeColor={"red"} />
+            {points.map((point, i) => (
+              <MapView.Marker 
+              coordinate={{
+                latitude: point.latitude,
+                longitude: point.longitude
+              }}
+              title={point.title}
+              description={point.description}
+              key={i}
+              >
+              <View style={styles.marker}></View>
+            </MapView.Marker>
+            ))}
+            
           </MapView>
         )}
         <View
@@ -99,6 +115,15 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%"
+  },
+  marker: {
+    height: 15,
+    width: 15,
+    borderColor: 'red',
+    borderWidth: 3,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    overflow: 'hidden'
   }
 });
 
