@@ -40,6 +40,10 @@ export default class ScheduleList extends Component {
       'M': require('../../assets/MTRAIN.png'),
       'L': require('../../assets/LTRAIN.png'),
       'G': require('../../assets/GTRAIN.png'),
+      'N': require('../../assets/NTRAIN.png'),
+      'Q': require('../../assets/QTRAIN.png'),
+      'R': require('../../assets/RTRAIN.png'),
+      'W': require('../../assets/WTRAIN.png'),
       'J': require('../../assets/JTRAIN.png'),
       'Z': require('../../assets/ZTRAIN.png'),
       7: require('../../assets/7TRAIN.png')
