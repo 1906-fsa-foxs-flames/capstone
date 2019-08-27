@@ -6,6 +6,7 @@ import axios from "axios";
 import UserLocation from "./ScheduleListMap";
 import DefaultLocation from "./UsersMap";
 import NearestCity from "../../trainStopInfo";
+import TrainCard from './TrainCard'
 
 export default class ScheduleList extends Component {
   constructor(props) {
@@ -85,12 +86,8 @@ export default class ScheduleList extends Component {
   }
 
   render() {
-    //For rendering the times as relative instead of absolute
+    //For rendering the times as relative instead of absolute.  'now' is in epoch time (s)
     const now = Date.now() / 1000
-
-    //For rendering a maximum number of trains
-    let uptownCounter = 0;
-    let downtownCounter = 0;
 
     //For grabbing the train line image
     let icon = this.props.currentLine
@@ -98,14 +95,6 @@ export default class ScheduleList extends Component {
       : require("../../assets/Empty.png");
 
     let phoneWidth = Dimensions.get("window").width;
-
-    //helper function that converts absolute arrival times into relative times
-    //arrivalTime: epoch seconds
-    //currentTime: epoch seconds
-    //returns minutes
-    function getTimeUntil(arrivalTime, currentTime) {
-      return Math.ceil((arrivalTime - currentTime) / 60)
-    }
 
     return (
       //PARENT VIEW FOR THE WHOLE PAGE
@@ -127,6 +116,7 @@ export default class ScheduleList extends Component {
             <Image source={icon} style={styles.nextTrainHeaderImg} />
             <Text style={styles.nextTrainHeaderText}>Trains</Text>
           </View>
+
         </View>
 
         {/* PARENT VIEW FOR THE LOWER SECTION OF THE PAGE*/}
@@ -138,52 +128,14 @@ export default class ScheduleList extends Component {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
           >
+            {/* UPTOWN/DOWNTOWN SWIPABLE CARDS*/}
             <View style={{ width: phoneWidth }}>
-              <Card
-                title="Uptown"
-                titleStyle={styles.cardTitleStyle}
-                containerStyle={styles.cardContainerStyle}
-              >
-                {this.state.uptownTrains.map(function(trainTime) {
-                  if (
-                    getTimeUntil(trainTime[0], now) >= 0 &&
-                    uptownCounter < 4
-                  ) {
-                    uptownCounter++;
-                    return (
-                      <Text key={trainTime[0]} style={styles.cardTextStyle}>
-                        {getTimeUntil(trainTime[0], now)} minutes
-                      </Text>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-              </Card>
+              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} />
             </View>
             <View style={{ width: phoneWidth }}>
-              <Card
-                title="Downtown"
-                titleStyle={styles.cardTitleStyle}
-                containerStyle={styles.cardContainerStyle}
-              >
-                {this.state.downtownTrains.map(function(trainTime) {
-                  if (
-                    getTimeUntil(trainTime[0], now) >= 0 &&
-                    downtownCounter < 4
-                  ) {
-                    downtownCounter++;
-                    return (
-                      <Text key={trainTime[0]} style={styles.cardTextStyle}>
-                        {getTimeUntil(trainTime[0], now)} minutes
-                      </Text>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-              </Card>
+              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} />
             </View>
+
           </ScrollView>
 
           {/* SWIPING INSTRUCTIONS*/}
@@ -198,6 +150,7 @@ export default class ScheduleList extends Component {
             style={styles.closeCameraStyle}
             buttonStyle={styles.closeCameraButtonStyle}
           />
+
         </View>
       </ScrollView>
     );
@@ -224,16 +177,6 @@ const styles = StyleSheet.create({
   nextTrainHeaderImg: {
     width: 40,
     height: 40
-  },
-  cardTitleStyle: {
-    fontSize: 24
-  },
-  cardContainerStyle: {
-    flex: 1,
-    alignItems: "center"
-  },
-  cardTextStyle: {
-    textAlign: "center"
   },
   swipingInstructionsTextStyle: {
     textAlign: "center"
