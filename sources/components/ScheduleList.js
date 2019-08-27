@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   upperParentView: {
-    height: 300
+    height: 425
   },
   nextTrainHeaderView: {
     paddingTop: 4,

@@ -103,7 +103,7 @@ class UsersMap extends React.Component {
         <View
           style={{
             position: "absolute",
-            top: this.props.smaller ? "70%" : "85%",
+            top: this.props.smaller ? "76.25%" : "85%",
             alignSelf: "flex-end",
             right: "5%"
           }}
