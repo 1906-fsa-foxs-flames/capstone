@@ -18,7 +18,7 @@
     "expo-image-picker": "^6.0.0",
     "expo-permissions": "^6.0.0",
     "fetch": "^1.1.0",
-    "firebase": "^6.4.0",
+    "firebase": "^6.4.2",
     "gtfs-realtime-bindings": "0.0.5",
     "moment": "^2.24.0",
     "mta-gtfs": "^1.1.0",
