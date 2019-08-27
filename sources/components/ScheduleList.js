@@ -55,7 +55,6 @@ export default class ScheduleList extends Component {
 
   async sendToAPI(position) {
     //Getting the station you're at
-
     const station = NearestCity(
       position.coords.latitude,
       position.coords.longitude
@@ -67,15 +66,23 @@ export default class ScheduleList extends Component {
     let feedId = this.feedIds[feedKeys[0]];
 
     //Querying the firebase function
+    //Arrivals will return in the form of [UPTOWN_ARRIVALS_ARRAY, DOWNTOWN_ARRIVALS_ARRAY]
     let arrivals = await axios.post(
       "https://us-central1-subwar-a2611.cloudfunctions.net/queryMTA",
       { feedId, currentLine: this.props.currentLine, station }
     );
 
-    //Setting the trains on state.  Each train will be of the form [ARRIVAL_TIME, TRAIN_ID]
+    //Sorting the trains by arrival time
+    let sortedUptown = arrivals.data[0].sort((a, b) => a[0] - b[0])
+    let sortedDowntown = arrivals.data[1].sort((a, b) => a[0] - b[0])
+
+    //Setting the trains on state.  Each train will be of the form [ARRIVAL_TIME, TRAIN_ID, FUTURE_STOPS_ARRAY]
+    //FUTURE_STOPS_ARRAY elements will be of the form: { stop_sequence, stop_id, ARRIVAL_OBJECT, departure = null, schedule_relationship, NYCT_STOP_TIME_UPDATE_OBJECT }
+    //To give meaning to stop_id, combine with the MTA static data to access station name and coordinates
+    //To access arrival time in ARRIVAL_OBJECT, use arrival.time.low
     this.setState({
-      uptownTrains: arrivals.data[0].sort((a, b) => a[0] - b[0]),
-      downtownTrains: arrivals.data[1].sort((a, b) => a[0] - b[0])
+      uptownTrains: sortedUptown,
+      downtownTrains: sortedDowntown
     });
   }
 

@@ -1,52 +1,57 @@
+/* eslint-disable quote-props */
+/* eslint-disable quotes */
+
+var turf = require('@turf/turf');
+
 const movingTrainsCoord = [
-  //Chambers to Park Place
+  //Chambers to Park Place - 18 entries
   [-74.0092660004712, 40.71547766602407],
-  [-74.00724899911688, 40.71803166728803],
-  [-74.00722699934337, 40.718062666024935],
-  [-74.0072059997474, 40.718094666962514],
-  [-74.00718600140478, 40.71812666693311],
-  [-74.00716699969054, 40.718159667304604],
-  [-74.00714999932315, 40.718192666647994],
-  [-74.00713300033658, 40.71822766692177],
-  [-74.00711700013385, 40.71826166576409],
-  [-74.00710300031344, 40.71829766631418],
-  [-74.0070890004778, 40.718333665961914],
-  [-74.0070769996311, 40.7183696663854],
-  [-74.00706599907765, 40.71840766587807],
-  [-74.00705499969544, 40.71844566717045],
-  [-74.00704599930788, 40.71848366653827],
-  [-74.0070380002953, 40.71852266631043],
-  [-74.00703100029207, 40.71856266738787],
-  [-74.00688599918587, 40.71931766721322]
-  //Park Place to Fulton
-  [-74.0065709996692, 40.709415666069596],
-  [-74.00586900029944, 40.710147667212645],
-  [-74.00583599947402, 40.71019466655424], 
-  [-74.00580299964676, 40.71025366699464],
-  [-74.00577699974454, 40.71031466620818],
-  [-74.0057629994808, 40.71037566751678],
-  [-74.0057609988881, 40.710436666422275],
-  [-74.00577200016902, 40.710495666442434],
-  [-74.00580500011749, 40.710558666323614],
-  [-74.00584799972805, 40.71061966565261],
-  [-74.0059490009974, 40.71072566591183],
-  [-74.00685400025873, 40.71158166635006],
-  [-74.00695399954549, 40.71168466707318],
-  [-74.00703499923617, 40.71178766797021],
-  [-74.00728900032101, 40.712144665933025],
-  [-74.00737100009506, 40.712238666820625],
-  [-74.00745299936403, 40.71233666681647],
-  [-74.00754799966599, 40.71243066673323],
-  [-74.0076669996913, 40.712518666673326],
-  [-74.00781299893856, 40.71259566672404],
-  [-74.00796199853681, 40.71266266621112],
-  [-74.00881099992978, 40.71305066768981],
-  //Fulton to Wall St
+  [-74.00724899911688, 40.71803166728803], //s1end
+  [-74.00722699934337, 40.718062666024935],//s2end
+  [-74.0072059997474, 40.718094666962514],//s3end
+  [-74.00718600140478, 40.71812666693311],//s4end
+  [-74.00716699969054, 40.718159667304604],//s5end
+  [-74.00714999932315, 40.718192666647994],//s6end
+  [-74.00713300033658, 40.71822766692177],//s7end
+  [-74.00711700013385, 40.71826166576409],//s8end
+  [-74.00710300031344, 40.71829766631418],//s9end
+  [-74.0070890004778, 40.718333665961914],//s10end
+  [-74.0070769996311, 40.7183696663854],//s11end
+  [-74.00706599907765, 40.71840766587807],//s12end
+  [-74.00705499969544, 40.71844566717045],//s13end
+  [-74.00704599930788, 40.71848366653827],//s14end
+  [-74.0070380002953, 40.71852266631043],//s15end
+  [-74.00703100029207, 40.71856266738787],//s16end
+  [-74.00688599918587, 40.71931766721322],//s17end
+  //Park Place to Fulton - 22 entries
+  [-74.0065709996692, 40.709415666069596],//s18end
+  [-74.00586900029944, 40.710147667212645],//s19end
+  [-74.00583599947402, 40.71019466655424],//s20end
+  [-74.00580299964676, 40.71025366699464],//s21end
+  [-74.00577699974454, 40.71031466620818],//s22end
+  [-74.0057629994808, 40.71037566751678],//s23end
+  [-74.0057609988881, 40.710436666422275],//s24end
+  [-74.00577200016902, 40.710495666442434],//s25end
+  [-74.00580500011749, 40.710558666323614],//s26end
+  [-74.00584799972805, 40.71061966565261],//s27end
+  [-74.0059490009974, 40.71072566591183],//s28end
+  [-74.00685400025873, 40.71158166635006],//s29end
+  [-74.00695399954549, 40.71168466707318],//s30end
+  [-74.00703499923617, 40.71178766797021],//s31end
+  [-74.00728900032101, 40.712144665933025],//s32end
+  [-74.00737100009506, 40.712238666820625],//s33end
+  [-74.00745299936403, 40.71233666681647],//s34end
+  [-74.00754799966599, 40.71243066673323],//s35end
+  [-74.0076669996913, 40.712518666673326],//s36end
+  [-74.00781299893856, 40.71259566672404],//s37end
+  [-74.00796199853681, 40.71266266621112],//s38end
+  [-74.00881099992978, 40.71305066768981],//s39end
+  //Fulton to Wall St - 4 entries
   [-74.00910000076378, 40.70682066656401],
   [-74.00859200104075, 40.707381666487144],
   [-74.00817199947087, 40.70781066638872],
   [-74.0065709996692, 40.709415666069596],
-  //Wall St to Clark
+  //Wall St to Clark - 23 entries
   [-73.99308599943733, 40.69746566677518],
   [-74.00290999918484, 40.70017366620592],
   [-74.0036520005466, 40.700422665453054],
@@ -70,7 +75,7 @@ const movingTrainsCoord = [
   [-74.00967000117375, 40.70614066739406],
   [-74.00948799992136, 40.706374666909696],
   [-74.00910000076378, 40.70682066656401],
-  //Clark to Borough Hall
+  //Clark to Borough Hall - 35 entries
   [-73.98999800083993, 40.69321866642143],
   [-73.99033800025441, 40.693904666519074],
   [-73.99035600077737, 40.69394066782861],
@@ -106,7 +111,7 @@ const movingTrainsCoord = [
   [-73.99189700009585, 40.69714766600536],
   [-73.99201799985318, 40.697179666965276],
   [-73.99308599943733, 40.69746566677518],
-  //Borough to Hoyt
+  //Borough to Hoyt - 18 entries
   [-73.98049199914621, 40.68824566584478],
   [-73.98065399892059, 40.688474665843515],
   [-73.98069700000673, 40.68853266612864],
@@ -126,3 +131,82 @@ const movingTrainsCoord = [
   [-73.9816160001898, 40.68916366675516],
   [-73.9850649999924, 40.69054466728554]
 ]
+
+//CHAMBERS TO HOYT TAKES 13 MINUTES OVERALL
+
+//Because these points are so close together, a regular euclidian distance seems appropriate
+function getAdjacentDistances(coordArr) {
+  //For holding the array of distances
+  const distArr = []
+
+  //Calculating the distance between each adjacent pair of points
+  for (let i = 1; i < coordArr.length; i++) {
+
+    //p1, p2 are of the form [-lon(?), lat]
+    const p1 = coordArr[i - 1]
+    const p2 = coordArr[i]
+    const lonDist = p2[0] - p1[0]
+    const latDist = p2[1] - p1[1]
+
+    //Calculating the distance
+    const dist = Math.sqrt((lonDist ** 2) + (latDist ** 2))
+
+    //Pushing to the distance array
+    distArr.push(dist)
+  }
+
+  return distArr
+}
+
+function createGeoArr(latLonArr) {
+  //for holding all the geoJSON lines.  Each element of this array will represent a line segment of the overall subway path
+  const geoArr = []
+
+  //generating the geoJSON objects
+  for (let i = 1; i < latLonArr.length; i++) {
+    //The origin of each line will be the previous point in the array, and the destination will be the current point
+    let origin = latLonArr[i - 1]
+    let destination = latLonArr[i]
+
+    //geoJSON formatting.  The critical element is the coordinates array
+    let newGeo = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [origin, destination]
+        }
+      }]
+    }
+
+    //pushing the new geoJSON object to the parent array
+    geoArr.push(newGeo)
+  }
+
+  return geoArr
+}
+
+//Calculates the total line distance of an array of geoJSON line segments
+function calculateTotalDistance(geoArr) {
+  //Initializing the total distance, to be added to with each segment processed
+  let totalDist = 0
+
+  let totalSegs = 0
+
+  //For each line segment, use turf to calculate its length and add that to the total
+  for (let elem of geoArr) {
+    console.log(elem.features[0].geometry.coordinates)
+    let segmentDistance = turf.length(elem.features[0], { units: 'miles' });
+    totalDist += segmentDistance
+    totalSegs++
+  }
+
+  return [totalDist, totalSegs]
+}
+
+let testGeo = createGeoArr(movingTrainsCoord.slice(17, 19))
+
+let totalD = calculateTotalDistance(testGeo)
+
+console.log(totalD)
