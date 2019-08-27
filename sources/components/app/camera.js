@@ -13,7 +13,6 @@ import * as firebase from "firebase";
 import ScheduleList from "../ScheduleList";
 
 import { Camera } from "expo-camera";
-import AndroidCamera from "react-native-camera";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -57,67 +56,65 @@ export default class Cam extends React.Component {
 
   snap = async () => {
     try {
-      if (this.camera) {
-        //Triggering the display of the loading screen
-        this.setState({ isLoading: true });
-        let photo = null;
+      //Triggering the display of the loading screen
+      this.setState({ isLoading: true });
+      let photo = null;
 
-        if (Platform.OS === "ios") {
-          //Taking the photo for iOS
-          photo = await this.camera.takePictureAsync();
+      if (Platform.OS === "ios") {
+        //Taking the photo for iOS
+        photo = await this.camera.takePictureAsync();
 
-          //Compressing the photo for iOS
-          photo = await ImageManipulator.manipulateAsync(
-            photo.uri,
-            {},
-            { compress: 0.5 }
-          );
-        } else if (Platform.OS === "android") {
-          //Taking the photo for Android
-          photo = await ImagePicker.launchCameraAsync({
-            base64: true,
-            quality: 0.5
-          });
-        }
-
-        //Encoding the photo as base64 so that it can be fed into Google Vision API directly
-        let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, {
-          encoding: FileSystem.EncodingType.Base64
-        });
-
-        //Setting the body for the Vision API request
-        let body = JSON.stringify({
-          requests: [
-            {
-              features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
-              image: {
-                content: BASE_64_IMAGE
-              }
-            }
-          ]
-        });
-
-        //Hitting the vision API
-        let response = await fetch(
-          "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: body
-          }
+        //Compressing the photo for iOS
+        photo = await ImageManipulator.manipulateAsync(
+          photo.uri,
+          {},
+          { compress: 0.5 }
         );
-
-        //Getting the text data back, splitting it up so that we only grab the first letter (should be the train line if the user has composed the photo correctly), and passing that letter on to the MTA API call
-        let responseJson = await response.json();
-        let OCRtext = responseJson.responses[0].fullTextAnnotation.text;
-        let split = OCRtext.split("");
-
-        //Triggering the display of the ScheduleList component and setting the OCR result on state for use by ScheduleList
-        this.setState({ photoProcessed: true, currentLine: split[0] });
+      } else if (Platform.OS === "android") {
+        //Taking the photo for Android
+        photo = await ImagePicker.launchCameraAsync({
+          base64: true,
+          quality: 0.5
+        });
       }
+
+      //Encoding the photo as base64 so that it can be fed into Google Vision API directly
+      let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, {
+        encoding: FileSystem.EncodingType.Base64
+      });
+
+      //Setting the body for the Vision API request
+      let body = JSON.stringify({
+        requests: [
+          {
+            features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
+            image: {
+              content: BASE_64_IMAGE
+            }
+          }
+        ]
+      });
+
+      //Hitting the vision API
+      let response = await fetch(
+        "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          body: body
+        }
+      );
+
+      //Getting the text data back, splitting it up so that we only grab the first letter (should be the train line if the user has composed the photo correctly), and passing that letter on to the MTA API call
+      let responseJson = await response.json();
+      let OCRtext = responseJson.responses[0].fullTextAnnotation.text;
+      let split = OCRtext.split("");
+
+      //Triggering the display of the ScheduleList component and setting the OCR result on state for use by ScheduleList
+      this.setState({ photoProcessed: true, currentLine: split[0] });
     } catch (error) {
       //Changing the state so if the OCR fails the loading screen goes away so you can try again
       this.setState({ isLoading: false });
@@ -149,8 +146,21 @@ export default class Cam extends React.Component {
             backgroundColor: "#0f61a9"
           }}
         >
-          {/*CAMERA DISPLAY*/}
-          {!this.state.isLoading && (
+          {/*CAMERA DISPLAY FOR ANDROID*/}
+          {!this.state.isLoading && Platform.OS === "android" && (
+            <View>
+              <TouchableOpacity onPress={this.snap}>
+                <Text
+                  style={{ textAlign: "center", fontSize: 24, color: "white" }}
+                >
+                  Press to take a picture
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/*CAMERA DISPLAY FOR iOS*/}
+          {!this.state.isLoading && Platform.OS === "ios" && (
             <Camera
               style={{ flex: 5 }}
               type={CAMERA_TYPE}
