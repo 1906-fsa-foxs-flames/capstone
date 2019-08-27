@@ -21,6 +21,8 @@ export default function TrainCard(props) {
       containerStyle={styles.cardContainerStyle}
     >
       {props.trains.map(function(trainTime) {
+
+        //This if-else checks whether the train's arrival is still in the future and whether the train is one of the next 'x' trains to arrive (don't want to list every future train)
         if (
           getTimeUntil(trainTime[0], props.now) >= 0 &&
           trainCounter < 4
