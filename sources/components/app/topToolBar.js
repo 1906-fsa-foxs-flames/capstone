@@ -14,6 +14,12 @@ export default class TopToolBar extends React.Component {
     this.props.navigation.navigate("Start");
   };
 
+  onChatPress = () => {
+      this.props.tab === 'Chat'
+      ? this.props.navigation.navigate('Home')
+      : this.props.navigation.navigate('Chat');
+  }
+
   render() {
     const user = firebase.auth().currentUser;
     return (
@@ -23,8 +29,15 @@ export default class TopToolBar extends React.Component {
             {user ? "Sign Out" : "Sign In"}
           </Text>
         </TouchableOpacity>
+        { this.props.tab === 'Info' &&
         <TouchableOpacity onPress={this.props.refreshPage}>
           <Text style={styles.toolBarButton}>Refresh</Text>
+        </TouchableOpacity>
+        }
+        <TouchableOpacity onPress={this.onChatPress}>
+          <Text style={styles.toolBarButton}>
+              {this.props.tab === 'Chat' ? 'Back' : 'Chat'}
+          </Text>
         </TouchableOpacity>
       </View>
     );

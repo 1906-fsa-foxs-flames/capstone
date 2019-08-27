@@ -1,22 +1,22 @@
 /* eslint-disable no-use-before-define */
-import React from "react";
+import React from 'react';
 import {
   createStackNavigator,
   createBottomTabNavigator,
   createSwitchNavigator,
   createAppContainer
-} from "react-navigation";
-import StartScreen from "./sources/components/startScreen";
-import HomeScreen from "./sources/components/app/homeScreen";
-//import ReportScreen from './sources/components/app/reportScreen';
-import Camera from "./sources/components/app/camera";
-import InfoScreen from "./sources/components/app/infoScreen";
-import forgotPasswordScreen from "./sources/components/auth/forgotPasswordScreen";
-import signInScreen from "./sources/components/auth/signInScreen";
-import signUpScreen from "./sources/components/auth/signUpScreen";
-import * as firebase from "firebase";
-import ApiKeys from "./sources/variables/apiKeys";
-import { Ionicons } from "@expo/vector-icons";
+} from 'react-navigation';
+import StartScreen from './sources/components/startScreen';
+import HomeScreen from './sources/components/app/homeScreen';
+import ChatScreen from './sources/components/app/chatScreen';
+import Camera from './sources/components/app/camera';
+import InfoScreen from './sources/components/app/infoScreen';
+import forgotPasswordScreen from './sources/components/auth/forgotPasswordScreen';
+import signInScreen from './sources/components/auth/signInScreen';
+import signUpScreen from './sources/components/auth/signUpScreen';
+import * as firebase from 'firebase';
+import ApiKeys from './sources/variables/apiKeys';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -41,11 +41,12 @@ export default class App extends React.Component {
         Start: StartScreen,
         SignIn: signInScreen,
         SignUp: signUpScreen,
-        ForgotPassword: forgotPasswordScreen
+        ForgotPassword: forgotPasswordScreen,
+        Chat: ChatScreen,
       },
       {
-        initialRouteName: "Start",
-        headerMode: "none"
+        initialRouteName: 'Start',
+        headerMode: 'none'
       }
     );
 
@@ -53,12 +54,12 @@ export default class App extends React.Component {
       const { routeName } = navigation.state;
       let IconComponent = Ionicons;
       let iconName;
-      if (routeName === "Home") {
-        iconName = "md-home";
-      } else if (routeName === "Camera") {
-        iconName = "md-camera";
-      } else if (routeName === "Info") {
-        iconName = "md-subway";
+      if (routeName === 'Home') {
+        iconName = 'md-home';
+      } else if (routeName === 'Camera') {
+        iconName = 'md-camera';
+      } else if (routeName === 'Info') {
+        iconName = 'md-subway';
       }
       return <IconComponent name={iconName} size={25} color={tintColor} />;
     };
@@ -70,20 +71,20 @@ export default class App extends React.Component {
         Info: { screen: InfoScreen }
       },
       {
-        initialRouteName: "Home",
+        initialRouteName: 'Home',
         defaultNavigationOptions: ({ navigation }) => ({
           tabBarIcon: ({ focused, tintColor }) =>
             getTabBarIcon(navigation, focused, tintColor)
         }),
         tabBarOptions: {
-          activeTintColor: "#f2a900",
-          inactiveTintColor: "white",
+          activeTintColor: '#f2a900',
+          inactiveTintColor: 'white',
           labelStyle: {
             fontSize: 12,
-            fontWeight: "bold"
+            fontWeight: 'bold'
           },
           style: {
-            backgroundColor: "#0f61a9"
+            backgroundColor: '#0f61a9'
           }
         }
       }
@@ -95,7 +96,7 @@ export default class App extends React.Component {
         AppNav: { screen: AppNav }
       },
       {
-        initialRouteName: this.state.isAuth ? "AppNav" : "AuthNav"
+        initialRouteName: this.state.isAuth ? 'AppNav' : 'AuthNav'
       }
     );
 
