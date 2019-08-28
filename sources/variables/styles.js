@@ -91,9 +91,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        paddingHorizontal: 10,
-        paddingBottom: 10
-    }
+        paddingHorizontal: 10
 });
 
 export default styles;
