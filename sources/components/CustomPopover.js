@@ -16,7 +16,7 @@ export default function CustomTooltip(props) {
       </Text>
 
       {/* DISPLAYING A BUTTON THAT WILL PUT THIS TRAIN ONTO THE CONGESTED TRAINS SECTION OF THE DB */}
-      <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonButtonStyle} title='Report congestion' onPress={() => props.writeTestData(props.trainTime[0], props.trainTime[1])} />
+      <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonButtonStyle} title='Report congestion' onPress={() => props.writeCongestedTrain(props.trainTime[0], props.trainTime[1])} />
 
     </View>
   )

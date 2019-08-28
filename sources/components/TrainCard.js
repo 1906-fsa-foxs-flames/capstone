@@ -35,7 +35,7 @@ export default function TrainCard(props) {
           trainCounter++;
           return (
             <View style={{justifyContent: 'center'}}>
-              <Tooltip height={100} popover={<CustomPopover writeTestData={props.writeTestData} congested={props.congested} trainTime={trainTime} />}>
+              <Tooltip height={100} popover={<CustomPopover writeCongestedTrain={props.writeCongestedTrain} congested={props.congested} trainTime={trainTime} />}>
                 <Text key={trainTime[0]} style={styles.cardTextStyle}>
                   {getTimeUntil(trainTime[0], props.now)} minutes
                 </Text>

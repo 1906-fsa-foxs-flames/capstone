@@ -34,23 +34,23 @@ var db = firebase.database()
 
 var congested = []
 
-function readTest(db) {
+function readCongestedTrains(db) {
   var ref = db.ref('congested-trains')
   ref.on('child_added', function(snapshot) {
-    congested.push(snapshot.val().trainId)
+    congested.push(snapshot.val().tripId)
   })
 }
 
-readTest(db)
+readCongestedTrains(db)
 
 //Write the data to the DB
-function writeTestData(testNumber, str) {
-  db.ref('congested-trains/' + testNumber).set({
-    'trainId': str
+function writeCongestedTrain(trainNumber, tripId) {
+  db.ref('congested-trains/' + trainNumber).set({
+    'tripId': tripId
   })
 }
 
-//Kill the firebase connection and log success
+//Kill the firebase connection and log success - NOT SURE THIS IS STRICTLY NECESSARY ANYMORE
 function killConnection() {
   firebase.app().delete().then(function() {
     console.log('connection closed')
@@ -64,7 +64,7 @@ export default class ScheduleList extends Component {
     super(props);
     this.state = { uptownTrains: [], downtownTrains: [] };
 
-    this.writeTestData = this.writeTestData.bind(this)
+    this.writeCongestedTrain = this.writeCongestedTrain.bind(this)
 
     //Object that maps the train lines to the feed IDs
     this.feedIds = {
@@ -139,8 +139,8 @@ export default class ScheduleList extends Component {
     });
   }
 
-  writeTestData(testNumber, str) {
-    writeTestData(testNumber, str)
+  writeCongestedTrain(trainNumber, tripId) {
+    writeCongestedTrain(trainNumber, tripId)
   }
 
   componentDidMount() {
@@ -194,10 +194,10 @@ export default class ScheduleList extends Component {
           >
             {/* UPTOWN/DOWNTOWN SWIPABLE CARDS*/}
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} writeTestData={this.writeTestData} congested={congested}/>
+              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} writeCongestedTrain={this.writeCongestedTrain} congested={congested}/>
             </View>
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} writeTestData={this.writeTestData} congested={congested}/>
+              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} writeCongestedTrain={this.writeCongestedTrain} congested={congested}/>
             </View>
 
           </ScrollView>
