@@ -5,7 +5,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 import apiKeys from "../../variables/apiKeys";
 import * as firebase from "firebase";
@@ -16,8 +17,9 @@ import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import * as ImageManipulator from "expo-image-manipulator";
 import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 
-const CAMERA_TYPE = Camera.Constants.Type.back
+const CAMERA_TYPE = Camera.Constants.Type.back;
 
 export default class Cam extends React.Component {
   constructor() {
@@ -54,60 +56,67 @@ export default class Cam extends React.Component {
 
   snap = async () => {
     try {
-      if (this.camera) {
-        //Triggering the display of the loading screen
-        this.setState({ isLoading: true });
+      //Triggering the display of the loading screen
+      this.setState({ isLoading: true });
+      let photo = null;
 
-        //Taking the photo
-        let photo = await this.camera.takePictureAsync();
+      if (Platform.OS === "ios") {
+        //Taking the photo for iOS
+        photo = await this.camera.takePictureAsync();
 
-        //Compressing the photo
+        //Compressing the photo for iOS
         photo = await ImageManipulator.manipulateAsync(
           photo.uri,
           {},
           { compress: 0.5 }
         );
-
-        //Encoding the photo as base64 so that it can be fed into Google Vision API directly
-        let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, {
-          encoding: FileSystem.EncodingType.Base64
+      } else if (Platform.OS === "android") {
+        //Taking the photo for Android
+        photo = await ImagePicker.launchCameraAsync({
+          base64: true,
+          quality: 0.5
         });
-
-        //Setting the body for the Vision API request
-        let body = JSON.stringify({
-          requests: [
-            {
-              features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
-              image: {
-                content: BASE_64_IMAGE
-              }
-            }
-          ]
-        });
-
-        //Hitting the vision API
-        let response = await fetch(
-          "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: body
-          }
-        );
-
-        //Getting the text data back, splitting it up so that we only grab the first letter (should be the train line if the user has composed the photo correctly), and passing that letter on to the MTA API call
-        let responseJson = await response.json();
-        let OCRtext = responseJson.responses[0].fullTextAnnotation.text;
-        let split = OCRtext.split("");
-
-        //Triggering the display of the ScheduleList component and setting the OCR result on state for use by ScheduleList
-        this.setState({ photoProcessed: true, currentLine: split[0] });
       }
+
+      //Encoding the photo as base64 so that it can be fed into Google Vision API directly
+      let BASE_64_IMAGE = await FileSystem.readAsStringAsync(photo.uri, {
+        encoding: FileSystem.EncodingType.Base64
+      });
+
+      //Setting the body for the Vision API request
+      let body = JSON.stringify({
+        requests: [
+          {
+            features: [{ type: "TEXT_DETECTION", maxResults: 5 }],
+            image: {
+              content: BASE_64_IMAGE
+            }
+          }
+        ]
+      });
+
+      //Hitting the vision API
+      let response = await fetch(
+        "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDELKklvRwJOftEZ73My2iykf2bzaDKoR8",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          body: body
+        }
+      );
+
+      //Getting the text data back, splitting it up so that we only grab the first letter (should be the train line if the user has composed the photo correctly), and passing that letter on to the MTA API call
+      let responseJson = await response.json();
+      let OCRtext = responseJson.responses[0].fullTextAnnotation.text;
+      let split = OCRtext.split("");
+
+      //Triggering the display of the ScheduleList component and setting the OCR result on state for use by ScheduleList
+      this.setState({ photoProcessed: true, currentLine: split[0] });
     } catch (error) {
-      //changing the state so if the OCR fails the loading screen goes away so you can try again
+      //Changing the state so if the OCR fails the loading screen goes away so you can try again
       this.setState({ isLoading: false });
       Alert.alert(
         "Image processing failed - please try again or yell your train line into the microphone"
@@ -122,9 +131,11 @@ export default class Cam extends React.Component {
     if (!hasCameraPermission) {
       return (
         <View style={styles.permissionTextContainer}>
-          <Text style={styles.permissionText}>Please allow camera access to use this feature</Text>
+          <Text style={styles.permissionText}>
+            Please allow camera access to use this feature
+          </Text>
         </View>
-      )
+      );
     } else if (!this.state.photoProcessed) {
       //If the photo has not been successfully processed, display either the camera or the loading screen
       return (
@@ -135,8 +146,21 @@ export default class Cam extends React.Component {
             backgroundColor: "#0f61a9"
           }}
         >
-          {/*CAMERA DISPLAY*/}
-          {!this.state.isLoading && (
+          {/*CAMERA DISPLAY FOR ANDROID*/}
+          {!this.state.isLoading && Platform.OS === "android" && (
+            <View>
+              <TouchableOpacity onPress={this.snap}>
+                <Text
+                  style={{ textAlign: "center", fontSize: 24, color: "white" }}
+                >
+                  Press to take a picture
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/*CAMERA DISPLAY FOR iOS*/}
+          {!this.state.isLoading && Platform.OS === "ios" && (
             <Camera
               style={{ flex: 5 }}
               type={CAMERA_TYPE}
@@ -201,11 +225,11 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   permissionText: {
-    textAlign: 'center'
+    textAlign: "center"
   },
   permissionTextContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
     flex: 1
   }
 });
