@@ -101,6 +101,24 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         overflow: 'hidden'
     },
+    chatMessageArea: {
+        backgroundColor: 'lightgray',
+        fontSize: 16,
+        color: 'black',
+        margin: 5,
+        padding: 5,
+        width: '90%'
+    },
+    chatInput: {
+        height: 40,
+        width: '80%',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        marginBottom: 20,
+        color: '#000',
+        fontSize: 16,
+        paddingHorizontal: 10,
+        borderRadius: 6,
+    },
 });
 
 export default styles;
