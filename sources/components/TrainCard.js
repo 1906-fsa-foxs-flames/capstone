@@ -28,7 +28,11 @@ export default function TrainCard(props) {
 
       {/* Map over every train in the array passed to this component*/}
       {props.trains.map(function(trainTime, index) {
-
+        let color;
+        let isCongested = props.congestedTrains.includes(trainTime[1]);
+        if (isCongested) {
+          color = 'orange';
+        } else color = 'black';
         //This if-else checks whether the train's arrival is still in the future and whether the train is one of the next 'x' trains to arrive (don't want to list every future train)
         if (
           getTimeUntil(trainTime[0], props.now) >= 0 &&
@@ -46,9 +50,24 @@ export default function TrainCard(props) {
               <Tooltip height={100} key={trainTime[0]} popover={<CustomPopover writeCongestedTrain={props.writeCongestedTrain} congestedTrains={props.congestedTrains} trainTime={trainTime} />}>
 
                 {/* TEXT DISPLAYS THE ARRIVAL TIMES OF THE TRAINS, RELATIVE TO NOW*/}
-                <Text key={trainTime[0]} style={styles.cardTextStyle}>
-                  {getTimeUntil(trainTime[0], props.now)} minutes away
-                </Text>
+                {isCongested
+                  ? <Text key={trainTime[0]} style={{
+                      textAlign: "center",
+                      margin: 5,
+                      fontWeight: 'bold',
+                      color: color
+                      }}>
+                      {getTimeUntil(trainTime[0], props.now)} minutes away (crowded)
+                    </Text>
+                  : <Text key={trainTime[0]} style={{
+                      textAlign: "center",
+                      margin: 5,
+                      fontWeight: 'bold',
+                      color: color
+                      }}>
+                      {getTimeUntil(trainTime[0], props.now)} minutes away
+                    </Text>
+                 }
               </Tooltip>
             </View>
           );
@@ -85,11 +104,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'black',
     marginBottom: 4
-  },
-  cardTextStyle: {
-    textAlign: "center",
-    margin: 5,
-    fontWeight: 'bold'
   },
   swipingInstructionsTextStyle: {
     textAlign: "center",
