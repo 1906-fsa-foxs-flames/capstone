@@ -2,9 +2,12 @@ const functions = require('firebase-functions');
 
 //This library handles the protocol buffers required to get the MTA data in a useful format
 const MtaGtfsRealtimeBindings = require('mta-gtfs-realtime-bindings');
+
 const MtaInfo = require('mta-gtfs');
+
 //Request-promise is used instead of something like axios because it's simpler to decode binary responses using a protocol buffer in r-p
 const rp = require('request-promise');
+
 const mtaState = new MtaInfo({
   key: "3f1463633a6a8c127fcd6560f9d6299a",
   feed_id: 1
@@ -70,9 +73,12 @@ exports.queryMTA = functions.https.onRequest(async (req, res) => {
       }
     })
 
-    //Pushing any relevant stops to the arrays
-    uptownArrival ? uptownArrivals.push([uptownArrival.arrival.time.low, tripId]) : null
-    downtownArrival ? downtownArrivals.push([downtownArrival.arrival.time.low, tripId]) : null
+    //Pushing relevant data to the arrays
+    //elem 0 = the arrival time of the train at our stop
+    //elem 1 = the unique trip id of the train
+    //elem 2 = a list of all future stops of this train for use by our map
+    uptownArrival ? uptownArrivals.push([uptownArrival.arrival.time.low, tripId, scheduleArray]) : null
+    downtownArrival ? downtownArrivals.push([downtownArrival.arrival.time.low, tripId, scheduleArray]) : null
   }
 
   //Filtering for trains scheduled to stop at the current stop and then logging the arrival times

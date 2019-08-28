@@ -113,6 +113,7 @@ export default class InfoScreen extends React.Component {
         <TopToolBar
           navigation={this.props.navigation}
           refreshPage={this.onRefresh}
+          tab = 'Info'
         />
         <View style={styles.mainSpace}>
           <ScrollView>

@@ -30,16 +30,17 @@ async function queryMTA() {
         downtownTrains.push(stop);
       }
     });
+
     uptownTrains.length > 0
       ? uptownArrivalTimes.push([
           new Date(uptownTrains[0].arrival.time.low * 1000),
-          tripId
+          tripId, scheduleArray
         ])
       : null;
     downtownTrains.length > 0
       ? downtownArrivalTimes.push([
           new Date(downtownTrains[0].arrival.time.low * 1000),
-          tripId
+          tripId, scheduleArray
         ])
       : null;
 
@@ -86,7 +87,7 @@ async function queryMTA() {
     })
     .catch(e => console.log(e));
 
-  console.log(arrivals);
+  console.log(arrivals[0][2][2][0]);
 }
 
 queryMTA();

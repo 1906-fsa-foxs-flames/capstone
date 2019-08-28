@@ -91,16 +91,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-    },
-    infoTrainText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        paddingVertical: 4,
         paddingHorizontal: 10,
-        margin: 15,
-        borderRadius: 15,
-        overflow: 'hidden'
-    },
+        paddingBottom: 10
+    }
 });
 
 export default styles;
