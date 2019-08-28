@@ -8,10 +8,63 @@ import DefaultLocation from "./UsersMap";
 import NearestCity from "../../trainStopInfo";
 import TrainCard from './TrainCard'
 
+//ALL THE FIREBASE STUFF -------------------------------------------------------
+
+// Firebase App (the core Firebase SDK) is always required and
+// must be listed before other Firebase SDKs
+var firebase = require("firebase/app");
+
+// Add the Firebase products that you want to use
+require("firebase/database");
+
+var firebaseConfig = {
+  apiKey: "AIzaSyDFJrmYkjMr6bymsyonik7Xr6zL9SMlxtA",
+  authDomain: "subwar-a2611.firebaseapp.com",
+  databaseURL: "https://subwar-a2611.firebaseio.com",
+  projectId: "subwar-a2611",
+  storageBucket: "subwar-a2611.appspot.com",
+  messagingSenderId: "909830506182",
+  appId: "1:909830506182:web:ac670ea82577cee6"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var db = firebase.database()
+
+var congested = []
+
+function readTest(db) {
+  var ref = db.ref('congested-trains')
+  ref.on('child_added', function(snapshot) {
+    congested.push(snapshot.val().trainId)
+  })
+}
+
+readTest(db)
+
+//Write the data to the DB
+function writeTestData(testNumber, str) {
+  db.ref('congested-trains/' + testNumber).set({
+    'trainId': str
+  })
+}
+
+//Kill the firebase connection and log success
+function killConnection() {
+  firebase.app().delete().then(function() {
+    console.log('connection closed')
+  });
+}
+
+//ALL THE FIREBASE STUFF -------------------------------------------------------
+
 export default class ScheduleList extends Component {
   constructor(props) {
     super(props);
     this.state = { uptownTrains: [], downtownTrains: [] };
+
+    this.writeTestData = this.writeTestData.bind(this)
 
     //Object that maps the train lines to the feed IDs
     this.feedIds = {
@@ -86,6 +139,10 @@ export default class ScheduleList extends Component {
     });
   }
 
+  writeTestData(testNumber, str) {
+    writeTestData(testNumber, str)
+  }
+
   componentDidMount() {
     //Gets the user's location in the background for use in calculating what station a user is at
     navigator.geolocation.getCurrentPosition(position =>
@@ -137,10 +194,10 @@ export default class ScheduleList extends Component {
           >
             {/* UPTOWN/DOWNTOWN SWIPABLE CARDS*/}
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} />
+              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} writeTestData={this.writeTestData} congested={congested}/>
             </View>
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} />
+              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} writeTestData={this.writeTestData} congested={congested}/>
             </View>
 
           </ScrollView>
