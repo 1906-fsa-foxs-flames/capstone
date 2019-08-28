@@ -158,7 +158,7 @@ export default class ScheduleList extends Component {
         <View style={styles.upperParentView}>
 
           {/* FOR RENDERING THE MAP WITH THE SELECTED SUBWAY LINE OVERLAID*/}
-          {this.props.currentLine === '2' || this.props.currentLine === 'J'
+          {this.props.currentLine === '2' || this.props.currentLine === 'J' || this.props.currentLine === '3'
           ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
           :  <DefaultLocation smaller={true} />
           }

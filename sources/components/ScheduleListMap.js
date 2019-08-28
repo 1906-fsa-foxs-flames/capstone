@@ -5,9 +5,11 @@ import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestCity from "../../trainStopInfo";
 import { twoLines } from "../../twoLine";
+import { threeLines } from "../../threeLine";
 import { jLines } from "../../jLine";
 import { twoPoints } from "../../twoLinePoints";
 import { jPoints } from "../../jLinePoints";
+import { threePoints } from "../../threeLinePoints"
 
 
 class UsersMap extends React.Component {
@@ -55,6 +57,10 @@ class UsersMap extends React.Component {
     points = twoPoints;
     lines = twoLines;
     color = 'red';
+   } else if (this.props.currentLine === '3') {
+     points = threePoints;
+     lines = threeLines;
+     color = 'red';
    } else {
      points = jPoints;
      lines = jLines;
