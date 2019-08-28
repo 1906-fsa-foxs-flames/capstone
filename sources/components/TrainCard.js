@@ -20,6 +20,9 @@ export default function TrainCard(props) {
       titleStyle={styles.cardTitleStyle}
       containerStyle={styles.cardContainerStyle}
     >
+      {/* USER INSTRUCTIONS */}
+      <Text>Tap a train for congestion information</Text>
+
       {/* Map over every train in the array passed to this component*/}
       {props.trains.map(function(trainTime) {
 
@@ -31,12 +34,11 @@ export default function TrainCard(props) {
           trainCounter++;
           return (
             <View style={{justifyContent: 'center'}}>
-              <Tooltip popover={<Text>{props.congested.includes(trainTime[1]) && 'CONGESTED'}</Text>}>
+              <Tooltip popover={<View><Text>{(props.congested.includes(trainTime[1]) && 'Users have reported this train is congested') || ('This train is not congested')}</Text><Button titleStyle={{ fontSize: 8, padding: 0 }}buttonStyle={{ width: 100, height: 25, padding: 0 }} title='Report congestion' onPress={() => props.writeTestData(trainTime[0], trainTime[1])}/></View>} height={100}>
                 <Text key={trainTime[0]} style={styles.cardTextStyle}>
                   {getTimeUntil(trainTime[0], props.now)} minutes
                 </Text>
               </Tooltip>
-              <Button title='Report congestion' onPress={() => props.writeTestData(trainTime[0], trainTime[1])}/>
             </View>
           );
         } else {
