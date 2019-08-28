@@ -195,11 +195,6 @@ export default class ScheduleList extends Component {
 
           </ScrollView>
 
-          {/* SWIPING INSTRUCTIONS*/}
-          <Text style={styles.swipingInstructionsTextStyle}>
-            Swipe left/right for uptown/downtown
-          </Text>
-
           {/* 'CLOSE CAMERA' BUTTON */}
           <Button
             onPress={() => this.props.closeNextTrains()}
@@ -219,7 +214,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   upperParentView: {
-    height: 425
+    height: 400
   },
   nextTrainHeaderView: {
     paddingTop: 4,
@@ -234,9 +229,6 @@ const styles = StyleSheet.create({
   nextTrainHeaderImg: {
     width: 40,
     height: 40
-  },
-  swipingInstructionsTextStyle: {
-    textAlign: "center"
   },
   closeCameraStyle: {
     padding: 15

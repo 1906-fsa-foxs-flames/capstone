@@ -22,7 +22,9 @@ export default function TrainCard(props) {
       containerStyle={styles.cardContainerStyle}
     >
       {/* USER INSTRUCTIONS */}
-      <Text>Tap a train for congestion information</Text>
+      <View style={styles.instructionsContainerStyle}>
+        <Text style={styles.InstructionsTextStyle}>Tap a train for congestion information</Text>
+      </View>
 
       {/* Map over every train in the array passed to this component*/}
       {props.trains.map(function(trainTime) {
@@ -41,7 +43,7 @@ export default function TrainCard(props) {
               {/* WRITECONGESTEDTRAIN = A METHOD TO WRITE CONGESTION DATA TO THE DB */}
               {/* CONGESTEDTRAINS = AN ARRAY PULLED FROM THE DB OF WHICH TRAINS ARE CURRENTLY CONGESTED*/}
               {/* TRAINTIME = AN ARRAY OF THE FORM [ARRIVAL_TIME, TRIP_ID, FUTURE_STOPS_ARRAY] */}
-              <Tooltip height={100} popover={<CustomPopover writeCongestedTrain={props.writeCongestedTrain} congestedTrains={props.congestedTrains} trainTime={trainTime} />}>
+              <Tooltip height={100} key={trainTime[0]} popover={<CustomPopover writeCongestedTrain={props.writeCongestedTrain} congestedTrains={props.congestedTrains} trainTime={trainTime} />}>
 
                 {/* TEXT DISPLAYS THE ARRIVAL TIMES OF THE TRAINS, RELATIVE TO NOW*/}
                 <Text key={trainTime[0]} style={styles.cardTextStyle}>
@@ -54,6 +56,12 @@ export default function TrainCard(props) {
           return null;
         }
       })}
+
+      {/* SWIPING INSTRUCTIONS*/}
+      <View style={styles.swipingInstructionsViewStyle}>
+        {props.direction === 'Uptown' && <Text style={styles.swipingInstructionsTextStyle}>Swipe right for downtown</Text>}
+        {props.direction === 'Downtown' && <Text style={styles.swipingInstructionsTextStyle}>Swipe left for uptown</Text>}
+      </View>
     </Card>
   )
 }
@@ -69,7 +77,27 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center"
   },
+  InstructionsTextStyle: {
+    textAlign: "center",
+    fontSize: 10
+  },
+  instructionsContainerStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    marginBottom: 4
+  },
   cardTextStyle: {
-    textAlign: "center"
+    textAlign: "center",
+    margin: 5,
+    fontWeight: 'bold'
+  },
+  swipingInstructionsTextStyle: {
+    textAlign: "center",
+    fontSize: 10,
+  },
+  swipingInstructionsViewStyle: {
+    borderTopWidth: 1,
+    borderTopColor: 'black',
+    marginTop: 2
   }
 })
