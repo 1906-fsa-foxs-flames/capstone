@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
-import { View, TouchableOpacity, Text, KeyboardAvoidingView, YellowBox } from 'react-native';
+import { View, Platform, Text, KeyboardAvoidingView, YellowBox } from 'react-native';
 import styles from '../../variables/styles';
 import TopToolBar from './topToolBar';
 import * as firebase from 'firebase';
@@ -128,6 +128,20 @@ export default class ChatScreen extends React.Component {
             navigation={this.props.navigation} 
             tab="Chat" />
         </View>
+        { Platform.OS === 'android' ?
+        <KeyboardAvoidingView
+          style={{ flex: 9 }}
+          behavior="padding"
+        >
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={Fire.shared.send}
+            user={this.state.user}
+            renderUsernameOnMessage={true}
+            // renderTime={this.getInstantDate}
+          />
+        </KeyboardAvoidingView>
+        : 
         <View
           style={{ flex: 9 }}
         >
@@ -139,6 +153,7 @@ export default class ChatScreen extends React.Component {
             // renderTime={this.getInstantDate}
           />
         </View>
+        }
       </View>
     );
   }
