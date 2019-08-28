@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView, Image, Dimensions, StyleSheet } from "react-native";
-import { Card, Button } from "react-native-elements";
+import { Button } from "react-native-elements";
 import axios from "axios";
 
 import UserLocation from "./ScheduleListMap";
@@ -8,10 +8,39 @@ import DefaultLocation from "./UsersMap";
 import NearestCity from "../../trainStopInfo";
 import TrainCard from './TrainCard'
 
+//Firebase configuration and initialization
+var firebase = require("firebase/app");
+var firebaseConfig = {
+  apiKey: "AIzaSyDFJrmYkjMr6bymsyonik7Xr6zL9SMlxtA",
+  authDomain: "subwar-a2611.firebaseapp.com",
+  databaseURL: "https://subwar-a2611.firebaseio.com",
+  projectId: "subwar-a2611",
+  storageBucket: "subwar-a2611.appspot.com",
+  messagingSenderId: "909830506182",
+  appId: "1:909830506182:web:ac670ea82577cee6"
+};
+firebase.initializeApp(firebaseConfig);
+
+
 export default class ScheduleList extends Component {
   constructor(props) {
     super(props);
+
+    //uptown and downtown trains will be arrays, where each element consists of [ARRIVAL_TIME, TRIP_ID, FUTURE_STOPS_ARRAY]
     this.state = { uptownTrains: [], downtownTrains: [] };
+
+    //binding the methods
+    this.writeCongestedTrain = this.writeCongestedTrain.bind(this)
+    this.readCongestedTrains = this.readCongestedTrains.bind(this)
+
+    // Initialize Firebase & database
+    this.db = firebase.database()
+
+    //Array for holding the list of congested trains (will not change so does not need to be on state)
+    this.congestedTrains = []
+
+    //Populate the congested trains array
+    this.readCongestedTrains(this.congestedTrains)
 
     //Object that maps the train lines to the feed IDs
     this.feedIds = {
@@ -53,6 +82,7 @@ export default class ScheduleList extends Component {
     };
   }
 
+  //method for sending package of data to the MTA API and getting results back
   async sendToAPI(position) {
     //Getting the station you're at
     const station = NearestCity(
@@ -86,6 +116,22 @@ export default class ScheduleList extends Component {
     });
   }
 
+  //this method adds a new train to the database under 'congested-trains'
+  writeCongestedTrain(trainNumber, tripId) {
+    this.db.ref('congested-trains/' + trainNumber).set({
+      'tripId': tripId
+    })
+  }
+
+  //this method reads in all congested trains from the db and pushes them to an array for processing
+  readCongestedTrains(congestedTrains) {
+    var ref = this.db.ref('congested-trains')
+    ref.on('child_added', function(snapshot) {
+      congestedTrains.push(snapshot.val().tripId)
+    })
+  }
+
+  //grabs the user's location and then sends all the relevant data to the MTA's API
   componentDidMount() {
     //Gets the user's location in the background for use in calculating what station a user is at
     navigator.geolocation.getCurrentPosition(position =>
@@ -136,11 +182,15 @@ export default class ScheduleList extends Component {
             showsHorizontalScrollIndicator={false}
           >
             {/* UPTOWN/DOWNTOWN SWIPABLE CARDS*/}
+            {/* TRAINS = ARRAY OF TRAINS TO BE DISPLAYED */}
+            {/* NOW = CURRENT TIME */}
+            {/* WRITECONGESTEDTRAIN = METHOD FOR ADDING CONGESTION INFO TO THE DB*/}
+            {/* CONGESTEDTRAINS = ARRAY PULLED FROM THE DB OF ALL CURRENTLY CONGESTED TRAINS*/}
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} />
+              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} writeCongestedTrain={this.writeCongestedTrain} congestedTrains={this.congestedTrains}/>
             </View>
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} />
+              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} writeCongestedTrain={this.writeCongestedTrain} congestedTrains={this.congestedTrains}/>
             </View>
 
           </ScrollView>
