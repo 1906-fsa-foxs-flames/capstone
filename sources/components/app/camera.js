@@ -32,8 +32,8 @@ export default class Cam extends React.Component {
     //isLoading: bool that triggers rendering of the loading screen while the OCR is processing
     this.state = {
       hasCameraPermission: null,
-      photoProcessed: true,
-      currentLine: "G",
+      photoProcessed: false,
+      currentLine: "",
       isLoading: false
     };
 
