@@ -282,6 +282,7 @@ const boroughToHoyt = [
   [-73.9850649999924, 40.69054466728554]
 ]
 
+//This function formats the coordinates for plotting on mapcustomizer.com (for checking the layout of the line)
 function format(arr) {
   let str = ''
   let betterArr = []
@@ -301,19 +302,15 @@ function format(arr) {
   return { str, betterArr }
 }
 
+//creating the complete coordinate array, with orders reversed as necessary
 const one = maybeChambersToPark.reverse()
-
 const two = parkToFulton.reverse()
-
 const three = fultonToWall.reverse()
-
 const four = wallToClark.reverse()
-
 const five = clarkToBorough.reverse()
-
 const final = one.concat(two).concat(three).concat(four).concat(five)
 
-let fin = format(final)
+//let fin = format(final)
 
 function createGeoArr(latLonArr) {
   //for holding all the geoJSON lines.  Each element of this array will represent a line segment of the overall subway path
@@ -361,16 +358,22 @@ function calculateTotalDistance(geoArr) {
   return [totalDist, totalSegs]
 }
 
-let testGeo = createGeoArr(fin.betterArr)
+//create a geoJSON array from the final coordinate array
+let testGeo = createGeoArr(final)
 
+//calculate the total distance of all the line segments in testGeo
 let totalDistance = calculateTotalDistance(testGeo)
 
+//set an arbitrary number of steps that composes the animation line
 var steps = 500
 
+//set a constant step distance
 var stepDistance = totalDistance[0] / steps
 
+//array to hold the final animation line
 var arc = []
 
+//for each geoJSON element representing a line segment, get the segment distance and place a series of points along the segment, at a distance of stepDistance
 for (let elem of testGeo) {
   let segmentDistance = turf.length(elem.features[0], { units: 'kilometers' });
   for (var i = 0; i < segmentDistance; i += stepDistance) {
