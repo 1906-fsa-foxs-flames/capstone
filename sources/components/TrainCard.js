@@ -32,12 +32,20 @@ export default function TrainCard(props) {
           getTimeUntil(trainTime[0], props.now) >= 0 &&
           trainCounter < 4
         ) {
+          //For every train we display, increment the counter
           trainCounter++;
           return (
-            <View style={{justifyContent: 'center'}}>
-              <Tooltip height={100} popover={<CustomPopover writeCongestedTrain={props.writeCongestedTrain} congested={props.congested} trainTime={trainTime} />}>
+            <View style={styles.viewStyle}>
+
+              {/* TOOLTIP DISPLAYS A POP-UP WITH CONGESTION DETAILS WHEN THE USER TAPS ON A TRAIN*/}
+              {/* WRITECONGESTEDTRAIN = A METHOD TO WRITE CONGESTION DATA TO THE DB */}
+              {/* CONGESTEDTRAINS = AN ARRAY PULLED FROM THE DB OF WHICH TRAINS ARE CURRENTLY CONGESTED*/}
+              {/* TRAINTIME = AN ARRAY OF THE FORM [ARRIVAL_TIME, TRIP_ID, FUTURE_STOPS_ARRAY] */}
+              <Tooltip height={100} popover={<CustomPopover writeCongestedTrain={props.writeCongestedTrain} congestedTrains={props.congestedTrains} trainTime={trainTime} />}>
+
+                {/* TEXT DISPLAYS THE ARRIVAL TIMES OF THE TRAINS, RELATIVE TO NOW*/}
                 <Text key={trainTime[0]} style={styles.cardTextStyle}>
-                  {getTimeUntil(trainTime[0], props.now)} minutes
+                  {getTimeUntil(trainTime[0], props.now)} minutes away
                 </Text>
               </Tooltip>
             </View>
@@ -51,6 +59,9 @@ export default function TrainCard(props) {
 }
 
 const styles = StyleSheet.create({
+  viewStyle: {
+    justifyContent: 'center'
+  },
   cardTitleStyle: {
     fontSize: 24
   },

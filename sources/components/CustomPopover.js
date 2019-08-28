@@ -4,7 +4,7 @@ import { Button } from "react-native-elements";
 
 export default function CustomTooltip(props) {
   //A flag for whether this train is on the list of congested trains or not
-  const isCongested = props.congested.includes(props.trainTime[1])
+  const isCongested = props.congestedTrains.includes(props.trainTime[1])
 
   return (
     <View style={styles.viewStyle}>
