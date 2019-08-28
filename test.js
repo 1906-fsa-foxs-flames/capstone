@@ -3,6 +3,7 @@
 
 var turf = require('@turf/turf');
 
+//THE OVERALL LIST OF COORDINATES
 const movingTrainsCoord = [
   //Chambers to Park Place - 18 entries
   [-74.0092660004712, 40.71547766602407],
@@ -23,6 +24,7 @@ const movingTrainsCoord = [
   [-74.0070380002953, 40.71852266631043],
   [-74.00703100029207, 40.71856266738787],
   [-74.00688599918587, 40.71931766721322],
+  //Park Place to Fulton - 22 entries
   [-74.0065709996692, 40.709415666069596],
   [-74.00586900029944, 40.710147667212645],
   [-74.00583599947402, 40.71019466655424],
@@ -310,8 +312,6 @@ const four = wallToClark.reverse()
 const five = clarkToBorough.reverse()
 const final = one.concat(two).concat(three).concat(four).concat(five)
 
-//let fin = format(final)
-
 function createGeoArr(latLonArr) {
   //for holding all the geoJSON lines.  Each element of this array will represent a line segment of the overall subway path
   const geoArr = []
@@ -383,5 +383,3 @@ for (let elem of testGeo) {
 }
 
 console.log(arc)
-
-//mapcustomizer.com
