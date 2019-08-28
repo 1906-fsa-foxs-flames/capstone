@@ -361,12 +361,24 @@ function calculateTotalDistance(geoArr) {
   return [totalDist, totalSegs]
 }
 
-//ANIMATE ON THIS ARRAY -------------------------------------->>>
 let testGeo = createGeoArr(fin.betterArr)
-//------------------------------------------------------------>>>
 
-let totalD = calculateTotalDistance(testGeo)
+let totalDistance = calculateTotalDistance(testGeo)
 
-console.log(totalD)
+var steps = 500
+
+var stepDistance = totalDistance[0] / steps
+
+var arc = []
+
+for (let elem of testGeo) {
+  let segmentDistance = turf.length(elem.features[0], { units: 'kilometers' });
+  for (var i = 0; i < segmentDistance; i += stepDistance) {
+    var segment = turf.along(elem.features[0], i, {units: 'kilometers'});
+    arc.push(segment.geometry.coordinates);
+  }
+}
+
+console.log(arc)
 
 //mapcustomizer.com
