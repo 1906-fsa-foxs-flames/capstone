@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from "react-native";
 import { Card, Tooltip, Icon, Button } from "react-native-elements";
+import CustomPopover from './CustomPopover'
 
 export default function TrainCard(props) {
   //helper function that converts absolute arrival times into relative times
@@ -34,7 +35,7 @@ export default function TrainCard(props) {
           trainCounter++;
           return (
             <View style={{justifyContent: 'center'}}>
-              <Tooltip popover={<View><Text>{(props.congested.includes(trainTime[1]) && 'Users have reported this train is congested') || ('This train is not congested')}</Text><Button titleStyle={{ fontSize: 8, padding: 0 }}buttonStyle={{ width: 100, height: 25, padding: 0 }} title='Report congestion' onPress={() => props.writeTestData(trainTime[0], trainTime[1])}/></View>} height={100}>
+              <Tooltip height={100} popover={<CustomPopover writeTestData={props.writeTestData} congested={props.congested} trainTime={trainTime}/>}>
                 <Text key={trainTime[0]} style={styles.cardTextStyle}>
                   {getTimeUntil(trainTime[0], props.now)} minutes
                 </Text>
