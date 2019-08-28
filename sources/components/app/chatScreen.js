@@ -4,7 +4,7 @@ import { View, Platform, Text, KeyboardAvoidingView, YellowBox } from 'react-nat
 import styles from '../../variables/styles';
 import TopToolBar from './topToolBar';
 import * as firebase from 'firebase';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
 class Fire {
 
@@ -74,6 +74,7 @@ export default class ChatScreen extends React.Component {
     YellowBox.ignoreWarnings(['Setting a timer']);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.getInstantDate = this.getInstantDate.bind(this);
+    this.renderBubble = this.renderBubble.bind(this)
   }
 
   componentDidMount() {
@@ -114,11 +115,22 @@ export default class ChatScreen extends React.Component {
       (date.getHours() >= 12 ? 'PM' : 'AM');
     return <Text> {day + ' ' + time} </Text>
   }
-
+  renderBubble(props) { return ( <Bubble {...props} 
+    {...props}
+    wrapperStyle={{
+      // left: {
+      //   backgroundColor: 'white',
+      // },
+      right: {
+        backgroundColor: '#f2a900'
+      }
+    }} />
+    );
+  }
   render() {
     return (
       <View
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch' }}
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch', backgroundColor: '#0f61a9' }}
         accessible
         accessibilityLabel="main"
         testID="main"
@@ -139,6 +151,7 @@ export default class ChatScreen extends React.Component {
             user={this.state.user}
             renderUsernameOnMessage={true}
             // renderTime={this.getInstantDate}
+            renderBubble={this.renderBubble}
           />
         </KeyboardAvoidingView>
         : 
@@ -151,6 +164,7 @@ export default class ChatScreen extends React.Component {
             user={this.state.user}
             renderUsernameOnMessage={true}
             // renderTime={this.getInstantDate}
+            renderBubble={this.renderBubble}
           />
         </View>
         }
