@@ -27,7 +27,7 @@ export default function TrainCard(props) {
       </View>
 
       {/* Map over every train in the array passed to this component*/}
-      {props.trains.map(function(trainTime) {
+      {props.trains.map(function(trainTime, index) {
 
         //This if-else checks whether the train's arrival is still in the future and whether the train is one of the next 'x' trains to arrive (don't want to list every future train)
         if (
@@ -37,7 +37,7 @@ export default function TrainCard(props) {
           //For every train we display, increment the counter
           trainCounter++;
           return (
-            <View style={styles.viewStyle}>
+            <View style={styles.viewStyle} key={index}>
 
               {/* TOOLTIP DISPLAYS A POP-UP WITH CONGESTION DETAILS WHEN THE USER TAPS ON A TRAIN*/}
               {/* WRITECONGESTEDTRAIN = A METHOD TO WRITE CONGESTION DATA TO THE DB */}
