@@ -75,7 +75,7 @@ class UsersMap extends React.Component {
             style={styles.map}
             mapType={"mutedStandard"}
           >
-            <Geojson geojson={lines} strokeColor={color} />
+            <Geojson geojson={lines} strokeColor={color} strokeWidth={3} />
             {points.map((point, i) => (
               <MapView.Marker
                 coordinate={{
@@ -103,7 +103,7 @@ class UsersMap extends React.Component {
         <View
           style={{
             position: "absolute",
-            top: this.props.smaller ? "76.25%" : "85%",
+            top: this.props.smaller ? "72.5%" : "85%",
             alignSelf: "flex-end",
             right: "5%"
           }}
