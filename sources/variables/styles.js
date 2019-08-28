@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         paddingHorizontal: 10
-});
+}});
 
 export default styles;
