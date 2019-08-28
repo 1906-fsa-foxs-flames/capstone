@@ -6,7 +6,7 @@ var firebase = require("firebase/app");
 require("firebase/database");
 
 var firebaseConfig = {
-  apiKey: "AIzaSyDFJrmYkjMr6bymsyonik7Xr6zL9SMlxtA",
+  apiKey: "API_KEY_HERE",
   authDomain: "subwar-a2611.firebaseapp.com",
   databaseURL: "https://subwar-a2611.firebaseio.com",
   projectId: "subwar-a2611",
