@@ -1,4 +1,4 @@
-export const threePoints = [
+export const points3 = [
   {
     title: "Harlem - 148 St", 
     description: '',

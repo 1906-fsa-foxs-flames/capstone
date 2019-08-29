@@ -1,4 +1,4 @@
-export const jLines = {
+export const lineJ = {
   "type": "FeatureCollection",
 	"features": [
     {

@@ -4,12 +4,8 @@ import MapView from "react-native-maps";
 import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
 import NearestStation from "../../trainStopInfo";
-import { twoLines } from "../../twoLine";
-import { threeLines } from "../../threeLine";
-import { jLines } from "../../jLine";
-import { twoPoints } from "../../twoLinePoints";
-import { jPoints } from "../../jLinePoints";
-import { threePoints } from "../../threeLinePoints";
+import { line2, line3, lineJ } from "../../trains/trainLines";
+import { points2, points3, pointsJ } from "../../trains/trainStations";
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -52,19 +48,19 @@ class UsersMap extends React.Component {
 
   render() {
     let points, color, lines;
-    if (this.props.currentLine === "2") {
-      points = twoPoints;
-      lines = twoLines;
-      color = "red";
-    } else if (this.props.currentLine === "3") {
-      points = threePoints;
-      lines = threeLines;
-      color = "red";
-    } else {
-      points = jPoints;
-      lines = jLines;
-      color = "#8B4513";
-    }
+   if (this.props.currentLine === '2') {
+    points = points2;
+    lines = line2;
+    color = 'red';
+   } else if (this.props.currentLine === '3') {
+     points = points3;
+     lines = line3;
+     color = 'red';
+   } else {
+     points = pointsJ;
+     lines = lineJ;
+     color = '#8B4513';
+   }
     return (
       <View style={styles.mapContainer}>
         {this.state.userLocation && (

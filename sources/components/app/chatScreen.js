@@ -10,7 +10,8 @@ import {
 import styles from "../../variables/styles";
 import TopToolBar from "./topToolBar";
 import * as firebase from "firebase";
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
+
 
 class Fire {
   get uid() {
@@ -78,6 +79,7 @@ export default class ChatScreen extends React.Component {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.getInstantDate = this.getInstantDate.bind(this);
+    this.renderBubble = this.renderBubble.bind(this)
   }
 
   componentDidMount() {
@@ -113,22 +115,62 @@ export default class ChatScreen extends React.Component {
       date.getFullYear();
     const time =
       (date.getHours() > 12 ? date.getHours() - 12 : date.getHours()) +
-      ":" +
-      (date.getMinutes() > 9 ? date.getMinutes() : "0" + date.getMinutes()) +
-      (date.getHours() >= 12 ? "PM" : "AM");
-    return <Text> {day + " " + time} </Text>;
-  };
-
+      ':' +
+      (date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()) +
+      (date.getHours() >= 12 ? 'PM' : 'AM');
+    return <Text> {day + ' ' + time} </Text>
+  }
+  renderBubble(props) { return ( <Bubble {...props} 
+    {...props}
+    wrapperStyle={{
+      // left: {
+      //   backgroundColor: 'white',
+      // },
+      right: {
+        backgroundColor: '#f2a900'
+      }
+    }} />
+    );
+  }
   render() {
     return (
       <View
-        style={{ flex: 1, justifyContent: "center", alignItems: "stretch" }}
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch', backgroundColor: '#0f61a9' }}
         accessible
         accessibilityLabel="main"
-        testID="main"
+        testID="main" 
       >
         <View style={{ flex: 1 }}>
-          <TopToolBar navigation={this.props.navigation} tab="Chat" />
+          <TopToolBar
+            navigation={this.props.navigation} 
+            tab="Chat" />
+        </View>
+        { Platform.OS === 'android' ?
+        <KeyboardAvoidingView
+          style={{ flex: 9 }}
+          behavior="padding"
+        >
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={Fire.shared.send}
+            user={this.state.user}
+            renderUsernameOnMessage={true}
+            // renderTime={this.getInstantDate}
+            renderBubble={this.renderBubble}
+          />
+        </KeyboardAvoidingView>
+        : 
+        <View
+          style={{ flex: 9 }}
+        >
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={Fire.shared.send}
+            user={this.state.user}
+            renderUsernameOnMessage={true}
+            // renderTime={this.getInstantDate}
+            renderBubble={this.renderBubble}
+          />
         </View>
         {Platform.OS === "android" ? (
           <KeyboardAvoidingView style={{ flex: 9 }} behavior="padding">

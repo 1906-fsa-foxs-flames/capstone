@@ -28,6 +28,8 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+const trains = ['2', '3', 'J']
+
 export default class ScheduleList extends Component {
   constructor(props) {
     super(props);
@@ -147,6 +149,7 @@ export default class ScheduleList extends Component {
 
   render() {
     //For rendering the times as relative instead of absolute.  'now' is in epoch time (s)
+
     const now = Date.now() / 1000;
 
     //For grabbing the train line image
@@ -162,13 +165,11 @@ export default class ScheduleList extends Component {
         {/* PARENT VIEW FOR THE UPPER SECTION OF THE PAGE */}
         <View style={styles.upperParentView}>
           {/* FOR RENDERING THE MAP WITH THE SELECTED SUBWAY LINE OVERLAID*/}
-          {this.props.currentLine === "2" ||
-          this.props.currentLine === "J" ||
-          this.props.currentLine === "3" ? (
-            <UserLocation smaller={true} currentLine={this.props.currentLine} />
-          ) : (
-            <DefaultLocation smaller={true} />
-          )}
+
+          {trains.includes(this.props.currentLine)
+          ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
+          :  <DefaultLocation smaller={true} />
+          }
 
           {/* FOR RENDERING THE 'NEXT A/B/C/1/2/3/ETC. TRAINS HEADER */}
           <View style={styles.nextTrainHeaderView}>
