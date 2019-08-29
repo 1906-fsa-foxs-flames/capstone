@@ -3,10 +3,9 @@ import { View, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
 import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
-import NearestCity from "../../trainStopInfo";
+import NearestStation from "../../trainStopInfo";
 import { line2, line3, lineJ } from "../../trains/trainLines";
 import { points2, points3, pointsJ } from "../../trains/trainStations";
-
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -88,17 +87,18 @@ class UsersMap extends React.Component {
                 description={point.description}
                 key={i}
               >
-              <View style={{
-                height: 15,
-                width: 15,
-                borderWidth: 3,
-                backgroundColor: 'white',
-                borderRadius: 10,
-                borderColor: color,
-                overflow: 'hidden'
-                }}>
-              </View>
-            </MapView.Marker>
+                <View
+                  style={{
+                    height: 15,
+                    width: 15,
+                    borderWidth: 3,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderColor: color,
+                    overflow: "hidden"
+                  }}
+                ></View>
+              </MapView.Marker>
             ))}
           </MapView>
         )}
@@ -124,7 +124,7 @@ class UsersMap extends React.Component {
               >
                 Closest station:{" "}
                 {
-                  NearestCity(
+                  NearestStation(
                     this.state.userLocation.latitude,
                     this.state.userLocation.longitude
                   )[1]
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%"
-  },
+  }
 });
 
 export default UsersMap;

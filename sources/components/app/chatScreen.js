@@ -1,19 +1,25 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
-import { View, Platform, Text, KeyboardAvoidingView, YellowBox } from 'react-native';
-import styles from '../../variables/styles';
-import TopToolBar from './topToolBar';
-import * as firebase from 'firebase';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import React from "react";
+import {
+  View,
+  Platform,
+  Text,
+  KeyboardAvoidingView,
+  YellowBox
+} from "react-native";
+import styles from "../../variables/styles";
+import TopToolBar from "./topToolBar";
+import * as firebase from "firebase";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
+
 
 class Fire {
-
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }
 
   get ref() {
-    return firebase.database().ref('messages');
+    return firebase.database().ref("messages");
   }
 
   parse = snapshot => {
@@ -24,7 +30,7 @@ class Fire {
       _id,
       createdAt,
       text,
-      user,
+      user
     };
     return message;
   };
@@ -32,7 +38,7 @@ class Fire {
   on = callback =>
     this.ref
       .limitToLast(20)
-      .on('child_added', snapshot => callback(this.parse(snapshot)));
+      .on("child_added", snapshot => callback(this.parse(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -44,7 +50,7 @@ class Fire {
       const message = {
         text,
         user,
-        createdAt: this.timestamp,
+        createdAt: this.timestamp
       };
       this.append(message);
     }
@@ -61,17 +67,16 @@ class Fire {
 Fire.shared = new Fire();
 
 export default class ChatScreen extends React.Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       messages: [],
       user: {
-        _id: '',
-        name: '',
+        _id: "",
+        name: ""
       }
-    }
-    YellowBox.ignoreWarnings(['Setting a timer']);
+    };
+    YellowBox.ignoreWarnings(["Setting a timer"]);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.getInstantDate = this.getInstantDate.bind(this);
     this.renderBubble = this.renderBubble.bind(this)
@@ -81,7 +86,7 @@ export default class ChatScreen extends React.Component {
     this.getUserInfo();
     Fire.shared.on(message =>
       this.setState(previousState => ({
-        messages: GiftedChat.append(previousState.messages, message),
+        messages: GiftedChat.append(previousState.messages, message)
       }))
     );
   }
@@ -93,8 +98,8 @@ export default class ChatScreen extends React.Component {
   getUserInfo() {
     const user = firebase.auth().currentUser;
     if (user) {
-      const email = user.email.slice(0, user.email.indexOf('@'));
-      this.setState({ user: {name: email, _id: user.uid }} );
+      const email = user.email.slice(0, user.email.indexOf("@"));
+      this.setState({ user: { name: email, _id: user.uid } });
     }
   }
 
@@ -103,10 +108,10 @@ export default class ChatScreen extends React.Component {
     const day =
       (1 + date.getMonth() >= 10
         ? 1 + date.getMonth()
-        : '0' + (1 + date.getMonth())) +
-      '/' +
+        : "0" + (1 + date.getMonth())) +
+      "/" +
       date.getDate() +
-      '/' +
+      "/" +
       date.getFullYear();
     const time =
       (date.getHours() > 12 ? date.getHours() - 12 : date.getHours()) +
@@ -167,7 +172,27 @@ export default class ChatScreen extends React.Component {
             renderBubble={this.renderBubble}
           />
         </View>
-        }
+        {Platform.OS === "android" ? (
+          <KeyboardAvoidingView style={{ flex: 9 }} behavior="padding">
+            <GiftedChat
+              messages={this.state.messages}
+              onSend={Fire.shared.send}
+              user={this.state.user}
+              renderUsernameOnMessage={true}
+              // renderTime={this.getInstantDate}
+            />
+          </KeyboardAvoidingView>
+        ) : (
+          <View style={{ flex: 9 }}>
+            <GiftedChat
+              messages={this.state.messages}
+              onSend={Fire.shared.send}
+              user={this.state.user}
+              renderUsernameOnMessage={true}
+              // renderTime={this.getInstantDate}
+            />
+          </View>
+        )}
       </View>
     );
   }
