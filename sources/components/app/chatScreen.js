@@ -133,7 +133,7 @@ export default class ChatScreen extends React.Component {
         style={{ flex: 1, justifyContent: 'center', alignItems: 'stretch', backgroundColor: '#0f61a9' }}
         accessible
         accessibilityLabel="main"
-        testID="main"
+        testID="main" 
       >
         <View style={{ flex: 1 }}>
           <TopToolBar

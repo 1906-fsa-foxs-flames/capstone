@@ -1,4 +1,4 @@
-export const jPoints = [
+export const pointsJ = [
   {
     title: "Jamaica Center - Parsons/Archer", 
     description: '',

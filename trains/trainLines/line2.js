@@ -1,4 +1,4 @@
-export const twoLines = {
+export const line2 = {
   "type": "FeatureCollection",
 	"features": [
   {

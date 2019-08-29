@@ -1,4 +1,4 @@
-export const twoPoints = [
+export const points2 = [
   {
     title: 'Wakefield - 241 St',
     description: '',
