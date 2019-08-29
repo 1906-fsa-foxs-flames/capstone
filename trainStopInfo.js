@@ -1,4 +1,4 @@
-let newStops = [
+let stops = [
   ["101", "Van Cortlandt Park - 242 St", "40.889248", "-73.898583"],
   ["101N", "Van Cortlandt Park - 242 St", "40.889248", "-73.898583"],
   ["101S", "Van Cortlandt Park - 242 St", "40.889248", "-73.898583"],
@@ -1521,25 +1521,25 @@ function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
   return d;
 }
 
-export default function NearestCity(latitude, longitude) {
+export default function NearestStation(latitude, longitude) {
   let minDif = Infinity;
   let closest;
-  for (index = 0; index < newStops.length; index++) {
+  for (index = 0; index < stops.length; index++) {
     var dif = PythagorasEquirectangular(
       latitude,
       longitude,
-      newStops[index][2],
-      newStops[index][3]
+      stops[index][2],
+      stops[index][3]
     );
     if (dif < minDif) {
       closest = index;
       minDif = dif;
     }
   }
-  return newStops[closest];
+  return stops[closest];
 }
 
 let lat = 40.7056; // user's latitude
 let lon = -74.0083; // user's longitude
 
-NearestCity(lat, lon);
+NearestStation(lat, lon);

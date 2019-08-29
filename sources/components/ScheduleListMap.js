@@ -3,14 +3,13 @@ import { View, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
 import Geojson from "react-native-geojson";
 import FetchLocation from "./FetchLocation";
-import NearestCity from "../../trainStopInfo";
+import NearestStation from "../../trainStopInfo";
 import { twoLines } from "../../twoLine";
 import { threeLines } from "../../threeLine";
 import { jLines } from "../../jLine";
 import { twoPoints } from "../../twoLinePoints";
 import { jPoints } from "../../jLinePoints";
-import { threePoints } from "../../threeLinePoints"
-
+import { threePoints } from "../../threeLinePoints";
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -53,19 +52,19 @@ class UsersMap extends React.Component {
 
   render() {
     let points, color, lines;
-   if (this.props.currentLine === '2') {
-    points = twoPoints;
-    lines = twoLines;
-    color = 'red';
-   } else if (this.props.currentLine === '3') {
-     points = threePoints;
-     lines = threeLines;
-     color = 'red';
-   } else {
-     points = jPoints;
-     lines = jLines;
-     color = '#8B4513';
-   }
+    if (this.props.currentLine === "2") {
+      points = twoPoints;
+      lines = twoLines;
+      color = "red";
+    } else if (this.props.currentLine === "3") {
+      points = threePoints;
+      lines = threeLines;
+      color = "red";
+    } else {
+      points = jPoints;
+      lines = jLines;
+      color = "#8B4513";
+    }
     return (
       <View style={styles.mapContainer}>
         {this.state.userLocation && (
@@ -92,17 +91,18 @@ class UsersMap extends React.Component {
                 description={point.description}
                 key={i}
               >
-              <View style={{
-                height: 15,
-                width: 15,
-                borderWidth: 3,
-                backgroundColor: 'white',
-                borderRadius: 10,
-                borderColor: color,
-                overflow: 'hidden'
-                }}>
-              </View>
-            </MapView.Marker>
+                <View
+                  style={{
+                    height: 15,
+                    width: 15,
+                    borderWidth: 3,
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderColor: color,
+                    overflow: "hidden"
+                  }}
+                ></View>
+              </MapView.Marker>
             ))}
           </MapView>
         )}
@@ -128,7 +128,7 @@ class UsersMap extends React.Component {
               >
                 Closest station:{" "}
                 {
-                  NearestCity(
+                  NearestStation(
                     this.state.userLocation.latitude,
                     this.state.userLocation.longitude
                   )[1]
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%"
-  },
+  }
 });
 
 export default UsersMap;
