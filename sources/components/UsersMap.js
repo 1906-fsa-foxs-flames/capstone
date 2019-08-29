@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
 import FetchLocation from "./FetchLocation";
-import NearestCity from "../../trainStopInfo";
+import NearestStation from "../../trainStopInfo";
 
 class UsersMap extends React.Component {
   constructor(props) {
@@ -82,7 +82,7 @@ class UsersMap extends React.Component {
               >
                 Closest station:{" "}
                 {
-                  NearestCity(
+                  NearestStation(
                     this.state.userLocation.latitude,
                     this.state.userLocation.longitude
                   )[1]

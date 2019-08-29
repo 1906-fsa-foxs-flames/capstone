@@ -1,12 +1,19 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, Image, Dimensions, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Dimensions,
+  StyleSheet
+} from "react-native";
 import { Button } from "react-native-elements";
 import axios from "axios";
 
 import UserLocation from "./ScheduleListMap";
 import DefaultLocation from "./UsersMap";
-import NearestCity from "../../trainStopInfo";
-import TrainCard from './TrainCard'
+import NearestStation from "../../trainStopInfo";
+import TrainCard from "./TrainCard";
 
 //Firebase configuration and initialization
 var firebase = require("firebase/app");
@@ -21,7 +28,6 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-
 export default class ScheduleList extends Component {
   constructor(props) {
     super(props);
@@ -30,17 +36,17 @@ export default class ScheduleList extends Component {
     this.state = { uptownTrains: [], downtownTrains: [] };
 
     //binding the methods
-    this.writeCongestedTrain = this.writeCongestedTrain.bind(this)
-    this.readCongestedTrains = this.readCongestedTrains.bind(this)
+    this.writeCongestedTrain = this.writeCongestedTrain.bind(this);
+    this.readCongestedTrains = this.readCongestedTrains.bind(this);
 
     // Initialize Firebase & database
-    this.db = firebase.database()
+    this.db = firebase.database();
 
     //Array for holding the list of congested trains (will not change so does not need to be on state)
-    this.congestedTrains = []
+    this.congestedTrains = [];
 
     //Populate the congested trains array
-    this.readCongestedTrains(this.congestedTrains)
+    this.readCongestedTrains(this.congestedTrains);
 
     //Object that maps the train lines to the feed IDs
     this.feedIds = {
@@ -85,7 +91,7 @@ export default class ScheduleList extends Component {
   //method for sending package of data to the MTA API and getting results back
   async sendToAPI(position) {
     //Getting the station you're at
-    const station = NearestCity(
+    const station = NearestStation(
       position.coords.latitude,
       position.coords.longitude
     );
@@ -103,8 +109,8 @@ export default class ScheduleList extends Component {
     );
 
     //Sorting the trains by arrival time
-    let sortedUptown = arrivals.data[0].sort((a, b) => a[0] - b[0])
-    let sortedDowntown = arrivals.data[1].sort((a, b) => a[0] - b[0])
+    let sortedUptown = arrivals.data[0].sort((a, b) => a[0] - b[0]);
+    let sortedDowntown = arrivals.data[1].sort((a, b) => a[0] - b[0]);
 
     //Setting the trains on state.  Each train will be of the form [ARRIVAL_TIME, TRAIN_ID, FUTURE_STOPS_ARRAY]
     //FUTURE_STOPS_ARRAY elements will be of the form: { stop_sequence, stop_id, ARRIVAL_OBJECT, departure = null, schedule_relationship, NYCT_STOP_TIME_UPDATE_OBJECT }
@@ -118,17 +124,17 @@ export default class ScheduleList extends Component {
 
   //this method adds a new train to the database under 'congested-trains'
   writeCongestedTrain(trainNumber, tripId) {
-    this.db.ref('congested-trains/' + trainNumber).set({
-      'tripId': tripId
-    })
+    this.db.ref("congested-trains/" + trainNumber).set({
+      tripId: tripId
+    });
   }
 
   //this method reads in all congested trains from the db and pushes them to an array for processing
   readCongestedTrains(congestedTrains) {
-    var ref = this.db.ref('congested-trains')
-    ref.on('child_added', function(snapshot) {
-      congestedTrains.push(snapshot.val().tripId)
-    })
+    var ref = this.db.ref("congested-trains");
+    ref.on("child_added", function(snapshot) {
+      congestedTrains.push(snapshot.val().tripId);
+    });
   }
 
   //grabs the user's location and then sends all the relevant data to the MTA's API
@@ -141,7 +147,7 @@ export default class ScheduleList extends Component {
 
   render() {
     //For rendering the times as relative instead of absolute.  'now' is in epoch time (s)
-    const now = Date.now() / 1000
+    const now = Date.now() / 1000;
 
     //For grabbing the train line image
     let icon = this.props.currentLine
@@ -153,15 +159,16 @@ export default class ScheduleList extends Component {
     return (
       //PARENT VIEW FOR THE WHOLE PAGE
       <ScrollView style={styles.overallParentScroll}>
-
         {/* PARENT VIEW FOR THE UPPER SECTION OF THE PAGE */}
         <View style={styles.upperParentView}>
-
           {/* FOR RENDERING THE MAP WITH THE SELECTED SUBWAY LINE OVERLAID*/}
-          {this.props.currentLine === '2' || this.props.currentLine === 'J' || this.props.currentLine === '3'
-          ?  <UserLocation smaller={true} currentLine={this.props.currentLine}/>
-          :  <DefaultLocation smaller={true} />
-          }
+          {this.props.currentLine === "2" ||
+          this.props.currentLine === "J" ||
+          this.props.currentLine === "3" ? (
+            <UserLocation smaller={true} currentLine={this.props.currentLine} />
+          ) : (
+            <DefaultLocation smaller={true} />
+          )}
 
           {/* FOR RENDERING THE 'NEXT A/B/C/1/2/3/ETC. TRAINS HEADER */}
           <View style={styles.nextTrainHeaderView}>
@@ -169,12 +176,10 @@ export default class ScheduleList extends Component {
             <Image source={icon} style={styles.nextTrainHeaderImg} />
             <Text style={styles.nextTrainHeaderText}>Trains</Text>
           </View>
-
         </View>
 
         {/* PARENT VIEW FOR THE LOWER SECTION OF THE PAGE*/}
         <View>
-
           {/* PARENT VIEW FOR THE LEFT/RIGHT SWIPING CARDS*/}
           <ScrollView
             horizontal
@@ -187,12 +192,23 @@ export default class ScheduleList extends Component {
             {/* WRITECONGESTEDTRAIN = METHOD FOR ADDING CONGESTION INFO TO THE DB*/}
             {/* CONGESTEDTRAINS = ARRAY PULLED FROM THE DB OF ALL CURRENTLY CONGESTED TRAINS*/}
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Uptown' trains={this.state.uptownTrains} now={now} writeCongestedTrain={this.writeCongestedTrain} congestedTrains={this.congestedTrains}/>
+              <TrainCard
+                direction="Uptown"
+                trains={this.state.uptownTrains}
+                now={now}
+                writeCongestedTrain={this.writeCongestedTrain}
+                congestedTrains={this.congestedTrains}
+              />
             </View>
             <View style={{ width: phoneWidth }}>
-              <TrainCard direction='Downtown' trains={this.state.downtownTrains} now={now} writeCongestedTrain={this.writeCongestedTrain} congestedTrains={this.congestedTrains}/>
+              <TrainCard
+                direction="Downtown"
+                trains={this.state.downtownTrains}
+                now={now}
+                writeCongestedTrain={this.writeCongestedTrain}
+                congestedTrains={this.congestedTrains}
+              />
             </View>
-
           </ScrollView>
 
           {/* 'CLOSE CAMERA' BUTTON */}
@@ -202,7 +218,6 @@ export default class ScheduleList extends Component {
             style={styles.closeCameraStyle}
             buttonStyle={styles.closeCameraButtonStyle}
           />
-
         </View>
       </ScrollView>
     );
@@ -234,6 +249,7 @@ const styles = StyleSheet.create({
     padding: 15
   },
   closeCameraButtonStyle: {
-    backgroundColor: "#0f61a9"
+    backgroundColor: "#0f61a9",
+    margin: 15
   }
-})
+});

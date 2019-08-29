@@ -169,10 +169,24 @@ export default class Cam extends React.Component {
               }}
             >
               <View style={styles.cameraStyle}>
-    
                 <TouchableOpacity style={styles.onPress} onPress={this.snap}>
-                <View style={{borderColor: 'white', borderWidth: 2, width: 400, height: 400, marginBottom: 30, alignContent: 'center', alignSelf: 'center', borderRadius: 400/2}}/>
-                <Text style={{marginBottom: 10, color: 'white', fontSize: 24}}>Place train line inside circle</Text>
+                  <View
+                    style={{
+                      borderColor: "white",
+                      borderWidth: 2,
+                      width: 400,
+                      height: 400,
+                      marginBottom: 30,
+                      alignContent: "center",
+                      alignSelf: "center",
+                      borderRadius: 400 / 2
+                    }}
+                  />
+                  <Text
+                    style={{ marginBottom: 10, color: "white", fontSize: 24 }}
+                  >
+                    Place train line inside circle
+                  </Text>
                   <Ionicons
                     name="ios-radio-button-off"
                     color="white"
