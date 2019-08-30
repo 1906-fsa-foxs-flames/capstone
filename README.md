@@ -46,4 +46,10 @@ A lightweight application packed with useful features
 * [React-Native](https://facebook.github.io/react-native/)
 * [Expo](https://expo.io/)
 
+## Authors
+* [Luke B.](https://github.com/lbuckheit)
+* [Dzmitry M.](https://github.com/dzmitry-maslau)
+* [Oleksii M.](https://github.com/omusinov)
+* [Danny L.](https://github.com/dongledan)
+
 ## Acknowledgments
