@@ -105,3 +105,5 @@ export default class App extends React.Component {
     return <AppContainer />;
   }
 }
+
+console.disableYellowBox = true;
