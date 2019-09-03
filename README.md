@@ -31,7 +31,8 @@ Install Expo on your phone or emulator-- only on iOS and Android. Sorry windows 
 * An animated map with a moving train representing the next train to arrive at your station
 
 ![ANIMATION GIF](https://media.giphy.com/media/Yl4plfeTktVF2sDEY6/giphy.gif)
-(TODO: Resize this .gif)
+
+(TODO: Resize and crop this .gif)
 
 #### OCR recognition
 * Point and shoot a picture of a train line
