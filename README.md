@@ -1,7 +1,7 @@
 # MTALens
-Have you ever found yourself in the subway station without the display that has the upcoming trains? Or you find yourself in the wrong side of the platform and the display is all the way at the other side? And wondered, if only there was an app that can tell me the next 4 upcoming trains.
+Have you ever found yourself in a subway station without a train time display? Or found yourself outside a station, wondering if you have time for a coffee before your train comes?  Or staring at a congested train, unsure if you need to try and squeeze in or if there's another train right behind?
 
-Look no further, have we got the solution for you! All you gotta do is point and shoot, and boom the next 4 stops are displayed. Not only that, it is also interactive and allows you to alert other users if a train is congested as well as providing a chat with all current users to discuss the current state of the MTA.
+With MTALens, we can solve all these conundrums and more. All you have to do is point and shoot, and the next 4 trains coming to your station are displayed. MTALens is also social, allowing riders to alert other users if a train is congested as well as providing a chat with all current users to discuss the current state of the MTA.
 
 Next train coming in a 34 minutes? Go grab a drink or food instead of waiting for a stuffy platform.
 
@@ -9,10 +9,8 @@ Upcoming train crowded but the next train is coming in 2 minutes? Wait for the n
 
 MTALens-- powered by the users, for the users
 
-Simple. Easy. Fast.
-
 ## Getting Started
-These instructions will get you a copy of the project up and running on your local machine soley for development and testing purposes.
+These instructions will get you a copy of the project up and running on your local device soley for development and testing purposes.
 
 ## Prerequisites
 Install Expo on your phone or emulator-- only on iOS and Android. Sorry windows users. 
@@ -63,3 +61,5 @@ Install Expo on your phone or emulator-- only on iOS and Android. Sorry windows 
 * [Danny L.](https://github.com/dongledan)
 
 ## Acknowledgments
+
+* TODO
