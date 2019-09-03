@@ -17,19 +17,20 @@ Install Expo on your phone or emulator-- only on iOS and Android. Sorry windows 
 1.  Clone the git onto your machine and run ```npm install``` in your terminal.
 2.  Then run ```npm start```.
 3. Scan QR code in terminal or the localhost, then be on your to transversing the subway like a pro!
+* Note: this project requires access to a Google Firebase Project and a Google Vision API account.  We may disable our linked Google accounts once this project is complete to avoid accidential billing.
 
 ## Features
 * Take a photo of a subway sign and return the next four uptown/downtown trains to your station, specific to the line that was photographed.
 
-![Alt Text](https://media.giphy.com/media/eJuiOM9SXzfZmPR5Ad/giphy.gif)
+![OCR Gif](https://media.giphy.com/media/eJuiOM9SXzfZmPR5Ad/giphy.gif)
 
 * Users can report that a train is congested as a heads up to other users, and future users who see that train will receive an alert
 
-![GIF PENDING](todo.gif)
+![Congestion Gif](https://media.giphy.com/media/eHWFGNUB5LCUNKV3cV/giphy.gif)
 
 * An animated map with a moving train representing the next train to arrive at your station
 
-![GIF PENDING](todo.gif)
+![ANIMATION GIF PENDING](todo.gif)
 
 #### OCR recognition
 * Point and shoot a picture of a train line
