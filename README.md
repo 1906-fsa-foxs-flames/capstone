@@ -21,7 +21,17 @@ Install Expo on your phone or emulator-- only on iOS and Android. Sorry windows 
 3. Scan QR code in terminal or the localhost, then be on your to transversing the subway like a pro!
 
 ## Features
-A lightweight application packed with useful features
+* Take a photo of a subway sign and return the next four uptown/downtown trains to your station, specific to the line that was photographed.
+
+![Alt Text](https://media.giphy.com/media/eJuiOM9SXzfZmPR5Ad/giphy.gif)
+
+* Users can report that a train is congested as a heads up to other users, and future users who see that train will receive an alert
+
+![GIF PENDING](todo.gif)
+
+* An animated map with a moving train representing the next train to arrive at your station
+
+![GIF PENDING](todo.gif)
 
 #### OCR recognition
 * Point and shoot a picture of a train line
