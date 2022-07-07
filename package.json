@@ -21,7 +21,7 @@
     "fetch": "^1.1.0",
     "firebase": "^6.4.2",
     "gtfs-realtime-bindings": "0.0.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mta-gtfs": "^1.1.0",
     "mta-gtfs-realtime-bindings": "0.0.5",
     "react": "16.8.3",
